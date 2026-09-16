@@ -1,0 +1,53 @@
+# Dependencies
+node_modules/
+
+# Next.js
+.next/
+out/
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Vercel
+.vercel/
+
+# Testing and coverage
+coverage/
+playwright-report/
+test-results/
+
+# Storybook
+storybook-static/
+
+# Supabase local state
+supabase/.temp/
+
+# Python / RenderCV tooling
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Operating system files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# IDE-local files
+.idea/
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
