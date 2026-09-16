@@ -1,0 +1,51 @@
+name: Implementation task
+description: Scoped implementation work derived from the approved specifications.
+title: "[Task] "
+body:
+  - type: textarea
+    id: objective
+    attributes:
+      label: Objective
+      description: What concrete outcome should exist when this Issue is complete?
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: Why is this work needed now?
+    validations:
+      required: true
+  - type: textarea
+    id: references
+    attributes:
+      label: Canonical references
+      description: List relevant DOCs, ADRs, prototype gates, or release requirements.
+      placeholder: "DOC-42, DOC-51, ADR-001"
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: Use verifiable criteria.
+      placeholder: "- [ ] ...\n- [ ] ..."
+    validations:
+      required: true
+  - type: textarea
+    id: testing
+    attributes:
+      label: Verification plan
+      description: Tests, QA, accessibility, security, or performance checks required.
+    validations:
+      required: true
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependencies / blockers
+      description: Related Issues, decisions, environments, assets, or external prerequisites.
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes
+      description: Optional implementation notes. Do not change approved architecture silently.
