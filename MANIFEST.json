@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "package": "interactive-portfolio-documentation",
-  "generated_at": "2026-09-15",
+  "generated_at": "2026-09-16",
   "manifest_excludes_self": true,
   "authority_note": "Use approved ADRs, DOC-00 domain-aware authority, then canonical domain owners; existing code cannot silently override approved documentation. GitHub Wiki is non-canonical and tool-specific local operator files remain untracked.",
   "consistency_gate": {
@@ -22,13 +22,13 @@
     "approved_adrs": 3,
     "review_records": 8,
     "files_hashed": 78,
-    "total_hashed_bytes": 1489001
+    "total_hashed_bytes": 1489390
   },
   "files": [
     {
       "path": "README.md",
-      "bytes": 2939,
-      "sha256": "d61a960f407e5f2f74974ea1240a53d4a046f95cf589b09ee0fb82956d6657d3"
+      "bytes": 3328,
+      "sha256": "7f3af7611ff274959b6d84051a60c66d8efaa428dd019399fd84e6823a44605b"
     },
     {
       "path": "docs/00-project/DOC-00-master-guide.md",
