@@ -4,6 +4,10 @@ Interactive personal portfolio for **alejosorno.dev**.
 
 The site is designed as a responsive personal-computing environment: project-first, bilingual, accessible, performance-conscious, and intentionally more like software to explore than a conventional portfolio page.
 
+## Inspiration
+
+This portfolio is inspired by **iiSU's spatial navigation, widget-centric layouts, and soft console-like interaction model**. The visual system, components, code, assets, and implementation in this repository are original to this project, and the portfolio is not affiliated with iiSU.
+
 ## Project status
 
 **Current phase:** V0 — Repository & Project Bootstrap
@@ -61,6 +65,8 @@ The repository follows trunk-based development:
 
 See [`CONTRIBUTING.md`](./CONTRIBUTING.md) for the operational workflow.
 
-## Ownership
+## Ownership and reuse
 
 Project owner and maintainer: **Alejandro Osorno** (`@osozzz`).
+
+This repository is public for transparency, portfolio review, and educational inspection. **No open-source license is granted at this time.** Unless a specific file or dependency states otherwise, the source code, portfolio content, visual identity, artwork, and original project materials remain copyright © Alejandro Osorno. Reuse, redistribution, or derivative works are not authorized by the repository's public visibility alone.
