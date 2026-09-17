@@ -1,0 +1,142 @@
+{
+  "id": "CONSISTENCY-AUDIT-002-EVIDENCE",
+  "date": "2026-09-15",
+  "result": "PASS",
+  "unresolved_issues": [],
+  "base_assertions": [
+    [
+      "META-004",
+      "DOC-00..DOC-40 each present exactly once and APPROVED"
+    ],
+    [
+      "ROUTE-001",
+      "Locale route placeholders normalized to /[locale]/..."
+    ],
+    [
+      "REL-001",
+      "Base release naming normalized: V1.0; family policies use V1.x"
+    ],
+    [
+      "REL-002",
+      "V1.0 personalization + fixed-Dock Coming Soon release contract synchronized"
+    ],
+    [
+      "STATE-001",
+      "ACTIVE/Loading and Success/Warning semantics aligned"
+    ],
+    [
+      "DATA-001",
+      "Project lifecycle and orthogonal authored axes normalized"
+    ],
+    [
+      "MOD-001",
+      "Content moderation status separated from report lifecycle"
+    ],
+    [
+      "WDG-001",
+      "Widget S/M/L, responsive budgets and release-aware eligibility aligned"
+    ],
+    [
+      "VISCTX-001",
+      "ProjectVisualContext authored contract/enums synchronized"
+    ],
+    [
+      "A11Y-CLR-001",
+      "Muted/signal/semantic text inks all >=4.5:1 on baseline opaque surfaces"
+    ],
+    [
+      "SOT-001",
+      "Runtime Admin vs repository-canonical professional data boundary aligned"
+    ],
+    [
+      "ARC-001",
+      "Arcade navigation/session-state/action taxonomy separated"
+    ],
+    [
+      "CONTENT-001",
+      "Narrative ownership and privacy/distribution vocabularies normalized"
+    ],
+    [
+      "GOV-001",
+      "Approved docs free of draft-era approval wording; task-aware authority present"
+    ],
+    [
+      "DEC-001",
+      "Formal decision definitions are unique and contiguous within registered families"
+    ],
+    [
+      "GEO-001",
+      "Six-item Compact Dock has explicit narrow/short/zoom prototype gate"
+    ],
+    [
+      "PERF-001",
+      "Performance outcome targets exist; exact technical budgets can be owned by Technical Architecture"
+    ]
+  ],
+  "supplemental_assertions": [
+    [
+      "MD-001",
+      "Markdown code fences balanced and numbered docs have one H1"
+    ],
+    [
+      "REV-001",
+      "Review histories/results normalized without rewriting audit history"
+    ],
+    [
+      "ADR-001",
+      "ADR-001/ADR-002 machine-readable and approved"
+    ],
+    [
+      "CROSS-001",
+      "Fixed Dock order identical in key interface owners"
+    ],
+    [
+      "CROSS-002",
+      "Initial Arcade game identity consistent"
+    ],
+    [
+      "CROSS-003",
+      "Achievement categories canonical"
+    ],
+    [
+      "CROSS-004",
+      "Theme/motion/transparency/sound/material core contracts consistent"
+    ],
+    [
+      "CROSS-007",
+      "CV artifact names consistent"
+    ],
+    [
+      "CROSS-008",
+      "No-visitor-account and explicit-local-personalization privacy contracts present"
+    ],
+    [
+      "REF-001",
+      "Explicit DOC/ADR references resolve within current package"
+    ],
+    [
+      "MAN-001",
+      "MANIFEST file set, sizes and SHA-256 hashes verified"
+    ]
+  ],
+  "contrast_minima": {
+    "light.muted": 4.616,
+    "dark.muted": 5.052,
+    "signal.ink.light": 4.926,
+    "signal.ink.dark": 9.799,
+    "success.ink.light": 5.338,
+    "warning.ink.light": 5.012,
+    "error.ink.light": 5.301,
+    "info.ink.light": 5.215,
+    "success.ink.dark": 8.519,
+    "warning.ink.dark": 8.95,
+    "error.ink.dark": 6.484,
+    "info.ink.dark": 7.87
+  },
+  "numbered_document_count": 41,
+  "formal_decision_definition_count": 779,
+  "notes": [
+    "Checks were executed against the remediated physical Markdown baseline before package handoff.",
+    "Manifest hashes were revalidated after the final package mutation."
+  ]
+}

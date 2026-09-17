@@ -1,0 +1,1785 @@
+{
+  "schema_version": 2,
+  "package": "interactive-portfolio-documentation",
+  "generated_at": "2026-09-16",
+  "manifest_excludes_self": true,
+  "authority_note": "Use approved ADRs, DOC-00 domain-aware authority, then canonical domain owners; existing code cannot silently override approved documentation. GitHub Wiki is non-canonical and tool-specific local operator files remain untracked.",
+  "consistency_gate": {
+    "review": "REVIEW-PRE-REPO-GOVERNANCE-001",
+    "result": "PASS",
+    "unresolved_p0": 0,
+    "unresolved_p1": 0,
+    "unresolved_p2": 0,
+    "unresolved_p3": 0,
+    "v0_implementation_gate": "CLEARED_FOR_REPOSITORY_BOOTSTRAP",
+    "technical_architecture_phase": "SPECIFICATION_COMPLETE_AUDITED",
+    "current_draft": null
+  },
+  "summary": {
+    "numbered_documents": 52,
+    "approved_numbered_documents": 52,
+    "draft_numbered_documents": 0,
+    "approved_adrs": 3,
+    "review_records": 8,
+    "files_hashed": 78,
+    "total_hashed_bytes": 1489390
+  },
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 3328,
+      "sha256": "7f3af7611ff274959b6d84051a60c66d8efaa428dd019399fd84e6823a44605b"
+    },
+    {
+      "path": "docs/00-project/DOC-00-master-guide.md",
+      "bytes": 13451,
+      "sha256": "48b64a62a259161d040849ea5e5030edae74a0dd2e70c96836958a47e2cc4e11",
+      "record_id": "DOC-00",
+      "record_type": "document",
+      "title": "Master Guide, Governance & Documentation Map",
+      "document_status": "APPROVED",
+      "phase": "Product Foundation",
+      "folder": "00-project",
+      "decision_families": [
+        "PRJ",
+        "GOV"
+      ],
+      "depends_on": [
+        "none"
+      ],
+      "reconstructed": true,
+      "approved_at": "2026-09-15",
+      "last_updated": "2026-09-15"
+    },
+    {
+      "path": "docs/00-project/DOC-01-product-vision.md",
+      "bytes": 6728,
+      "sha256": "6179d0d2ba457f9fe87828633b8d766f901f9aff128329c56e83850b818b95e3",
+      "record_id": "DOC-01",
+      "record_type": "document",
+      "title": "Product Vision, Positioning & Success Criteria",
+      "document_status": "APPROVED",
+      "phase": "Product Foundation",
+      "folder": "00-project",
+      "decision_families": [
+        "VIS"
+      ],
+      "depends_on": [
+        "DOC-00"
+      ],
+      "reconstructed": true,
+      "approved_at": "2026-09-15",
+      "last_updated": "2026-09-15"
+    },
+    {
+      "path": "docs/00-project/DOC-02-scope-release-boundaries.md",
+      "bytes": 8044,
+      "sha256": "23ccbccf38244b6dafcda1fd3e0aa1a2989eb9a99041fe2a4bf4afd8b50ef01e",
+      "record_id": "DOC-02",
+      "record_type": "document",
+      "title": "Scope, Release Boundaries & Non-Goals",
+      "document_status": "APPROVED",
+      "phase": "Product Foundation",
+      "folder": "00-project",
+      "decision_families": [
+        "SCP"
+      ],
+      "depends_on": [
+        "DOC-00",
+        "DOC-01"
+      ],
+      "reconstructed": true,
+      "approved_at": "2026-09-15",
+      "last_updated": "2026-09-15"
+    },
+    {
+      "path": "docs/00-project/DOC-03-audiences-personas-stakeholders.md",
+      "bytes": 5429,
+      "sha256": "346e4e2d78e8761d0450c19e7177dc88633f0b6561fe18179a45daa927b7c5d4",
+      "record_id": "DOC-03",
+      "record_type": "document",
+      "title": "Audiences, Personas & Stakeholder Needs",
+      "document_status": "APPROVED",
+      "phase": "Product Foundation",
+      "folder": "00-project",
+      "decision_families": [
+        "AUD"
+      ],
+      "depends_on": [
+        "DOC-01",
+        "DOC-02"
+      ],
+      "reconstructed": true,
+      "approved_at": "2026-09-15",
+      "last_updated": "2026-09-15"
+    },
+    {
+      "path": "docs/00-project/DOC-04-user-journeys.md",
+      "bytes": 6376,
+      "sha256": "397d53aff52ef2755c7f4e19b6b93890105ceba63002744907f7d73651649725",
+      "record_id": "DOC-04",
+      "record_type": "document",
+      "title": "User Journeys & Experience Outcomes",
+      "document_status": "APPROVED",
+      "phase": "Product Foundation",
+      "folder": "00-project",
+      "decision_families": [
+        "JRN"
+      ],
+      "depends_on": [
+        "DOC-03"
+      ],
+      "reconstructed": true,
+      "approved_at": "2026-09-15",
+      "last_updated": "2026-09-15"
+    },
+    {
+      "path": "docs/00-project/README.md",
+      "bytes": 643,
+      "sha256": "1f09134ee8c35962dd8867bc605d55b598977394d644f7bf7baaa793ee8fbcce"
+    },
+    {
+      "path": "docs/01-product/DOC-05-user-stories-acceptance.md",
+      "bytes": 6993,
+      "sha256": "9139c17644e5d97990c49b458b2d5e5d7c2a7a002b467cd59097718516cbe67e",
+      "record_id": "DOC-05",
+      "record_type": "document",
+      "title": "User Stories, Epics & Acceptance Framework",
+      "document_status": "APPROVED",
+      "phase": "Product Foundation",
+      "folder": "01-product",
+      "decision_families": [
+        "USR"
+      ],
+      "depends_on": [
+        "DOC-02",
+        "DOC-03",
+        "DOC-04"
+      ],
+      "reconstructed": true,
+      "approved_at": "2026-09-15",
+      "last_updated": "2026-09-15"
+    },
+    {
+      "path": "docs/01-product/DOC-06-functional-requirements.md",
+      "bytes": 9960,
+      "sha256": "473138aadbfeb0545aa57633f9aafed48ff0a5a0852b88f733389b0876e3cb33",
+      "record_id": "DOC-06",
+      "record_type": "document",
+      "title": "Functional Requirements",
+      "document_status": "APPROVED",
+      "phase": "Product Foundation",
+      "folder": "01-product",
+      "decision_families": [
+        "FR"
+      ],
+      "depends_on": [
+        "DOC-05",
+        "DOC-20",
+        "DOC-31"
+      ],
+      "reconstructed": true,
+      "approved_at": "2026-09-15",
+      "last_updated": "2026-09-15"
+    },
+    {
+      "path": "docs/01-product/DOC-07-nonfunctional-requirements.md",
+      "bytes": 6150,
+      "sha256": "e7a0200e63eb59332b8a036e2bafeb664af4a9bc8cbcef1357fff84b961276e6",
+      "record_id": "DOC-07",
+      "record_type": "document",
+      "title": "Non-Functional Requirements",
+      "document_status": "APPROVED",
+      "phase": "Product Foundation",
+      "folder": "01-product",
+      "decision_families": [
+        "NFR"
+      ],
+      "depends_on": [
+        "DOC-06"
+      ],
+      "reconstructed": true,
+      "approved_at": "2026-09-15",
+      "last_updated": "2026-09-15"
+    },
+    {
+      "path": "docs/01-product/DOC-08-engineering-coverage-constraints.md",
+      "bytes": 20267,
+      "sha256": "29fbbf21a74112e6b2cde058a59c2b95ae640790461b5bff2967b77482061738",
+      "record_id": "DOC-08",
+      "record_type": "document",
+      "title": "Engineering Coverage Register & Technical Constraints",
+      "document_status": "APPROVED",
+      "phase": "Product Foundation",
+      "folder": "01-product",
+      "decision_families": [
+        "ENG"
+      ],
+      "depends_on": [
+        "DOC-06",
+        "DOC-07"
+      ],
+      "reconstructed": true,
+      "approved_at": "2026-09-15",
+      "last_updated": "2026-09-15"
+    },
+    {
+      "path": "docs/01-product/DOC-09-professional-content-requirements.md",
+      "bytes": 5336,
+      "sha256": "67456d4ac718ce06d16e91a83ac8fec01b92e8d1c6a16731a577890ca043709e",
+      "record_id": "DOC-09",
+      "record_type": "document",
+      "title": "Professional & Public Content Requirements",
+      "document_status": "APPROVED",
+      "phase": "Product Foundation",
+      "folder": "01-product",
+      "decision_families": [
+        "CNTREQ"
+      ],
+      "depends_on": [
+        "DOC-01",
+        "DOC-02"
+      ],
+      "reconstructed": true,
+      "approved_at": "2026-09-15",
+      "last_updated": "2026-09-15"
+    },
+    {
+      "path": "docs/01-product/DOC-10-localization-i18n.md",
+      "bytes": 4283,
+      "sha256": "de483938104cf5d77f5eae8332f70cf561869f5940b379149d2677bb3c8580a4",
+      "record_id": "DOC-10",
+      "record_type": "document",
+      "title": "Localization, Language & Bilingual Behavior",
+      "document_status": "APPROVED",
+      "phase": "Product Foundation",
+      "folder": "01-product",
+      "decision_families": [
+        "L10N"
+      ],
+      "depends_on": [
+        "DOC-06",
+        "DOC-09"
+      ],
+      "reconstructed": true,
+      "approved_at": "2026-09-15",
+      "last_updated": "2026-09-15"
+    },
+    {
+      "path": "docs/01-product/DOC-11-accessibility-inclusive-experience.md",
+      "bytes": 4988,
+      "sha256": "84f891bf245753b034d4274de1f84b5cb8a9b51a81ef0ff14c8288581649d332",
+      "record_id": "DOC-11",
+      "record_type": "document",
+      "title": "Accessibility & Inclusive Experience Requirements",
+      "document_status": "APPROVED",
+      "phase": "Product Foundation",
+      "folder": "01-product",
+      "decision_families": [
+        "A11Y"
+      ],
+      "depends_on": [
+        "DOC-07",
+        "DOC-20",
+        "DOC-23",
+        "DOC-28"
+      ],
+      "reconstructed": true,
+      "approved_at": "2026-09-15",
+      "last_updated": "2026-09-15"
+    },
+    {
+      "path": "docs/01-product/DOC-12-security-privacy-abuse.md",
+      "bytes": 6228,
+      "sha256": "ac9cb5dbd4e2dde4adbab3a64383e25d6311058d026d45922ba741e4ed017867",
+      "record_id": "DOC-12",
+      "record_type": "document",
+      "title": "Security, Privacy & Abuse-Prevention Requirements",
+      "document_status": "APPROVED",
+      "phase": "Product Foundation",
+      "folder": "01-product",
+      "decision_families": [
+        "SEC"
+      ],
+      "depends_on": [
+        "DOC-07",
+        "DOC-08"
+      ],
+      "reconstructed": true,
+      "approved_at": "2026-09-15",
+      "last_updated": "2026-09-15"
+    },
+    {
+      "path": "docs/01-product/DOC-13-community-moderation.md",
+      "bytes": 5933,
+      "sha256": "8d5251a6c459249c8cd59b148930d2e393aa8d18ac3d0ebdd98f9affc157b1f6",
+      "record_id": "DOC-13",
+      "record_type": "document",
+      "title": "Community, UGC & Moderation Product Requirements",
+      "document_status": "APPROVED",
+      "phase": "Product Foundation",
+      "folder": "01-product",
+      "decision_families": [
+        "COM"
+      ],
+      "depends_on": [
+        "DOC-02",
+        "DOC-12",
+        "DOC-31"
+      ],
+      "reconstructed": true,
+      "approved_at": "2026-09-15",
+      "last_updated": "2026-09-15"
+    },
+    {
+      "path": "docs/01-product/DOC-14-arcade-achievements.md",
+      "bytes": 4761,
+      "sha256": "3257bb6e145a8ddc73d8165b39dbbe061439cdc34481a38fafa40b64f553b0da",
+      "record_id": "DOC-14",
+      "record_type": "document",
+      "title": "Arcade, Achievements & Playful Progression Requirements",
+      "document_status": "APPROVED",
+      "phase": "Product Foundation",
+      "folder": "01-product",
+      "decision_families": [
+        "ARC"
+      ],
+      "depends_on": [
+        "DOC-02",
+        "DOC-12",
+        "DOC-30",
+        "DOC-31"
+      ],
+      "reconstructed": true,
+      "approved_at": "2026-09-15",
+      "last_updated": "2026-09-15"
+    },
+    {
+      "path": "docs/01-product/DOC-15-integrations-live-data.md",
+      "bytes": 4405,
+      "sha256": "aa54194d67d4e9241d5a963cb783b425738e1cdc7a08bfda696253ed46829610",
+      "record_id": "DOC-15",
+      "record_type": "document",
+      "title": "External Integrations & Live-Data Requirements",
+      "document_status": "APPROVED",
+      "phase": "Product Foundation",
+      "folder": "01-product",
+      "decision_families": [
+        "INT"
+      ],
+      "depends_on": [
+        "DOC-08",
+        "DOC-12"
+      ],
+      "reconstructed": true,
+      "approved_at": "2026-09-15",
+      "last_updated": "2026-09-15"
+    },
+    {
+      "path": "docs/01-product/DOC-16-contact-email.md",
+      "bytes": 3163,
+      "sha256": "0bf9cfbfcff088ee35d81d43182bc2bea82059cde74a85fafe42026cb5593106",
+      "record_id": "DOC-16",
+      "record_type": "document",
+      "title": "Contact, Email & Communication Requirements",
+      "document_status": "APPROVED",
+      "phase": "Product Foundation",
+      "folder": "01-product",
+      "decision_families": [
+        "MSG"
+      ],
+      "depends_on": [
+        "DOC-06",
+        "DOC-12",
+        "DOC-15"
+      ],
+      "reconstructed": true,
+      "approved_at": "2026-09-15",
+      "last_updated": "2026-09-15"
+    },
+    {
+      "path": "docs/01-product/DOC-17-seo-analytics-discoverability.md",
+      "bytes": 5002,
+      "sha256": "bb418aa19da0f8c71dfb115bc8c5b6a6db42d66f82b7a74a19c4fe66c08da651",
+      "record_id": "DOC-17",
+      "record_type": "document",
+      "title": "SEO, Metadata, Analytics & Discoverability Requirements",
+      "document_status": "APPROVED",
+      "phase": "Product Foundation",
+      "folder": "01-product",
+      "decision_families": [
+        "SEO"
+      ],
+      "depends_on": [
+        "DOC-10",
+        "DOC-12",
+        "DOC-31"
+      ],
+      "reconstructed": true,
+      "approved_at": "2026-09-15",
+      "last_updated": "2026-09-15"
+    },
+    {
+      "path": "docs/01-product/DOC-18-delivery-github-release-governance.md",
+      "bytes": 6675,
+      "sha256": "a25cb6e5e902e98b097870f7a686463387db21f732b4f0f0838efc1242edc499",
+      "record_id": "DOC-18",
+      "record_type": "document",
+      "title": "Delivery Roadmap, GitHub Workflow & Release Governance",
+      "document_status": "APPROVED",
+      "phase": "Product Foundation",
+      "folder": "01-product",
+      "decision_families": [
+        "DLV"
+      ],
+      "depends_on": [
+        "DOC-00",
+        "DOC-02",
+        "DOC-07",
+        "DOC-08"
+      ],
+      "reconstructed": true,
+      "approved_at": "2026-09-15",
+      "last_updated": "2026-09-15"
+    },
+    {
+      "path": "docs/01-product/DOC-19-implementation-tooling-automation-governance.md",
+      "bytes": 9540,
+      "sha256": "f6d7c148bd61e69313eaa80428464d0b7cda585e55ad407b84e3e78c8de6a7ca",
+      "record_id": "DOC-19",
+      "record_type": "document",
+      "title": "Implementation Tooling, Automation & Authorship Governance",
+      "document_status": "APPROVED",
+      "phase": "Product Foundation",
+      "folder": "01-product",
+      "decision_families": [
+        "TLG"
+      ],
+      "depends_on": [
+        "DOC-00",
+        "DOC-06",
+        "DOC-07",
+        "DOC-08"
+      ],
+      "reconstructed": true,
+      "approved_at": "2026-09-15",
+      "last_updated": "2026-09-15"
+    },
+    {
+      "path": "docs/01-product/README.md",
+      "bytes": 1850,
+      "sha256": "5ac4c1fc593143a7e439c1be417d48149cd73202dbf0ac32ef2ef48a26158495"
+    },
+    {
+      "path": "docs/02-interface-architecture/DOC-20-interface-philosophy.md",
+      "bytes": 11163,
+      "sha256": "57407733ea29b04efef0b0998df434317c2f9c54e7540df6f07814c5e01e9ce5",
+      "record_id": "DOC-20",
+      "record_type": "document",
+      "title": "Interface Philosophy & Interaction Model",
+      "document_status": "APPROVED",
+      "phase": "Interface Architecture",
+      "folder": "02-interface-architecture",
+      "decision_families": [
+        "UI"
+      ],
+      "depends_on": [
+        "none"
+      ],
+      "approved_at": "2026-09-15",
+      "last_updated": "2026-09-15"
+    },
+    {
+      "path": "docs/02-interface-architecture/DOC-21-screen-anatomy.md",
+      "bytes": 8416,
+      "sha256": "6f9aa8a9c60af1f22f77ddee43b1735fcae0b1f396ba2c68700b390e0a9772ef",
+      "record_id": "DOC-21",
+      "record_type": "document",
+      "title": "Screen Anatomy",
+      "document_status": "APPROVED",
+      "phase": "Interface Architecture",
+      "folder": "02-interface-architecture",
+      "decision_families": [
+        "SA"
+      ],
+      "depends_on": [
+        "none"
+      ],
+      "approved_at": "2026-09-15",
+      "last_updated": "2026-09-15"
+    },
+    {
+      "path": "docs/02-interface-architecture/DOC-22-navigation-grammar.md",
+      "bytes": 9093,
+      "sha256": "3a226b83d8c2ec79461cb10b4cfbc30009a5540ae2bf5bb32738203218ff56a8",
+      "record_id": "DOC-22",
+      "record_type": "document",
+      "title": "Navigation Grammar",
+      "document_status": "APPROVED",
+      "phase": "Interface Architecture",
+      "folder": "02-interface-architecture",
+      "decision_families": [
+        "NAV"
+      ],
+      "depends_on": [
+        "none"
+      ],
+      "approved_at": "2026-09-15",
+      "last_updated": "2026-09-15"
+    },
+    {
+      "path": "docs/02-interface-architecture/DOC-23-input-system.md",
+      "bytes": 8811,
+      "sha256": "595a04ddbd33e55cc95b7919828c37cc47e65fc31b3a2c9590bb15173150f25c",
+      "record_id": "DOC-23",
+      "record_type": "document",
+      "title": "Input System",
+      "document_status": "APPROVED",
+      "phase": "Interface Architecture",
+      "folder": "02-interface-architecture",
+      "decision_families": [
+        "INP"
+      ],
+      "depends_on": [
+        "none"
+      ],
+      "approved_at": "2026-09-15",
+      "last_updated": "2026-09-15"
+    },
+    {
+      "path": "docs/02-interface-architecture/DOC-24-focus-selection.md",
+      "bytes": 10125,
+      "sha256": "00ddbc15d3222c13cf5ab7fbdfe0b6b1e4d251a01a1b59ec4909f14d0f0aaaec",
+      "record_id": "DOC-24",
+      "record_type": "document",
+      "title": "Focus & Selection System",
+      "document_status": "APPROVED",
+      "phase": "Interface Architecture",
+      "folder": "02-interface-architecture",
+      "decision_families": [
+        "FCS"
+      ],
+      "depends_on": [
+        "none"
+      ],
+      "approved_at": "2026-09-15",
+      "last_updated": "2026-09-15"
+    },
+    {
+      "path": "docs/02-interface-architecture/DOC-25-widget-system.md",
+      "bytes": 15318,
+      "sha256": "12a0df791e90d45f35ba4e5ce5a1ad32b8e134999d090a5d509738b4cd98df73",
+      "record_id": "DOC-25",
+      "record_type": "document",
+      "title": "Widget System",
+      "document_status": "APPROVED",
+      "phase": "Interface Architecture",
+      "folder": "02-interface-architecture",
+      "decision_families": [
+        "WDG"
+      ],
+      "depends_on": [
+        "none"
+      ],
+      "approved_at": "2026-09-15",
+      "last_updated": "2026-09-15"
+    },
+    {
+      "path": "docs/02-interface-architecture/DOC-26-overlay-surface-system.md",
+      "bytes": 9638,
+      "sha256": "86c645246847b766b653b1aed9917548f91b423413ce7ceca117285f5b89976e",
+      "record_id": "DOC-26",
+      "record_type": "document",
+      "title": "Overlay & Surface System",
+      "document_status": "APPROVED",
+      "phase": "Interface Architecture",
+      "folder": "02-interface-architecture",
+      "decision_families": [
+        "SUR"
+      ],
+      "depends_on": [
+        "none"
+      ],
+      "approved_at": "2026-09-15",
+      "last_updated": "2026-09-15"
+    },
+    {
+      "path": "docs/02-interface-architecture/DOC-27-component-inventory.md",
+      "bytes": 14866,
+      "sha256": "e38127e95818e576dd727b92513cb8a9cfb989638ff54e5720ecf77c9eb5716f",
+      "record_id": "DOC-27",
+      "record_type": "document",
+      "title": "Component Inventory & UI Primitives",
+      "document_status": "APPROVED",
+      "phase": "Interface Architecture",
+      "folder": "02-interface-architecture",
+      "decision_families": [
+        "CMP"
+      ],
+      "depends_on": [
+        "none"
+      ],
+      "approved_at": "2026-09-15",
+      "last_updated": "2026-09-15"
+    },
+    {
+      "path": "docs/02-interface-architecture/DOC-28-responsive-behavior.md",
+      "bytes": 13942,
+      "sha256": "bfb81ba6bbf2810b3ccaa6892041c0c3cd2c6c52eba621eb7f4b06c6a76177dd",
+      "record_id": "DOC-28",
+      "record_type": "document",
+      "title": "Responsive Behavior & Layout Rules",
+      "document_status": "APPROVED",
+      "phase": "Interface Architecture",
+      "folder": "02-interface-architecture",
+      "decision_families": [
+        "RSP"
+      ],
+      "depends_on": [
+        "none"
+      ],
+      "approved_at": "2026-09-15",
+      "last_updated": "2026-09-15"
+    },
+    {
+      "path": "docs/02-interface-architecture/DOC-29-motion-architecture.md",
+      "bytes": 11693,
+      "sha256": "a1f07db7b686fd781eef5163c0f84605ddaccf6b4d631f67f908b80f074c2f4c",
+      "record_id": "DOC-29",
+      "record_type": "document",
+      "title": "Motion & Transition Architecture",
+      "document_status": "APPROVED",
+      "phase": "Interface Architecture",
+      "folder": "02-interface-architecture",
+      "decision_families": [
+        "MOT"
+      ],
+      "depends_on": [
+        "none"
+      ],
+      "approved_at": "2026-09-15",
+      "last_updated": "2026-09-15"
+    },
+    {
+      "path": "docs/02-interface-architecture/DOC-30-audio-feedback-delight.md",
+      "bytes": 10999,
+      "sha256": "2aec2ea0e38e08d2421470920e3f85bb54ee6e9c03d6338fa8749d905bc152ca",
+      "record_id": "DOC-30",
+      "record_type": "document",
+      "title": "Audio, Feedback & Delight System",
+      "document_status": "APPROVED",
+      "phase": "Interface Architecture",
+      "folder": "02-interface-architecture",
+      "decision_families": [
+        "AFD"
+      ],
+      "depends_on": [
+        "none"
+      ],
+      "approved_at": "2026-09-15",
+      "last_updated": "2026-09-15"
+    },
+    {
+      "path": "docs/02-interface-architecture/DOC-31-screen-inventory.md",
+      "bytes": 19552,
+      "sha256": "23a1b11f7503d686fc5c29c282ff48ac5c5c96b76e7d22c5d3d25ddd66f32e88",
+      "record_id": "DOC-31",
+      "record_type": "document",
+      "title": "Screen & Workspace Inventory",
+      "document_status": "APPROVED",
+      "phase": "Interface Architecture",
+      "folder": "02-interface-architecture",
+      "decision_families": [
+        "SCR"
+      ],
+      "depends_on": [
+        "none"
+      ],
+      "approved_at": "2026-09-15",
+      "last_updated": "2026-09-15"
+    },
+    {
+      "path": "docs/02-interface-architecture/DOC-32-interface-master-spec.md",
+      "bytes": 17810,
+      "sha256": "8f3989fa14b5757185a5c90e3add228d488175d7e324c68444004e453937b5c9",
+      "record_id": "DOC-32",
+      "record_type": "document",
+      "title": "Interface Architecture Master Specification & Decision Registry",
+      "document_status": "APPROVED",
+      "phase": "Interface Architecture",
+      "folder": "02-interface-architecture",
+      "decision_families": [
+        "MST"
+      ],
+      "depends_on": [
+        "DOC-20",
+        "DOC-31"
+      ],
+      "approved_at": "2026-09-15",
+      "last_updated": "2026-09-15"
+    },
+    {
+      "path": "docs/02-interface-architecture/README.md",
+      "bytes": 1206,
+      "sha256": "32dd8997d18752a63bca1f387441d2c51ff344f47d71a608e825421251fd1ac6"
+    },
+    {
+      "path": "docs/03-visual-design/DOC-33-visual-identity-direction.md",
+      "bytes": 15172,
+      "sha256": "dd9230affe632cadd043051f381b214381187be8d1ef468206a20cf612564240",
+      "record_id": "DOC-33",
+      "record_type": "document",
+      "title": "Visual Identity & Design Direction",
+      "document_status": "APPROVED",
+      "phase": "Visual Design Foundation",
+      "folder": "03-visual-design",
+      "decision_families": [
+        "VID"
+      ],
+      "depends_on": [
+        "DOC-20",
+        "DOC-21",
+        "DOC-22",
+        "DOC-23",
+        "DOC-24",
+        "DOC-25",
+        "DOC-26",
+        "DOC-27",
+        "DOC-28",
+        "DOC-29",
+        "DOC-30",
+        "DOC-31",
+        "DOC-32",
+        "ADR-001"
+      ],
+      "approved_at": "2026-09-15",
+      "last_updated": "2026-09-15"
+    },
+    {
+      "path": "docs/03-visual-design/DOC-34-color-theme-environmental-palette.md",
+      "bytes": 27777,
+      "sha256": "6029a6019e2bb7837bce12ada6f9496a0984fc22c494ad1e6d4506df79546b12",
+      "record_id": "DOC-34",
+      "record_type": "document",
+      "title": "Color, Theme & Environmental Palette",
+      "document_status": "APPROVED",
+      "phase": "Visual Design Foundation",
+      "folder": "03-visual-design",
+      "decision_families": [
+        "CLR"
+      ],
+      "depends_on": [
+        "DOC-20",
+        "DOC-21",
+        "DOC-22",
+        "DOC-23",
+        "DOC-24",
+        "DOC-25",
+        "DOC-26",
+        "DOC-27",
+        "DOC-28",
+        "DOC-29",
+        "DOC-30",
+        "DOC-31",
+        "DOC-32",
+        "DOC-33",
+        "ADR-001"
+      ],
+      "approved_at": "2026-09-15",
+      "last_updated": "2026-09-15"
+    },
+    {
+      "path": "docs/03-visual-design/DOC-35-typography-iconography-graphic-language.md",
+      "bytes": 27234,
+      "sha256": "b5c35b88c532990e3492ba96549ff64a77a5e114cd2cf76e99de3b7948e63399",
+      "record_id": "DOC-35",
+      "record_type": "document",
+      "title": "Typography, Iconography & Graphic Language",
+      "document_status": "APPROVED",
+      "phase": "Visual Design Foundation",
+      "folder": "03-visual-design",
+      "decision_families": [
+        "TYP",
+        "ICO",
+        "GFX"
+      ],
+      "depends_on": [
+        "DOC-20",
+        "DOC-21",
+        "DOC-22",
+        "DOC-23",
+        "DOC-24",
+        "DOC-25",
+        "DOC-26",
+        "DOC-27",
+        "DOC-28",
+        "DOC-29",
+        "DOC-30",
+        "DOC-31",
+        "DOC-32",
+        "DOC-33",
+        "DOC-34",
+        "ADR-001"
+      ],
+      "approved_at": "2026-09-15",
+      "last_updated": "2026-09-15"
+    },
+    {
+      "path": "docs/03-visual-design/DOC-36-content-architecture-canonical-professional-data.md",
+      "bytes": 39641,
+      "sha256": "e0b016723f3116498e0fb347ca04d55cc0cbc85fb94ce4ce78025efb6ee09852",
+      "record_id": "DOC-36",
+      "record_type": "document",
+      "title": "Content Architecture & Canonical Professional Data",
+      "document_status": "APPROVED",
+      "phase": "Visual Design Foundation",
+      "folder": "03-visual-design",
+      "decision_families": [
+        "CNT"
+      ],
+      "depends_on": [
+        "DOC-00",
+        "DOC-01",
+        "DOC-02",
+        "DOC-03",
+        "DOC-04",
+        "DOC-05",
+        "DOC-06",
+        "DOC-07",
+        "DOC-08",
+        "DOC-09",
+        "DOC-10",
+        "DOC-11",
+        "DOC-12",
+        "DOC-13",
+        "DOC-14",
+        "DOC-15",
+        "DOC-16",
+        "DOC-17",
+        "DOC-18",
+        "DOC-19",
+        "DOC-20",
+        "DOC-21",
+        "DOC-22",
+        "DOC-23",
+        "DOC-24",
+        "DOC-25",
+        "DOC-26",
+        "DOC-27",
+        "DOC-28",
+        "DOC-29",
+        "DOC-30",
+        "DOC-31",
+        "DOC-32",
+        "DOC-33",
+        "DOC-34",
+        "DOC-35",
+        "ADR-001"
+      ],
+      "approved_at": "2026-09-15",
+      "last_updated": "2026-09-15"
+    },
+    {
+      "path": "docs/03-visual-design/DOC-37-rendercv-pipeline.md",
+      "bytes": 21035,
+      "sha256": "55ceb0c392c33ac51dfacc5f89f06f52e9bf8835dc304b1cff2df54623f3c3d0",
+      "record_id": "DOC-37",
+      "record_type": "document",
+      "title": "RenderCV Pipeline",
+      "document_status": "APPROVED",
+      "phase": "Visual Design Foundation",
+      "folder": "03-visual-design",
+      "decision_families": [
+        "CVP"
+      ],
+      "depends_on": [
+        "DOC-09",
+        "DOC-10",
+        "DOC-17",
+        "DOC-18",
+        "DOC-19",
+        "DOC-31",
+        "DOC-35",
+        "DOC-36"
+      ],
+      "approved_at": "2026-09-15",
+      "last_updated": "2026-09-15"
+    },
+    {
+      "path": "docs/03-visual-design/DOC-38-geometry-spacing-layout-tokens.md",
+      "bytes": 33829,
+      "sha256": "05610bcf21e21e5371f58392081b26788a777acaf749350882be0ffcbe199e90",
+      "record_id": "DOC-38",
+      "record_type": "document",
+      "title": "Geometry, Spacing & Layout Tokens",
+      "document_status": "APPROVED",
+      "phase": "Visual Design Foundation",
+      "folder": "03-visual-design",
+      "decision_families": [
+        "GEO"
+      ],
+      "depends_on": [
+        "DOC-20",
+        "DOC-21",
+        "DOC-25",
+        "DOC-27",
+        "DOC-28",
+        "DOC-33",
+        "DOC-34",
+        "DOC-35"
+      ],
+      "approved_at": "2026-09-15",
+      "last_updated": "2026-09-15"
+    },
+    {
+      "path": "docs/03-visual-design/DOC-39-liquid-glass-material-specification.md",
+      "bytes": 32906,
+      "sha256": "0544295301addabf37c16dbf589a711d9a982b9b0e2545c80ff4d3fec3bbf1c2",
+      "record_id": "DOC-39",
+      "record_type": "document",
+      "title": "Liquid Glass Material Specification",
+      "document_status": "APPROVED",
+      "phase": "Visual Design Foundation",
+      "folder": "03-visual-design",
+      "decision_families": [
+        "MAT"
+      ],
+      "depends_on": [
+        "DOC-20",
+        "DOC-21",
+        "DOC-25",
+        "DOC-26",
+        "DOC-28",
+        "DOC-29",
+        "DOC-33",
+        "DOC-34",
+        "DOC-35",
+        "DOC-38"
+      ],
+      "approved_at": "2026-09-15",
+      "last_updated": "2026-09-15"
+    },
+    {
+      "path": "docs/03-visual-design/DOC-40-visual-states-focus-effects.md",
+      "bytes": 32142,
+      "sha256": "e745c08ff696023d9d7a0f505fb7f38f4a10045d3f3cda74e8185b2c2ddbcad2",
+      "record_id": "DOC-40",
+      "record_type": "document",
+      "title": "Visual States, Focus & Effects",
+      "document_status": "APPROVED",
+      "phase": "Visual Design Foundation",
+      "folder": "03-visual-design",
+      "decision_families": [
+        "STA"
+      ],
+      "depends_on": [
+        "DOC-20",
+        "DOC-21",
+        "DOC-22",
+        "DOC-23",
+        "DOC-24",
+        "DOC-25",
+        "DOC-26",
+        "DOC-28",
+        "DOC-29",
+        "DOC-30",
+        "DOC-33",
+        "DOC-34",
+        "DOC-35",
+        "DOC-38",
+        "DOC-39"
+      ],
+      "approved_at": "2026-09-15",
+      "last_updated": "2026-09-15"
+    },
+    {
+      "path": "docs/03-visual-design/README.md",
+      "bytes": 945,
+      "sha256": "e0ca73456fb45eeab4943c7fb3811bd162f61c117b48eca1a7138b6b24a52e29"
+    },
+    {
+      "path": "docs/04-technical-architecture/DOC-41-technical-architecture-master-blueprint.md",
+      "bytes": 55652,
+      "sha256": "76eac5e55e4711fcd2f3e2f0d8ec16b76e3de9d1fb8a2dac8a67927a139d3e08",
+      "record_id": "DOC-41",
+      "record_type": "document",
+      "title": "Technical Architecture Master Blueprint & System Context",
+      "document_status": "APPROVED",
+      "phase": "Technical Architecture",
+      "folder": "04-technical-architecture",
+      "decision_families": [
+        "TAM"
+      ],
+      "depends_on": [
+        "DOC-00",
+        "DOC-01",
+        "DOC-02",
+        "DOC-05",
+        "DOC-06",
+        "DOC-07",
+        "DOC-08",
+        "DOC-10",
+        "DOC-11",
+        "DOC-12",
+        "DOC-13",
+        "DOC-14",
+        "DOC-15",
+        "DOC-16",
+        "DOC-17",
+        "DOC-18",
+        "DOC-19",
+        "DOC-20",
+        "DOC-21",
+        "DOC-22",
+        "DOC-23",
+        "DOC-24",
+        "DOC-25",
+        "DOC-26",
+        "DOC-27",
+        "DOC-28",
+        "DOC-29",
+        "DOC-30",
+        "DOC-31",
+        "DOC-32",
+        "DOC-33",
+        "DOC-34",
+        "DOC-35",
+        "DOC-36",
+        "DOC-37",
+        "DOC-38",
+        "DOC-39",
+        "DOC-40",
+        "ADR-001",
+        "ADR-002"
+      ],
+      "last_updated": "2026-09-15"
+    },
+    {
+      "path": "docs/04-technical-architecture/DOC-42-frontend-architecture-rendering-state-boundaries.md",
+      "bytes": 82469,
+      "sha256": "d197ce658b36a6b4caf5073d20f092dbe3738d12e8f8286e431b166aee0429ac",
+      "record_id": "DOC-42",
+      "record_type": "document",
+      "title": "Frontend Architecture, Rendering & State Boundaries",
+      "document_status": "APPROVED",
+      "phase": "Technical Architecture",
+      "folder": "04-technical-architecture",
+      "decision_families": [
+        "FEA"
+      ],
+      "depends_on": [
+        "DOC-00",
+        "DOC-02",
+        "DOC-05",
+        "DOC-06",
+        "DOC-07",
+        "DOC-10",
+        "DOC-11",
+        "DOC-17",
+        "DOC-19",
+        "DOC-20",
+        "DOC-21",
+        "DOC-22",
+        "DOC-23",
+        "DOC-24",
+        "DOC-25",
+        "DOC-26",
+        "DOC-27",
+        "DOC-28",
+        "DOC-29",
+        "DOC-30",
+        "DOC-31",
+        "DOC-32",
+        "DOC-33",
+        "DOC-34",
+        "DOC-35",
+        "DOC-36",
+        "DOC-38",
+        "DOC-39",
+        "DOC-40",
+        "DOC-41",
+        "ADR-001",
+        "ADR-002"
+      ],
+      "approved_at": "2026-09-15",
+      "last_updated": "2026-09-15"
+    },
+    {
+      "path": "docs/04-technical-architecture/DOC-43-backend-api-application-service-architecture.md",
+      "bytes": 67961,
+      "sha256": "3425ce58fa1b14f593b3d908803ba5caee10e69d17d29361a7bfdd6245608150",
+      "record_id": "DOC-43",
+      "record_type": "document",
+      "title": "Backend, API & Application Service Architecture",
+      "document_status": "APPROVED",
+      "phase": "Technical Architecture",
+      "folder": "04-technical-architecture",
+      "decision_families": [
+        "BEA"
+      ],
+      "depends_on": [
+        "DOC-00",
+        "DOC-02",
+        "DOC-05",
+        "DOC-06",
+        "DOC-07",
+        "DOC-10",
+        "DOC-11",
+        "DOC-12",
+        "DOC-13",
+        "DOC-14",
+        "DOC-15",
+        "DOC-16",
+        "DOC-17",
+        "DOC-19",
+        "DOC-22",
+        "DOC-23",
+        "DOC-25",
+        "DOC-30",
+        "DOC-31",
+        "DOC-32",
+        "DOC-36",
+        "DOC-41",
+        "DOC-42",
+        "ADR-001",
+        "ADR-002"
+      ],
+      "approved_at": "2026-09-15",
+      "last_updated": "2026-09-15"
+    },
+    {
+      "path": "docs/04-technical-architecture/DOC-44-data-architecture-postgresql-rls-storage.md",
+      "bytes": 81685,
+      "sha256": "5f5c291eabea4ae8dd28fdb695401f2f00114260d05d2044878c4d8a4334886b",
+      "record_id": "DOC-44",
+      "record_type": "document",
+      "title": "Data Architecture, PostgreSQL, RLS & Storage",
+      "document_status": "APPROVED",
+      "phase": "Technical Architecture",
+      "folder": "04-technical-architecture",
+      "decision_families": [
+        "DTA"
+      ],
+      "depends_on": [
+        "DOC-00",
+        "DOC-02",
+        "DOC-05",
+        "DOC-06",
+        "DOC-07",
+        "DOC-08",
+        "DOC-09",
+        "DOC-10",
+        "DOC-11",
+        "DOC-12",
+        "DOC-13",
+        "DOC-14",
+        "DOC-15",
+        "DOC-16",
+        "DOC-17",
+        "DOC-19",
+        "DOC-31",
+        "DOC-32",
+        "DOC-36",
+        "DOC-41",
+        "DOC-42",
+        "DOC-43",
+        "ADR-001",
+        "ADR-002"
+      ],
+      "last_updated": "2026-09-15"
+    },
+    {
+      "path": "docs/04-technical-architecture/DOC-45-authentication-authorization-admin-session-architecture.md",
+      "bytes": 58770,
+      "sha256": "7441dd1d0664c82f3673ed1607cd867c9c58cee76ad5e15ace30b9df88cde889",
+      "record_id": "DOC-45",
+      "record_type": "document",
+      "title": "Authentication, Authorization & Admin Session Architecture",
+      "document_status": "APPROVED",
+      "phase": "Technical Architecture",
+      "folder": "04-technical-architecture",
+      "decision_families": [
+        "IAM"
+      ],
+      "depends_on": [
+        "DOC-00",
+        "DOC-02",
+        "DOC-05",
+        "DOC-06",
+        "DOC-07",
+        "DOC-08",
+        "DOC-10",
+        "DOC-11",
+        "DOC-12",
+        "DOC-13",
+        "DOC-18",
+        "DOC-19",
+        "DOC-22",
+        "DOC-26",
+        "DOC-31",
+        "DOC-32",
+        "DOC-41",
+        "DOC-42",
+        "DOC-43",
+        "DOC-44",
+        "ADR-001",
+        "ADR-002"
+      ],
+      "approved_at": "2026-09-15",
+      "last_updated": "2026-09-15"
+    },
+    {
+      "path": "docs/04-technical-architecture/DOC-46-integrations-caching-jobs-provider-resilience.md",
+      "bytes": 73869,
+      "sha256": "ac4aa888075e59a18dcdd123b55cc1c648dd74afb1f9d37715ac1ac7e2523b58",
+      "record_id": "DOC-46",
+      "record_type": "document",
+      "title": "Integrations, Caching, Jobs & Provider Resilience",
+      "document_status": "APPROVED",
+      "phase": "Technical Architecture",
+      "folder": "04-technical-architecture",
+      "decision_families": [
+        "ICJ"
+      ],
+      "depends_on": [
+        "DOC-00",
+        "DOC-02",
+        "DOC-06",
+        "DOC-07",
+        "DOC-08",
+        "DOC-10",
+        "DOC-11",
+        "DOC-12",
+        "DOC-13",
+        "DOC-15",
+        "DOC-16",
+        "DOC-17",
+        "DOC-18",
+        "DOC-19",
+        "DOC-25",
+        "DOC-31",
+        "DOC-32",
+        "DOC-36",
+        "DOC-41",
+        "DOC-42",
+        "DOC-43",
+        "DOC-44",
+        "DOC-45",
+        "ADR-001",
+        "ADR-002"
+      ],
+      "approved_at": "2026-09-15",
+      "last_updated": "2026-09-15"
+    },
+    {
+      "path": "docs/04-technical-architecture/DOC-47-security-architecture-threat-model.md",
+      "bytes": 85854,
+      "sha256": "94c50c0cdb73ff77e3407317604969b38031a0f3d6d6ab7920dcf382604d1b85",
+      "record_id": "DOC-47",
+      "record_type": "document",
+      "title": "Security Architecture & Threat Model",
+      "document_status": "APPROVED",
+      "phase": "Technical Architecture",
+      "folder": "04-technical-architecture",
+      "decision_families": [
+        "SECARC"
+      ],
+      "depends_on": [
+        "DOC-00",
+        "DOC-02",
+        "DOC-06",
+        "DOC-07",
+        "DOC-08",
+        "DOC-10",
+        "DOC-11",
+        "DOC-12",
+        "DOC-13",
+        "DOC-14",
+        "DOC-15",
+        "DOC-16",
+        "DOC-17",
+        "DOC-18",
+        "DOC-19",
+        "DOC-20",
+        "DOC-22",
+        "DOC-23",
+        "DOC-24",
+        "DOC-25",
+        "DOC-26",
+        "DOC-30",
+        "DOC-31",
+        "DOC-32",
+        "DOC-36",
+        "DOC-37",
+        "DOC-39",
+        "DOC-40",
+        "DOC-41",
+        "DOC-42",
+        "DOC-43",
+        "DOC-44",
+        "DOC-45",
+        "DOC-46",
+        "ADR-001",
+        "ADR-002"
+      ],
+      "approved_at": "2026-09-15",
+      "last_updated": "2026-09-15"
+    },
+    {
+      "path": "docs/04-technical-architecture/DOC-48-infrastructure-environments-dns-deployment-architecture.md",
+      "bytes": 82363,
+      "sha256": "52394e8e426ae0d99292820cbcab986437eac2bf4ba58be364300cea6594cf36",
+      "record_id": "DOC-48",
+      "record_type": "document",
+      "title": "Infrastructure, Environments, DNS & Deployment Architecture",
+      "document_status": "APPROVED",
+      "phase": "Technical Architecture",
+      "folder": "04-technical-architecture",
+      "decision_families": [
+        "INF"
+      ],
+      "depends_on": [
+        "DOC-00",
+        "DOC-02",
+        "DOC-07",
+        "DOC-08",
+        "DOC-10",
+        "DOC-11",
+        "DOC-12",
+        "DOC-15",
+        "DOC-16",
+        "DOC-17",
+        "DOC-18",
+        "DOC-19",
+        "DOC-31",
+        "DOC-32",
+        "DOC-36",
+        "DOC-37",
+        "DOC-41",
+        "DOC-42",
+        "DOC-43",
+        "DOC-44",
+        "DOC-45",
+        "DOC-46",
+        "DOC-47",
+        "ADR-001",
+        "ADR-002"
+      ],
+      "approved_at": "2026-09-15",
+      "last_updated": "2026-09-15"
+    },
+    {
+      "path": "docs/04-technical-architecture/DOC-49-performance-observability-reliability-architecture.md",
+      "bytes": 66715,
+      "sha256": "17d8db3ea86b45f2b4d017434c0353adc1841779d54e9fd23a4c4673d66163cf",
+      "record_id": "DOC-49",
+      "record_type": "document",
+      "title": "Performance, Observability & Reliability Architecture",
+      "document_status": "APPROVED",
+      "phase": "Technical Architecture",
+      "folder": "04-technical-architecture",
+      "decision_families": [
+        "POR"
+      ],
+      "depends_on": [
+        "DOC-00",
+        "DOC-02",
+        "DOC-06",
+        "DOC-07",
+        "DOC-08",
+        "DOC-11",
+        "DOC-12",
+        "DOC-14",
+        "DOC-15",
+        "DOC-16",
+        "DOC-17",
+        "DOC-18",
+        "DOC-19",
+        "DOC-20",
+        "DOC-21",
+        "DOC-22",
+        "DOC-23",
+        "DOC-24",
+        "DOC-25",
+        "DOC-26",
+        "DOC-27",
+        "DOC-28",
+        "DOC-29",
+        "DOC-30",
+        "DOC-31",
+        "DOC-32",
+        "DOC-34",
+        "DOC-38",
+        "DOC-39",
+        "DOC-40",
+        "DOC-41",
+        "DOC-42",
+        "DOC-43",
+        "DOC-44",
+        "DOC-45",
+        "DOC-46",
+        "DOC-47",
+        "DOC-48",
+        "ADR-001",
+        "ADR-002"
+      ],
+      "approved_at": "2026-09-15",
+      "last_updated": "2026-09-15"
+    },
+    {
+      "path": "docs/04-technical-architecture/DOC-50-testing-quality-engineering-strategy.md",
+      "bytes": 75573,
+      "sha256": "161b219ee0d707251ea9879af2f21548e85a2296ce8bc17d4bfaf52af4234ccd",
+      "record_id": "DOC-50",
+      "record_type": "document",
+      "title": "Testing & Quality Engineering Strategy",
+      "document_status": "APPROVED",
+      "phase": "Technical Architecture",
+      "folder": "04-technical-architecture",
+      "decision_families": [
+        "TQE"
+      ],
+      "depends_on": [
+        "DOC-00",
+        "DOC-02",
+        "DOC-05",
+        "DOC-06",
+        "DOC-07",
+        "DOC-08",
+        "DOC-09",
+        "DOC-10",
+        "DOC-11",
+        "DOC-12",
+        "DOC-13",
+        "DOC-14",
+        "DOC-15",
+        "DOC-16",
+        "DOC-17",
+        "DOC-18",
+        "DOC-19",
+        "DOC-20",
+        "DOC-21",
+        "DOC-22",
+        "DOC-23",
+        "DOC-24",
+        "DOC-25",
+        "DOC-26",
+        "DOC-27",
+        "DOC-28",
+        "DOC-29",
+        "DOC-30",
+        "DOC-31",
+        "DOC-32",
+        "DOC-34",
+        "DOC-35",
+        "DOC-36",
+        "DOC-37",
+        "DOC-38",
+        "DOC-39",
+        "DOC-40",
+        "DOC-41",
+        "DOC-42",
+        "DOC-43",
+        "DOC-44",
+        "DOC-45",
+        "DOC-46",
+        "DOC-47",
+        "DOC-48",
+        "DOC-49",
+        "ADR-001",
+        "ADR-002"
+      ],
+      "approved_at": "2026-09-15",
+      "last_updated": "2026-09-15"
+    },
+    {
+      "path": "docs/04-technical-architecture/DOC-51-repository-cicd-developer-experience-implementation.md",
+      "bytes": 85364,
+      "sha256": "a18a367d2e063400f224fecc81769924a2adef4a589d3f5405ab1a8296a7e366",
+      "record_id": "DOC-51",
+      "record_type": "document",
+      "title": "Repository, CI/CD & Developer Experience Implementation",
+      "document_status": "APPROVED",
+      "phase": "Technical Architecture",
+      "folder": "04-technical-architecture",
+      "decision_families": [
+        "RDX"
+      ],
+      "depends_on": [
+        "DOC-00",
+        "DOC-02",
+        "DOC-05",
+        "DOC-06",
+        "DOC-07",
+        "DOC-08",
+        "DOC-09",
+        "DOC-10",
+        "DOC-11",
+        "DOC-12",
+        "DOC-13",
+        "DOC-14",
+        "DOC-15",
+        "DOC-16",
+        "DOC-17",
+        "DOC-18",
+        "DOC-19",
+        "DOC-32",
+        "DOC-36",
+        "DOC-37",
+        "DOC-41",
+        "DOC-42",
+        "DOC-43",
+        "DOC-44",
+        "DOC-45",
+        "DOC-46",
+        "DOC-47",
+        "DOC-48",
+        "DOC-49",
+        "DOC-50",
+        "ADR-001",
+        "ADR-002"
+      ],
+      "approved_at": "2026-09-15",
+      "last_updated": "2026-09-15"
+    },
+    {
+      "path": "docs/04-technical-architecture/README.md",
+      "bytes": 2198,
+      "sha256": "d230ebbb5415b482c9e8dd690147c43b080072d9d2cb6bbf65d7f90f410f7603"
+    },
+    {
+      "path": "docs/README.md",
+      "bytes": 8481,
+      "sha256": "8f65d489b6f547be88fe70a0923f352ee0c1cfd083a4fed47247bb9876c90684"
+    },
+    {
+      "path": "docs/decisions/ADR-001-controlled-widget-field-personalization.md",
+      "bytes": 3587,
+      "sha256": "025fdb27103208a4aea2a48758550f7fbd5dbf4d70528b9f402e6e0c46477ccd",
+      "record_id": "ADR-001",
+      "record_type": "adr",
+      "title": "Controlled Personal Widget Field",
+      "decision_status": "APPROVED",
+      "date": "2026-09-15",
+      "affects": [
+        "DOC-00",
+        "DOC-01",
+        "DOC-02",
+        "DOC-04",
+        "DOC-05",
+        "DOC-06",
+        "DOC-07",
+        "DOC-19",
+        "DOC-20",
+        "DOC-21",
+        "DOC-25",
+        "DOC-27",
+        "DOC-28",
+        "DOC-29",
+        "DOC-31",
+        "DOC-32",
+        "DOC-33"
+      ]
+    },
+    {
+      "path": "docs/decisions/ADR-002-release-gating-six-space-dock.md",
+      "bytes": 2537,
+      "sha256": "0618726d3f227adaa9ea3251f951f66607423ea4560ea10159dea51440eb904f",
+      "record_id": "ADR-002",
+      "record_type": "adr",
+      "title": "V1.0 Release Naming & Fixed-Dock Pre-release Route Gating",
+      "decision_status": "APPROVED",
+      "date": "2026-09-15",
+      "affects": [
+        "DOC-00",
+        "DOC-02",
+        "DOC-05",
+        "DOC-06",
+        "DOC-17",
+        "DOC-21",
+        "DOC-22",
+        "DOC-31",
+        "DOC-32"
+      ]
+    },
+    {
+      "path": "docs/decisions/ADR-003-currently-building-source-of-truth.md",
+      "bytes": 1835,
+      "sha256": "ef1bd03f48610602e62928a85694c067b0353eb8c729a7206128bb1aacad6039",
+      "record_id": "ADR-003",
+      "record_type": "adr",
+      "title": "Currently Building Source-of-Truth Boundary",
+      "decision_status": "APPROVED",
+      "date": "2026-09-15",
+      "scope": "Currently Building / managed-status authority through V1.x",
+      "affects": [
+        "DOC-03",
+        "DOC-25",
+        "DOC-36",
+        "DOC-41",
+        "DOC-43",
+        "DOC-44",
+        "DOC-49"
+      ],
+      "supersedes": [
+        "earlier wording that implied V1.x Admin/runtime DB editing was already approved"
+      ]
+    },
+    {
+      "path": "docs/decisions/ADR-TEMPLATE.md",
+      "bytes": 703,
+      "sha256": "cbaf136d2377e9f9aa59c83f216e9ae71ceda12c07f6e240a28bf1a478e967e3",
+      "record_id": "ADR-XXX",
+      "record_type": "adr",
+      "title": "Decision title",
+      "decision_status": "PROPOSED",
+      "date": "YYYY-MM-DD",
+      "owners": [],
+      "affected_docs": [],
+      "supersedes": []
+    },
+    {
+      "path": "docs/decisions/README.md",
+      "bytes": 950,
+      "sha256": "b12587db17c40065c3b4b95038f0956b0cac3188795c80184db46137dcd64ee2"
+    },
+    {
+      "path": "docs/reviews/AMENDMENT-PRE-REPO-GOVERNANCE-002.md",
+      "bytes": 4592,
+      "sha256": "3d262e2709d33b59357244419b3385aadd383383cd35ae6e258c0311a9daa8cf",
+      "record_id": "AMENDMENT-PRE-REPO-GOVERNANCE-002",
+      "record_type": "review",
+      "review_status": "APPROVED",
+      "review_result": "PASS",
+      "phase": "Pre-V0 Repository Bootstrap",
+      "last_updated": "2026-09-15",
+      "approved_at": "2026-09-15"
+    },
+    {
+      "path": "docs/reviews/AMENDMENT-PRE-V0-CONSISTENCY-001.md",
+      "bytes": 3051,
+      "sha256": "5086bb9296ac72ea608b1284ed7d33460027cc51ea6e20294d870a651013e859",
+      "record_id": "AMENDMENT-PRE-V0-CONSISTENCY-001",
+      "record_type": "amendment",
+      "decision_status": "APPROVED",
+      "date": "2026-09-15",
+      "scope": "Accepted remediation of REVIEW-FINAL-DOC00-51-AUDIT-001",
+      "applies_to": "DOC-00 through DOC-51 + ADR-003"
+    },
+    {
+      "path": "docs/reviews/PRE-REPO-GOVERNANCE-001-EVIDENCE.json",
+      "bytes": 1165,
+      "sha256": "95e7c81e4485082a12669019075f5fe3ee69e14a6fee0f6182ad274458442d74"
+    },
+    {
+      "path": "docs/reviews/README.md",
+      "bytes": 1854,
+      "sha256": "42f8328cd20236d0f57589efa502128abdd861f04fa69cd87feb3b136272883d"
+    },
+    {
+      "path": "docs/reviews/REVIEW-CROSS-DOCUMENT-CONSISTENCY-001.md",
+      "bytes": 28653,
+      "sha256": "8d998e3c3a72ab1069db155c61bf14d7df5012db7c538ceb7dc896b989038a7a",
+      "record_id": "REVIEW-CROSS-DOCUMENT-CONSISTENCY-001",
+      "record_type": "review",
+      "review_status": "COMPLETE",
+      "review_result": "FAIL",
+      "date": "2026-09-15",
+      "scope": "DOC-00 through DOC-40 + ADR-001 + package governance",
+      "remediation_status": "REMEDIATED",
+      "remediated_by": "REVIEW-CROSS-DOCUMENT-CONSISTENCY-002"
+    },
+    {
+      "path": "docs/reviews/REVIEW-CROSS-DOCUMENT-CONSISTENCY-002.md",
+      "bytes": 11393,
+      "sha256": "c2c1170f89c30e020692f2047692251e656cfe40d7142b527717a9677192a512",
+      "record_id": "REVIEW-CROSS-DOCUMENT-CONSISTENCY-002",
+      "record_type": "review",
+      "review_status": "COMPLETE",
+      "review_result": "PASS",
+      "date": "2026-09-15",
+      "scope": "DOC-00 through DOC-40 + ADR-001/ADR-002 + governance metadata + consistency amendment",
+      "supersedes_gate_from": "REVIEW-CROSS-DOCUMENT-CONSISTENCY-001",
+      "technical_architecture_gate": "CLEARED"
+    },
+    {
+      "path": "docs/reviews/REVIEW-FINAL-DOC00-51-AUDIT-001.md",
+      "bytes": 34689,
+      "sha256": "2d4913e4c15fe1a6d33c691ac1f14dd819ac6311a5fbdea09a69fb49ed437d62",
+      "record_id": "REVIEW-FINAL-DOC00-51-AUDIT-001",
+      "record_type": "review",
+      "review_status": "COMPLETE",
+      "review_result": "REMEDIATION_REQUIRED",
+      "date": "2026-09-15",
+      "scope": "DOC-00 through DOC-51 + ADR-001/ADR-002 + package/governance metadata + current-provider validation",
+      "supersedes_gate_from": "REVIEW-CROSS-DOCUMENT-CONSISTENCY-002",
+      "v0_implementation_gate": "HOLD"
+    },
+    {
+      "path": "docs/reviews/REVIEW-FINAL-DOC00-51-AUDIT-002-EVIDENCE.json",
+      "bytes": 3543,
+      "sha256": "5d4eff59c001623fba1060ea13a5c76a1a47c41bbaaaa6c36e3b6263acbf426d"
+    },
+    {
+      "path": "docs/reviews/REVIEW-FINAL-DOC00-51-AUDIT-002.md",
+      "bytes": 8148,
+      "sha256": "017770403a44cb60c1233f46db9bb4ae25ab3a10afe3b799d8bc6a2abd5017fd",
+      "record_id": "REVIEW-FINAL-DOC00-51-AUDIT-002",
+      "record_type": "review",
+      "review_status": "COMPLETE",
+      "review_result": "PASS",
+      "date": "2026-09-15",
+      "scope": "DOC-00 through DOC-51 + ADR-001 through ADR-003 after AMENDMENT-PRE-V0-CONSISTENCY-001",
+      "supersedes_gate_from": [
+        "REVIEW-FINAL-DOC00-51-AUDIT-001"
+      ],
+      "v0_implementation_gate": "CLEARED_FOR_REPOSITORY_BOOTSTRAP"
+    },
+    {
+      "path": "docs/reviews/REVIEW-PRE-REPO-GOVERNANCE-001.md",
+      "bytes": 2524,
+      "sha256": "cc2ca1ecf0eb927c463906b5a614f1606afdbac380af48945e26790b57ceceea",
+      "record_id": "REVIEW-PRE-REPO-GOVERNANCE-001",
+      "record_type": "review",
+      "review_status": "COMPLETE",
+      "review_result": "PASS",
+      "phase": "Pre-V0 Repository Bootstrap",
+      "last_updated": "2026-09-15",
+      "approved_at": "2026-09-15",
+      "scope": "Post-AMENDMENT-PRE-REPO-GOVERNANCE-002 verification"
+    },
+    {
+      "path": "docs/reviews/REVIEW-RECONSTRUCTION-DOC00-19.md",
+      "bytes": 1863,
+      "sha256": "1a91524858f65440c42221997d00423d9a397eccf53c0e6882ffabeb60818b1d",
+      "record_id": "REVIEW-RECONSTRUCTION-DOC00-19",
+      "record_type": "review",
+      "review_status": "COMPLETE",
+      "review_result": "PASS",
+      "date": "2026-09-15",
+      "scope": "DOC-00 through DOC-19 reconstruction"
+    },
+    {
+      "path": "docs/reviews/REVIEW-WIDGET-FIELD-AMENDMENT-001.md",
+      "bytes": 1687,
+      "sha256": "885bec413d650b0064b47558bb71f138969df15eff91e2b885156dc4ac57a715",
+      "record_id": "REVIEW-WIDGET-FIELD-AMENDMENT-001",
+      "record_type": "review",
+      "review_status": "COMPLETE",
+      "review_result": "PASS_WITH_CORRECTIONS",
+      "date": "2026-09-15",
+      "scope": "ADR-001 controlled Personal Widget Field synchronization",
+      "corrected_by": "REVIEW-CROSS-DOCUMENT-CONSISTENCY-002"
+    },
+    {
+      "path": "docs/reviews/evidence/CONSISTENCY-AUDIT-002.json",
+      "bytes": 3649,
+      "sha256": "2bac36810289e921614ece52e79e63ba882203225913d8095c07b87e4cddc9b2"
+    },
+    {
+      "path": "docs/reviews/evidence/FINAL-AUDIT-001-STRUCTURAL.json",
+      "bytes": 3167,
+      "sha256": "daf7179da3fc73e7fc560d740110802904bfab5008de378ed85c3e79c6041303"
+    }
+  ]
+}

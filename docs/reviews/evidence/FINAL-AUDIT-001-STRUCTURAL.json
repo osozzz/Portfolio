@@ -1,0 +1,134 @@
+{
+  "generated_at": "2026-09-15",
+  "scope": "DOC-00 through DOC-51 + ADRs + reviews + package metadata",
+  "markdown_file_count": 67,
+  "numbered_docs_count": 52,
+  "numbered_ids": [
+    "DOC-00",
+    "DOC-01",
+    "DOC-02",
+    "DOC-03",
+    "DOC-04",
+    "DOC-05",
+    "DOC-06",
+    "DOC-07",
+    "DOC-08",
+    "DOC-09",
+    "DOC-10",
+    "DOC-11",
+    "DOC-12",
+    "DOC-13",
+    "DOC-14",
+    "DOC-15",
+    "DOC-16",
+    "DOC-17",
+    "DOC-18",
+    "DOC-19",
+    "DOC-20",
+    "DOC-21",
+    "DOC-22",
+    "DOC-23",
+    "DOC-24",
+    "DOC-25",
+    "DOC-26",
+    "DOC-27",
+    "DOC-28",
+    "DOC-29",
+    "DOC-30",
+    "DOC-31",
+    "DOC-32",
+    "DOC-33",
+    "DOC-34",
+    "DOC-35",
+    "DOC-36",
+    "DOC-37",
+    "DOC-38",
+    "DOC-39",
+    "DOC-40",
+    "DOC-41",
+    "DOC-42",
+    "DOC-43",
+    "DOC-44",
+    "DOC-45",
+    "DOC-46",
+    "DOC-47",
+    "DOC-48",
+    "DOC-49",
+    "DOC-50",
+    "DOC-51"
+  ],
+  "all_numbered_approved": true,
+  "wrong_status": {},
+  "dependency_edge_count": 496,
+  "missing_dependencies": [],
+  "dependency_cycles": [
+    "DOC-12 -> DOC-13 -> DOC-12"
+  ],
+  "missing_doc_references": [],
+  "duplicate_formal_decision_ids_cross_docs": {
+    "ADR-002": [
+      [
+        "docs/04-technical-architecture/DOC-43-backend-api-application-service-architecture.md",
+        2368,
+        "| `BEA-048` | ADR-002 release gating is enforced server-side, not only through Coming Soon UI. |"
+      ],
+      [
+        "docs/reviews/REVIEW-CROSS-DOCUMENT-CONSISTENCY-002.md",
+        58,
+        "| P0-02 Six fixed Dock spaces versus staged features | ADR-002 + DOC-02 define route-backed localized Coming Soon major surfaces, `noindex`, sitemap exclusion and unavailable subroutes | PASS |"
+      ]
+    ]
+  },
+  "h1_issues": [
+    [
+      "docs/04-technical-architecture/DOC-41-technical-architecture-master-blueprint.md",
+      2
+    ],
+    [
+      "docs/04-technical-architecture/DOC-42-frontend-architecture-rendering-state-boundaries.md",
+      2
+    ],
+    [
+      "docs/04-technical-architecture/DOC-43-backend-api-application-service-architecture.md",
+      2
+    ],
+    [
+      "docs/04-technical-architecture/DOC-44-data-architecture-postgresql-rls-storage.md",
+      17
+    ],
+    [
+      "docs/04-technical-architecture/DOC-45-authentication-authorization-admin-session-architecture.md",
+      36
+    ],
+    [
+      "docs/04-technical-architecture/DOC-46-integrations-caching-jobs-provider-resilience.md",
+      29
+    ],
+    [
+      "docs/04-technical-architecture/DOC-47-security-architecture-threat-model.md",
+      42
+    ],
+    [
+      "docs/04-technical-architecture/DOC-48-infrastructure-environments-dns-deployment-architecture.md",
+      111
+    ],
+    [
+      "docs/04-technical-architecture/DOC-49-performance-observability-reliability-architecture.md",
+      101
+    ],
+    [
+      "docs/04-technical-architecture/DOC-50-testing-quality-engineering-strategy.md",
+      121
+    ],
+    [
+      "docs/04-technical-architecture/DOC-51-repository-cicd-developer-experience-implementation.md",
+      151
+    ]
+  ],
+  "markdown_fence_issues": [],
+  "manifest": {
+    "exists": true,
+    "entries": 69,
+    "errors": []
+  }
+}
