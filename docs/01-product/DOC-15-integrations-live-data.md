@@ -1,7 +1,7 @@
 ---
 id: DOC-15
 title: "External Integrations & Live-Data Requirements"
-document_status: APPROVED
+document_status: REVIEW
 reconstructed: true
 canonical_format: markdown
 phase: Product Foundation
@@ -70,6 +70,11 @@ Project-specific OG images may use server/build generation. They should derive f
 
 Each integration defines: timeout, cache/stale strategy, empty/error UI, retry policy, rate-limit behavior and what remains functional during outage. There is no full-page spinner while GitHub/news loads.
 
+## 10A. Blog and presence (ADR-007)
+
+- **Blog (V1.1).** Repository-authored Markdown in Astro Content Collections; no CMS, no external content provider. Posts may link to Dev Log entries and projects; Dev Log may surface new posts as curated milestones.
+- **Anonymous presence (V1.4).** Ephemeral realtime channel state (e.g. Supabase Realtime Presence) providing aggregate counts and subtle traces only. It is an enhancement layer: if unavailable, the indicator disappears without affecting anything else. Never persisted (DOC-44 DTA-103).
+
 ## 11. Webhooks/idempotency
 
 Current portfolio has no payment webhooks. If any provider uses webhooks later (email events, content pipeline, etc.), validate signatures where available, deduplicate/idempotently process retries and store only necessary metadata.
@@ -86,3 +91,5 @@ Do not build elaborate provider-abstraction frameworks preemptively. Wrap integr
 - **INT-004** Tech Pulse visibly attributes original sources.
 - **INT-005** RenderCV generation runs outside the runtime visitor path.
 - **INT-006** External integration failure is localized and cache-aware.
+- **INT-007** The blog uses no external CMS/provider (ADR-007).
+- **INT-008** Presence is ephemeral, aggregate-only and fails silently (ADR-007).

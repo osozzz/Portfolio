@@ -1,7 +1,7 @@
 ---
 id: DOC-12
 title: "Security, Privacy & Abuse-Prevention Requirements"
-document_status: APPROVED
+document_status: REVIEW
 reconstructed: true
 canonical_format: markdown
 phase: Product Foundation
@@ -101,6 +101,19 @@ Task-specific data remains separate:
 
 These do not become a universal visitor profile. Contact/Guestbook data is never automatically used for returning personalization.
 
+## 10A. Legal baseline — Colombia (ADR-008)
+
+> **Pending lawyer review — not legal advice.** This section fixes the product/engineering baseline; the published legal texts are reviewed by a lawyer before V1.0 production (privacy policy) and before V1.2 (terms).
+
+- **Framework.** Ley 1581 de 2012 (Habeas Data) and its regulation, Decreto 1377 de 2013 (compiled in Decreto 1074 de 2015). Supervisory authority: Superintendencia de Industria y Comercio (SIC). The owner (Medellín, Colombia) is the data controller (*responsable del tratamiento*).
+- **Personal Data Processing Policy** (*Política de Tratamiento de Datos Personales*) is published at `/[locale]/privacy` **from V1.0** in ES and EN. Minimum content: controller identity and contact channel; categories of data and purposes per feature (Contact, Guestbook, Sketch Wall, leaderboards); processors (Supabase, Vercel, Resend, Sentry, Turnstile); retention per category (DOC-44); data-subject rights and how to exercise them; response times; policy version and effective date.
+- **Authorization.** Prior, express and informed authorization is collected at every collection point (Contact from V1.0; Guestbook/Sketch/leaderboard nickname from V1.2/V1.3) with a short notice linking to the policy; proof is kept as policy version + time (DOC-44 §41A, DTA-101/102).
+- **Data-subject rights channel.** Visitors can consult, update, rectify and delete their data through a published channel (email to the controller plus the accountless deletion capabilities for UGC). Response times follow the law: consultations within 10 business days, claims within 15 business days, extendable as the law allows.
+- **Terms of Use** (`/[locale]/terms`) are published **before V1.2** in ES and EN, covering UGC rules, moderation, licensing of submitted content and liability limits.
+- **Minors.** The site does not collect age (data minimization). Before posting to Guestbook or Sketch Wall the visitor ticks: EN "I am 18 or older, or I have my legal representative's authorization." / ES "Soy mayor de 18 años o cuento con la autorización de mi representante legal." Pre-moderation stays as specified in DOC-13.
+- **RNBD.** Registration in the Registro Nacional de Bases de Datos is believed not to apply to a natural person below the asset threshold; **verify before V1.0 production**.
+- **GDPR.** Not directly triggered while analytics are disabled and no goods/services are offered to EU residents; the design follows it as good practice (minimization, purpose limitation, rights, retention).
+
 ## 11. Retention/deletion
 
 Detailed periods are deferred, but every persistent category must later define retention, deletion/anonymization and moderation/audit needs. Raw IP retention is not the default. Local visitor data must be clearable from Settings.
@@ -140,3 +153,6 @@ Security review intensifies before:
 - **SEC-005** Privileged provider/database secrets never reach browser bundles.
 - **SEC-006** Public-write abuse controls are mandatory, not optional polish.
 - **SEC-007** Task-specific identities are not silently linked into a profile.
+- **SEC-008** Colombian Ley 1581 is the legal baseline; the privacy policy ships in V1.0 and terms before V1.2, both ES/EN and lawyer-reviewed (ADR-008).
+- **SEC-009** Authorization is collected at every collection point and proven by policy version + time, without extra personal data.
+- **SEC-010** No age is collected; UGC requires an 18+/legal-representative declaration (ADR-008).

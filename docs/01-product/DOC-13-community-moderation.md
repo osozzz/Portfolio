@@ -1,7 +1,7 @@
 ---
 id: DOC-13
 title: "Community, UGC & Moderation Product Requirements"
-document_status: APPROVED
+document_status: REVIEW
 reconstructed: true
 canonical_format: markdown
 phase: Product Foundation
@@ -32,7 +32,7 @@ No visitor accounts. A submission may ask for a public nickname; nickname is pre
 
 ## 3. Guestbook
 
-Fields: nickname and message, with length limits and optional anti-bot challenge. Server creates moderation state. Public read APIs return only approved entries and allowed public fields.
+Fields: nickname and message, with length limits and optional anti-bot challenge, plus a required age/authorization declaration checkbox and a link to the Terms of Use and privacy policy (ADR-008). Server creates moderation state. Public read APIs return only approved entries and allowed public fields.
 
 Content moderation status is one axis: `pending`, `approved`, `rejected`, `hidden`.
 
@@ -40,7 +40,7 @@ Reports are separate records associated with content and have their own lifecycl
 
 ## 4. Sketch Wall
 
-Drawings originate from Drawing Pad only in V1.x. Public tile may show drawing preview, nickname, date, reaction count and report action. Pending/rejected/private moderation metadata is not public.
+Drawings originate from Drawing Pad only in V1.x. Publishing for review requires the same age/authorization declaration as Guestbook (ADR-008). Public tile may show drawing preview, nickname, date, reaction count and report action. Pending/rejected/private moderation metadata is not public.
 
 ## 5. Publication semantics
 
@@ -133,3 +133,5 @@ Community succeeds when it makes the portfolio feel visited/living without creat
 - **COM-004** Submission acknowledgement distinguishes pending from published.
 - **COM-005** Social Activity is optional V1.2 scope behind Guestbook/Sketch/moderation.
 - **COM-006** Admin moderation is operational tooling, not a public-style cinematic experience.
+- **COM-007** Guestbook and Sketch submissions require the 18+/legal-representative declaration; the server rejects submissions without it and stores only the declaration time (ADR-008, DOC-44 DTA-101).
+- **COM-008** Anonymous presence (V1.4) is not a community feature: no identity, chat or messages (ADR-007).

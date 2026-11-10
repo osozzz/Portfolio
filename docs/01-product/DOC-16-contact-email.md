@@ -1,7 +1,7 @@
 ---
 id: DOC-16
 title: "Contact, Email & Communication Requirements"
-document_status: APPROVED
+document_status: REVIEW
 reconstructed: true
 canonical_format: markdown
 phase: Product Foundation
@@ -37,6 +37,8 @@ Recommended V1.0 fields:
 
 Do not require company/phone/account creation merely to send a message.
 
+Authorization notice (ADR-008): below the fields, a short notice states the purpose (replying to the message) and links to `/[locale]/privacy`; submitting requires an explicit authorization checkbox (unchecked by default). Suggested copy, final copy owned by DOC-10: EN "I authorize the processing of my data to reply to this message, under the Privacy Policy." / ES "Autorizo el tratamiento de mis datos para responder este mensaje, según la Política de Tratamiento de Datos Personales."
+
 ## 3. Validation
 
 Client validation improves feedback; server validation is authoritative. Validate required fields, lengths, email syntax and request size. Preserve entered values on recoverable error.
@@ -60,7 +62,7 @@ Optional confirmation email to sender can be evaluated later; it should not crea
 
 ## 6. Data handling
 
-Decide whether message content is stored in DB, delivered only by email, or both for reliability/audit. Minimize retention and document it. Contact identity remains separate from Guestbook/Sketch/leaderboard/local-personalization identity.
+Message content is delivered by email and not stored as a database inbox (DOC-43/DOC-44); the operation ledger keeps only proof of authorization (policy version + time). Minimize retention and document it. Contact identity remains separate from Guestbook/Sketch/leaderboard/local-personalization identity.
 
 ## 7. Deliverability
 
@@ -89,3 +91,4 @@ Visible labels, associated errors, logical tab order, mobile keyboard support, s
 - **MSG-004** Contact identity is not reused for personalization/community identity.
 - **MSG-005** SPF/DKIM/DMARC readiness is part of production email delivery.
 - **MSG-006** Contact remains professionally restrained—no confetti/achievement gamification.
+- **MSG-007** Contact requires an explicit, unchecked-by-default authorization checkbox linked to the privacy policy (Ley 1581; ADR-008).

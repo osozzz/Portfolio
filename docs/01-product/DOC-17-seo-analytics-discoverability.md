@@ -1,7 +1,7 @@
 ---
 id: DOC-17
 title: "SEO, Metadata, Analytics & Discoverability Requirements"
-document_status: APPROVED
+document_status: REVIEW
 reconstructed: true
 canonical_format: markdown
 phase: Product Foundation
@@ -28,7 +28,7 @@ The interface may feel like an app, but public professional content must remain 
 
 ## 2. Indexable route set
 
-Index candidates include locale Home, public Project Detail, Achievements, Arcade landing/game information, Channel, Social public pages, Contact, CV, Making Of, Changelog and Status where meaningful. Admin/transient/settings/palette/Terminal/moderation states are not indexable.
+Index candidates include locale Home, public Project Detail, Achievements, Arcade landing/game information, Channel, Social public pages, Contact, CV, Making Of, Changelog, Status where meaningful, the blog index and posts (V1.1), and the privacy and terms pages. Admin/transient/settings/palette/Terminal/moderation states are not indexable.
 
 Final indexing policy may exclude low-value or duplicate live/status pages, but the decision is explicit.
 
@@ -48,7 +48,7 @@ Locale-prefixed pages emit canonical/alternate metadata for both supported langu
 
 ## 5. Sitemap/robots
 
-Generate locale-aware sitemap for public canonical routes. Keep admin/private/generated internal endpoints out. Robots policy should not be used as a security mechanism.
+Generate locale-aware sitemap for public canonical routes. The blog publishes one RSS feed per locale (`/[locale]/blog/rss.xml`) and posts carry `Article` structured data with locale alternates when both translations exist. Keep admin/private/generated internal endpoints out. Robots policy should not be used as a security mechanism.
 
 ## 6. Dynamic OG
 
@@ -103,3 +103,5 @@ Command Palette can act as internal navigation/search but does not replace crawl
 - **SEO-004** Analytics is minimal and excludes raw private creative/message input.
 - **SEO-005** Robots/noindex is never treated as authorization.
 - **SEO-006** Dynamic OG is enhancement; route rendering does not depend on it.
+- **SEO-007** Blog posts are indexable with per-locale RSS and `Article` structured data (ADR-007).
+- **SEO-008** The music prompt, presence indicator and 3D stage expose no indexable content; meaningful content always exists in HTML.
