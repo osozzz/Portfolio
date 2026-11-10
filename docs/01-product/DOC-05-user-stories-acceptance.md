@@ -1,7 +1,7 @@
 ---
 id: DOC-05
 title: "User Stories, Epics & Acceptance Framework"
-document_status: APPROVED
+document_status: REVIEW
 reconstructed: true
 canonical_format: markdown
 phase: Product Foundation
@@ -51,6 +51,9 @@ Normative epic release mapping (DOC-02 governs exact release scope):
 - **USR-003:** As a mobile visitor, I can access the same core destinations without hover or hidden gestures.
 - **USR-004:** As a keyboard user, I can navigate global and composite controls with predictable focus.
 - **USR-005:** As a visitor, I can change language/theme/sound/motion/transparency without losing my current destination.
+- **USR-006:** As a first-time visitor, I am impressed in the first seconds (cinematic Boot, signature 3D) without having to do anything to reach the content (ADR-006).
+- **USR-007:** As a first-time visitor, I am asked once whether I want background music, can answer Yes or No with equal ease, and can ignore the question without losing anything (ADR-005).
+- **USR-008:** As a visitor listening to music, I can stop it in one action from anywhere, and it does not restart when I navigate (ADR-005).
 
 ## 4. Epic B — Projects and professional history
 
@@ -67,6 +70,8 @@ Normative epic release mapping (DOC-02 governs exact release scope):
 - **USR-021:** A direct CV URL works without previous app state.
 - **USR-022:** I can send a real contact message and receive clear success/failure feedback.
 - **USR-023:** A failed send preserves my typed message.
+- **USR-024:** Before sending, I can read how my data will be used and explicitly authorize it (ADR-008).
+- **USR-025:** I can read the privacy policy in my language and know how to consult, correct or delete my data (ADR-008).
 
 ## 6. Epic D — Personalization and system settings
 
@@ -86,6 +91,8 @@ Normative epic release mapping (DOC-02 governs exact release scope):
 - **USR-042:** I can use Command Palette as an alternative global navigation method.
 - **USR-043:** I can open a safe predefined Terminal without real shell execution.
 - **USR-044:** I can inspect Making Of, Changelog and Status as product evidence.
+- **USR-045:** I can read technical blog posts about the owner's real work and subscribe through RSS (V1.1, ADR-007).
+- **USR-046:** I can switch to a curated theme that changes the environment without breaking readability or layout (V1.1, ADR-007).
 
 ## 8. Epic F — Community
 
@@ -95,6 +102,7 @@ Normative epic release mapping (DOC-02 governs exact release scope):
 - **USR-053:** I can create a sketch with Drawing Pad without uploading arbitrary files.
 - **USR-054:** I can save a sketch locally and intentionally submit it for moderation.
 - **USR-055:** I am not told my sketch is published until approval occurs.
+- **USR-056:** Before posting, I confirm I am 18+ or have my legal representative's authorization, without being asked my age (V1.2, ADR-008).
 
 ## 9. Epic G — Arcade
 
@@ -108,6 +116,7 @@ Normative epic release mapping (DOC-02 governs exact release scope):
 - **USR-070:** I can read a curated Tech Pulse with visible source attribution.
 - **USR-071:** I can review a Dev Log that combines real GitHub activity with curated milestones.
 - **USR-072:** Live-data outages do not prevent access to the portfolio core.
+- **USR-073:** I can sense that other people are exploring the site right now without anyone being identified (V1.4, ADR-007).
 
 ## 11. Epic I — Owner/admin
 
