@@ -13,8 +13,8 @@ depends_on:
   - DOC-28
 decision_families:
   - A11Y
-last_updated: 2026-09-15
-approved_at: 2026-09-15
+last_updated: 2026-11-10
+approved_at: 2026-11-10
 ---
 
 # DOC-11 — Accessibility & Inclusive Experience Requirements
@@ -53,6 +53,18 @@ Controls have meaningful names describing action (`Open Dex-Sphere media`, not j
 ## 6. Motion
 
 Honor OS/browser `prefers-reduced-motion` and product setting. Remove or shorten large translations, parallax, spring overshoot and continuous ambient motion. Direct manipulation (drawing/dragging) remains immediate rather than disabled.
+
+## 6A. Audio and the music prompt (ADR-005)
+
+- **SC 1.4.2 Audio Control.** Music never starts before an explicit Yes; once playing, the always-visible Sound/Music control stops it in one action in every responsive mode.
+- **Music prompt.** Non-modal, no focus trap, does not steal focus on appearance; announced politely; reachable in normal focus order; Yes/No are native buttons with equal visual weight and localized accessible names; Escape dismisses as No.
+- **Meaning never depends on audio** (AFD-001); music never masks screen-reader speech priorities — it ducks during Project Media video and can be turned off independently of UI sounds.
+
+## 6B. 3D stage (ADR-006)
+
+- Decorative 3D is hidden from assistive technology (`aria-hidden` canvas); anything meaningful (e.g. project selection) has a DOM equivalent such as the selector list/index.
+- Reduced motion replaces the stage with its static/2D rendition; no camera moves, spins or parallax.
+- Flashing content stays below WCAG 2.3.1 thresholds.
 
 ## 7. Transparency/readability
 
@@ -102,3 +114,7 @@ Release review includes automated scanning plus manual keyboard, zoom, reduced-m
 - **A11Y-003** Native semantics are preferred over custom ARIA widgets.
 - **A11Y-004** Reduced presentation never removes route/action capability.
 - **A11Y-005** Essential actions never depend exclusively on hover, sound, color, gamepad or gesture.
+- **A11Y-006** Music satisfies SC 1.4.2: it never plays before Yes and stops in one action from an always-visible control (ADR-005).
+- **A11Y-007** The music prompt is non-modal and never traps or steals focus.
+- **A11Y-008** The 3D stage is decorative to assistive technology and has a reduced-motion static rendition (ADR-006).
+- **A11Y-009** Legal pages are plain, readable content with headings and no layout tricks (ADR-008).

@@ -11,8 +11,8 @@ depends_on:
   - DOC-02
 decision_families:
   - CNTREQ
-last_updated: 2026-09-15
-approved_at: 2026-09-15
+last_updated: 2026-11-10
+approved_at: 2026-11-10
 ---
 
 # DOC-09 — Professional & Public Content Requirements
@@ -72,6 +72,10 @@ This is curated state, not inferred from commit count. May include project, mile
 ## 7. Dev Log
 
 Supports normalized GitHub-derived events and curated human-authored milestones. Curated entries can explain architecture/design decisions that commits do not communicate well.
+
+## 7A. Blog (V1.1, ADR-007)
+
+First-person technical writing in the portfolio voice: concrete decisions, trade-offs and lessons from real projects (including this portfolio). Same integrity rules as project content: no invented metrics, clients or results. Each post states its publication date and, where relevant, links to the project, Dev Log entry or Making Of section it explains.
 
 ## 8. Tech Pulse
 

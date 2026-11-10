@@ -11,8 +11,8 @@ depends_on:
   - DOC-09
 decision_families:
   - L10N
-last_updated: 2026-09-15
-approved_at: 2026-09-15
+last_updated: 2026-11-10
+approved_at: 2026-11-10
 ---
 
 # DOC-10 — Localization, Language & Bilingual Behavior
@@ -41,9 +41,22 @@ Both locales cover:
 - 404/status/changelog/terminal responses;
 - accessibility labels;
 - metadata/SEO and OG text;
-- CV content/artifacts.
+- CV content/artifacts;
+- music prompt and sound/music control labels;
+- legal pages (privacy policy, terms), the Contact authorization notice and the UGC age declaration;
+- blog posts (a post may exist in one locale only; the index shows per-locale availability and never machine-translates).
 
 No essential flow ships as mixed-language UI.
+
+Baseline copy for the new surfaces (final wording may be refined in review):
+
+| Key | EN | ES |
+|---|---|---|
+| music.prompt | Play background music? | ¿Reproducir música de fondo? |
+| music.yes / music.no | Yes / No | Sí / No |
+| sound.control.on / off | Turn music off / Turn music on | Apagar música / Encender música |
+| contact.authorization | I authorize the processing of my data to reply to this message, under the Privacy Policy. | Autorizo el tratamiento de mis datos para responder este mensaje, según la Política de Tratamiento de Datos Personales. |
+| ugc.ageDeclaration | I am 18 or older, or I have my legal representative's authorization. | Soy mayor de 18 años o cuento con la autorización de mi representante legal. |
 ## 3A. Root `/` locale negotiation
 
 Canonical content always lives under locale-prefixed routes. Root `/` is a redirect-only negotiation endpoint with this deterministic order:
@@ -92,3 +105,5 @@ Localized routes define correct canonical/hreflang/alternate metadata. Language 
 - **L10N-003** Locale switch preserves current destination/context.
 - **L10N-004** Essential feedback/errors/metadata are localized, not only primary page copy.
 - **L10N-005** Content validation should catch missing required translations before release.
+- **L10N-006** Legal texts and consent notices exist in both locales with equivalent meaning; the Spanish legal text governs where Colombian law requires it (ADR-008).
+- **L10N-007** Blog posts may be single-locale; availability is explicit and never auto-translated (ADR-007).
