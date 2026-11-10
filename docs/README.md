@@ -32,6 +32,7 @@ This directory is the Markdown-first source-of-truth package for the interactive
 | DOC-17 | SEO, Metadata, Analytics & Discoverability Requirements | `01-product` | **APPROVED** |
 | DOC-18 | Delivery Roadmap, GitHub Workflow & Release Governance | `01-product` | **APPROVED** |
 | DOC-19 | Implementation Tooling, Automation & Authorship Governance | `01-product` | **APPROVED** |
+| DOC-52 | Software Requirements Specification (SRS) Index | `01-product` | **REVIEW** |
 | DOC-20 | Interface Philosophy & Interaction Model | `02-interface-architecture` | **APPROVED** |
 | DOC-21 | Screen Anatomy | `02-interface-architecture` | **APPROVED** |
 | DOC-22 | Navigation Grammar | `02-interface-architecture` | **APPROVED** |

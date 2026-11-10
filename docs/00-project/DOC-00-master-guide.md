@@ -1,7 +1,7 @@
 ---
 id: DOC-00
 title: "Master Guide, Governance & Documentation Map"
-document_status: APPROVED
+document_status: REVIEW
 reconstructed: true
 canonical_format: markdown
 phase: Product Foundation
@@ -62,7 +62,7 @@ A lower item cannot silently override a higher item. DOC-32 is not a blanket ove
 | SUPERSEDED | Replaced by a later decision/document; retained for traceability. |
 | ARCHIVED | Historical only. |
 
-DOC-00–DOC-19 were historically reconstructed from prior planning and initially reviewed before approval; all numbered documents DOC-00–DOC-51 are now `APPROVED`. `reconstructed: true` records provenance only and does not reduce authority.
+DOC-00–DOC-19 were historically reconstructed from prior planning and initially reviewed before approval; all numbered documents DOC-00–DOC-52 are `APPROVED` once the PROPOSAL-REOPEN-001 revision closes. `reconstructed: true` records provenance only and does not reduce authority.
 
 ### Separate governance vocabularies
 
@@ -105,6 +105,7 @@ Do not reuse a moderation/project lifecycle/status enum for documentation govern
 | DOC-17 | SEO, metadata, analytics and discoverability requirements. |
 | DOC-18 | Delivery roadmap, GitHub workflow and release governance. |
 | DOC-19 | Implementation tooling, automation and authorship governance. |
+| DOC-52 | Software Requirements Specification (SRS) index — ISO/IEC/IEEE 29148 outline mapped to owner documents; holds no requirement text. |
 
 ### 02-interface-architecture
 
@@ -139,7 +140,7 @@ The current architecture does not include visitor accounts, follower graphs, vis
 
 The package uses stable prefixes for traceability. Canonical family owners are:
 
-- Product/Foundation: `PRJ` (DOC-00), `VIS` (DOC-01), `SCP` (DOC-02), `AUD` (DOC-03), `JRN` (DOC-04), `USR` (DOC-05), `FR` (DOC-06), `NFR` (DOC-07), `ENG` (DOC-08), `CNTREQ` (DOC-09 content requirements), `L10N` (DOC-10), `A11Y` (DOC-11), `SEC` (DOC-12), `COM` (DOC-13), `ARC` (DOC-14), `INT` (DOC-15), `MSG` (DOC-16), `SEO` (DOC-17), `DLV` (DOC-18), `TLG` (DOC-19).
+- Product/Foundation: `PRJ` (DOC-00), `VIS` (DOC-01), `SCP` (DOC-02), `AUD` (DOC-03), `JRN` (DOC-04), `USR` (DOC-05), `FR` (DOC-06), `NFR` (DOC-07), `ENG` (DOC-08), `CNTREQ` (DOC-09 content requirements), `L10N` (DOC-10), `A11Y` (DOC-11), `SEC` (DOC-12), `COM` (DOC-13), `ARC` (DOC-14), `INT` (DOC-15), `MSG` (DOC-16), `SEO` (DOC-17), `DLV` (DOC-18), `TLG` (DOC-19), `SRS` (DOC-52 index).
 - Interface Architecture: `UI` (DOC-20), `SA` (DOC-21), `NAV` (DOC-22), `INP` (DOC-23), `FCS` (DOC-24), `WDG` (DOC-25), `SUR` (DOC-26), `CMP` (DOC-27), `RSP` (DOC-28), `MOT` (DOC-29), `AFD` (DOC-30), `SCR` (DOC-31), `MST` (DOC-32).
 - Visual/Content/CV: `VID` (DOC-33), `CLR` (DOC-34), `TYP` / `ICO` / `GFX` (DOC-35), **`CNT` (DOC-36 canonical content architecture)**, `CVP` (DOC-37), `GEO` (DOC-38), `MAT` (DOC-39), `STA` (DOC-40).
 - Technical Architecture: `TAM` (DOC-41 master blueprint), `FEA` (DOC-42 frontend), `BEA` (DOC-43 backend/application services), `DTA` (DOC-44 data/PostgreSQL/RLS/Storage), `IAM` (DOC-45 identity/access), `ICJ` (DOC-46 integrations/caching/jobs), `SECARC` (DOC-47 security architecture/threat model), `INF` (DOC-48 infrastructure/environments/DNS/deployment), `POR` (DOC-49 performance/observability/reliability), `TQE` (DOC-50 testing/quality engineering), `RDX` (DOC-51 repository/CI/CD/developer experience). Later families are registered when their canonical documents are created.
