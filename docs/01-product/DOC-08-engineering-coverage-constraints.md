@@ -1,7 +1,7 @@
 ---
 id: DOC-08
 title: "Engineering Coverage Register & Technical Constraints"
-document_status: APPROVED
+document_status: REVIEW
 reconstructed: true
 canonical_format: markdown
 phase: Product Foundation
@@ -32,9 +32,10 @@ This is the anti-omission register for engineering concerns. It records what mus
 The approved V1.x technical baseline is:
 
 - **Language:** TypeScript.
-- **Web application:** React with Next.js.
+- **Web application:** Astro (static by default; server rendering through the Vercel adapter only for routes/endpoints that need it), with React islands for complex interactive surfaces, plain Astro for content pages, vanilla TypeScript + canvas for Drawing Pad and Arcade, nanostores for cross-island state and Astro Content Collections for repository-authored content (ADR-004).
+- **3D:** three.js through React Three Fiber, limited to signature moments in one persistent lazy-loaded stage with static/2D fallbacks (ADR-006).
 - **Styling:** Tailwind/CSS variables/design tokens; avoid hardcoding design values in feature components.
-- **Motion:** CSS for simple local transitions; Motion as primary React animation system; GSAP only if a documented prototype demonstrates a need.
+- **Motion:** CSS for simple local transitions; Astro View Transitions for the persistent shell; Motion as primary animation system inside React islands; GSAP only if a documented prototype demonstrates a need.
 - **Database/Auth/Storage:** Supabase/PostgreSQL with admin auth only, server-first runtime data access, RLS/grants/least privilege and controlled Storage only where a feature actually requires it.
 - **Hosting:** Vercel managed deployment/runtime, with Cloudflare DNS-only authoritative DNS preferred and Vercel DNS acceptable as the simpler alternative.
 - **Email:** Resend behind a server-side provider adapter with domain authentication and idempotent Contact delivery.
@@ -49,7 +50,7 @@ Exact compatible package/runtime versions are pinned during V0 bootstrap and the
 
 | Concern | Current requirement/direction | Status owner |
 |---|---|---|
-| Frontend architecture | Server-render by default; deliberate client islands; feature/system boundaries. | DOC-41 / DOC-42 |
+| Frontend architecture | Static/server HTML by default; deliberate client islands; persistent shell via View Transitions; feature/system boundaries (ADR-004). | DOC-41 / DOC-42 |
 | Backend/API | Thin transports over application services/repositories; browser does not hold privileged provider secrets. | DOC-43 |
 | Database | PostgreSQL runtime model for UGC/moderation/Arcade/admin/abuse state; professional canonical content remains repository-authored. | DOC-36 / DOC-44 |
 | Migrations | Reproducible versioned Supabase/PostgreSQL migrations using expand → migrate → contract. | DOC-44 / DOC-51 |
@@ -155,11 +156,11 @@ Use structured logs/metrics/errors without storing message bodies, unpublished s
 
 ## 10. Payments and commerce assessment
 
-**Current status: NOT APPLICABLE.** The portfolio has no payment, subscription, purchase, refund or settlement flows in V1.x. Therefore payment webhooks, reconciliation and refunds are not implemented. The engineering checklist explicitly records this as N/A instead of silently forgetting it. If commerce ever enters scope, it requires a new threat/data/legal architecture review.
+**Current status: NOT APPLICABLE.** The portfolio has no payment, subscription, purchase, refund or settlement flows in V1.x. Subscription renewal terms are therefore also N/A. Therefore payment webhooks, reconciliation and refunds are not implemented. The engineering checklist explicitly records this as N/A instead of silently forgetting it. If commerce ever enters scope, it requires a new threat/data/legal architecture review.
 
 ## 11. Email/deliverability assessment
 
-Contact email is applicable. Before public production delivery, configure/verify sending-domain SPF, DKIM and DMARC strategy, bounce/error handling and provider credentials. Do not expose provider API keys client-side.
+Contact email is applicable and transactional. There is no newsletter or marketing email, so marketing-email unsubscribe and postal-address requirements (CAN-SPAM-style) are **NOT APPLICABLE**; they must be reassessed if a newsletter is ever proposed. Before public production delivery, configure/verify sending-domain SPF, DKIM and DMARC strategy, bounce/error handling and provider credentials. Do not expose provider API keys client-side.
 
 ## 12. Mobile-store assessment
 
@@ -175,6 +176,8 @@ Must explicitly define retention/deletion for:
 - leaderboard nickname/score/session records;
 - admin audit logs;
 - local visitor preferences/achievements.
+
+**Legal baseline (ADR-008).** The applicable framework is Colombia's Ley 1581 de 2012 with Decreto 1377 de 2013 (compiled in Decreto 1074 de 2015), supervised by the SIC; GDPR is followed as good practice. A Personal Data Processing Policy is published from V1.0 because Contact collects personal data; prior, express and informed authorization is collected at every collection point; a data-subject rights channel is published. RNBD applicability must be verified before V1.0 production. Legal texts require lawyer review and this register is not legal advice.
 
 Retention, accountless self-deletion capability, hard-delete/anonymization behavior and operational evidence windows are now defined in DOC-44/DOC-47. “Keep forever” is not a default.
 
@@ -195,6 +198,8 @@ Use lockfiles, automated dependency update proposals where useful, CVE/SCA scann
 - **ENG-005** Preview environments must not casually share production write credentials/data.
 - **ENG-006** Heavy observability/queue/cache infrastructure is introduced from concrete need, not checklist theater.
 - **ENG-007** Security/testing/backup concerns become stronger as community persistence launches.
+- **ENG-008** Astro is the application framework; the earlier framework baseline is superseded by ADR-004.
+- **ENG-009** Privacy policy from V1.0, Terms of Use before V1.2 and the UGC age declaration follow the Colombian legal baseline (ADR-008).
 
 ## 17. Full engineering completeness register
 
@@ -285,19 +290,25 @@ This matrix mirrors the project's explicit engineering checklist so a concern ca
 | App Store / Play Store review | **N/A web portfolio** | Same |
 | Native build numbers | **N/A web portfolio** | Same |
 | Web builds/versioning | Applicable | DOC-51 |
-| Privacy policy | Required before public UGC/data collection; product/data contracts already define minimization/retention | DOC-12 / DOC-13 / DOC-44 + pre-launch legal readiness |
-| Terms & conditions | Evaluate before Community launch based on UGC/legal need | DOC-13 + pre-launch legal readiness |
+| Privacy policy | **Required from V1.0** (Contact collects personal data): Personal Data Processing Policy in ES/EN under Ley 1581, lawyer-reviewed before production (ADR-008) | DOC-12 / DOC-16 / DOC-44 + pre-launch legal readiness |
+| Terms & conditions | **Required before V1.2** (UGC and nicknames), ES/EN, lawyer-reviewed (ADR-008) | DOC-12 / DOC-13 + pre-launch legal readiness |
+| Minimum age for UGC | Applicable from V1.2: no age collected; visitor declares 18+ or legal-representative authorization before posting; pre-moderation unchanged (ADR-008) | DOC-13 / DOC-44 |
 | UGC/community policy | Applicable before public community launch | DOC-13 + V1.2 readiness |
 | Soft delete | Conditional by record/data type | DOC-44 |
 | Hard delete/anonymization | Applicable to data lifecycle decisions | DOC-13 / DOC-44 / DOC-47 |
 | Data retention | Applicable | DOC-44 / DOC-49 |
-| Data export/access requests | Evaluate before Community production based on stored data/applicable law | DOC-13 / DOC-44 + pre-launch legal readiness |
+| Data export/access requests | Applicable from V1.0 through the Ley 1581 data-subject rights channel (consult, update, rectify, delete) with legal response times (ADR-008) | DOC-12 / DOC-44 + pre-launch legal readiness |
+| Marketing email unsubscribe / postal address | **N/A**: no newsletter or marketing email; Contact replies are transactional | Reassess if a newsletter enters scope |
+| Subscription renewal terms | **N/A**: no payments or subscriptions | §10 |
 | Performance budgets | Required | DOC-07 / DOC-49 / DOC-50 |
 | Device/browser compatibility | Required | DOC-28 / DOC-50 |
 | Touch UX | Required | DOC-23/DOC-28 |
 | Gamepad compatibility | Progressive enhancement, applicable where documented | Input/Arcade tests |
 | Analytics | Capability exists behind wrapper; disabled/no-op in V0/V1.0 until separately approved | DOC-17 / DOC-49 |
 | Analytics consent/cookies | Not applicable while analytics is disabled; must be reevaluated before enabling a provider | DOC-17 / privacy readiness |
+| Session replay | **OFF.** If ever enabled, all inputs and keystrokes are masked and the provider decision requires an ADR | DOC-17 / DOC-49 |
+| Web fonts | Self-hosted; no third-party font CDN requests | DOC-35 / DOC-42 |
+| Audio/3D asset licensing | Applicable from V1.0: committed audio license register; CC0 preferred; 3D models/textures self-hosted with documented rights (ADR-005, ADR-006) | DOC-19 / DOC-47 |
 | Dependency updates | Required governance | DOC-18 / DOC-51 |
 | Third-party vulnerabilities | Required scanning/review | DOC-47 / DOC-50 / DOC-51 |
 | SBOM | Optional initially; evaluate as dependency surface grows | DOC-47 / DOC-51 |
