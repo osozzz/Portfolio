@@ -1,7 +1,7 @@
 ---
 id: DOC-01
 title: "Product Vision, Positioning & Success Criteria"
-document_status: APPROVED
+document_status: REVIEW
 reconstructed: true
 canonical_format: markdown
 phase: Product Foundation
@@ -66,8 +66,11 @@ A visitor should be able to:
 8. **Performance is part of design.** Visual effects degrade before capability.
 9. **Own identity.** iiSU is inspiration; the finished product must be recognizably Alejandro's portfolio.
 10. **Evidence over claims.** Project case studies and Skill Constellation should point to where technologies were actually used.
+11. **Dazzle without demands.** The first seconds should impress (cinematic Boot, signature 3D moments, optional music), but the visitor never has to do anything to reach the content. The interface stays a console-like explorable space: the visitor moves through Dock spaces, selectors, focus and widgets, and it is never a walkable 3D world (ADR-005, ADR-006).
 
 ## 6. Target perception
+
+**First-seconds reaction (owner intent).** In the first seconds a visitor should think: *how great*, *what attention to detail*, *how technical*, *how well organized the information is*, *what good product sense*. Product sense is the differentiator the owner most wants to prove.
 
 The system should read as: technically capable, thoughtful, curious, crafted, confident, approachable and modern. Avoid generic SaaS, generic cyberpunk, childish gamification, overdone glass, gamer HUD clutter, fake system telemetry and animation for its own sake.
 
@@ -98,6 +101,7 @@ The portfolio may evolve as a living product with Dev Log, Changelog, Tech Pulse
 - **VIS-002** iiSU is the principal interaction inspiration, not an asset source or brand template.
 - **VIS-003** Home work/project exploration is the default first meaningful experience.
 - **VIS-004** Playful features are optional enrichment, never prerequisites for professional information.
+- **VIS-005** The first impression dazzles without requiring any visitor action. Boot, 3D and music are enhancements over content that renders first (ADR-005, ADR-006, ADR-007).
 - **VIS-005** The portfolio itself is treated as a product/case study with engineering evidence.
 - **VIS-006** Bilingual ES/EN support is part of the product identity, not a later translation patch.
 - **VIS-007** Mobile, keyboard and accessibility quality are indicators of product craftsmanship.
