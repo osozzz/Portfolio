@@ -1,7 +1,7 @@
 ---
 id: DOC-50
 title: "Testing & Quality Engineering Strategy"
-document_status: APPROVED
+document_status: REVIEW
 canonical_format: markdown
 phase: "Technical Architecture"
 folder: 04-technical-architecture
@@ -148,7 +148,7 @@ The project uses the following verification stack.
 |---|---|---|
 | Static | Types, lint, schema, content, dependency boundaries | TypeScript, ESLint, custom validators |
 | Unit | Pure logic and deterministic state | Vitest |
-| Component | Interactive Client Components/primitives | Vitest + Testing Library |
+| Component | Interactive React islands/primitives | Vitest + Testing Library |
 | Service integration | Application services + repositories/adapters | Vitest + controlled fakes/local dependencies |
 | Database | Constraints, RLS, SQL functions, migrations | Supabase CLI + pgTAP |
 | Contract | DTO/provider/protocol/schema compatibility | Vitest/schema fixtures |
@@ -204,12 +204,12 @@ Vitest aligns with the TypeScript/modern frontend stack and is the baseline for:
 - resolvers;
 - state reducers/stores;
 - adapters with fakes;
-- synchronous Client Components;
+- React island components;
 - deterministic service tests.
 
-Vitest is **not** used to pretend we have fully tested every Next.js runtime behavior.
+Vitest is **not** used to pretend we have fully tested every Astro runtime behavior (persistence across navigation, on-demand rendering, Actions).
 
-In particular, async Server Components are verified primarily through browser/system-level tests and focused lower-level logic extraction rather than brittle synthetic component harnesses.
+In particular, server-rendered `.astro` pages and the persistent shell are verified primarily through browser/system-level tests and focused lower-level logic extraction rather than brittle synthetic harnesses. Astro's Container API may render individual `.astro` components in tests where useful.
 
 ---
 
@@ -302,7 +302,7 @@ Invalid transitions must be tested as aggressively as valid transitions.
 
 ## 10. Component-test scope
 
-Component tests focus on interactive Client Components and visual semantics that do not require a complete browser navigation stack.
+Component tests focus on interactive React islands and visual semantics that do not require a complete browser navigation stack.
 
 Good component-test subjects:
 
@@ -322,17 +322,17 @@ Component tests should interact through public semantics such as roles, labels a
 
 ---
 
-## 11. Async Server Components
+## 11. Server-rendered Astro pages
 
-Async Server Components are not forced into unit/component tools that do not model them reliably.
+Server-rendered `.astro` pages are not forced into unit/component tools that do not model them reliably.
 
 The testing strategy is:
 
 1. extract pure business/content transformation into unit-testable modules;
 2. validate server-side schemas and services independently;
-3. verify the assembled async Server Component through E2E against a built Next.js application.
+3. verify the assembled page through E2E against a built Astro application (`astro build` + preview or a preview deployment).
 
-This prevents a false sense of coverage created by mocks that do not match the actual React/Next runtime.
+This prevents a false sense of coverage created by mocks that do not match the actual Astro runtime.
 
 ---
 
@@ -430,7 +430,7 @@ Architecture rules should be machine-checkable where practical.
 
 Examples:
 
-- Client Components cannot import server-only repositories;
+- client islands cannot import server-only repositories;
 - feature code cannot import provider SDKs directly when an adapter is required;
 - UI cannot import Supabase secret clients;
 - Admin shell cannot be imported into public shell;
@@ -2339,7 +2339,7 @@ DOC-50 does not require:
 - full load testing on every commit;
 - production DAST against destructive routes;
 - screenshot testing of every component;
-- brittle mocks of every Next.js internal;
+- brittle mocks of every Astro internal;
 - tests whose only purpose is increasing a metric.
 
 Quality engineering remains proportional to the product's real risks.
@@ -2358,7 +2358,7 @@ A fresh local Supabase stack can apply all migrations and pass pgTAP without Pro
 
 ## TQE-GATE-03 — Production-build E2E
 
-Playwright runs critical user journeys against `next build`/production-like server behavior.
+Playwright runs critical user journeys against `astro build` output/production-like server behavior.
 
 ## TQE-GATE-04 — Accessibility
 
@@ -2400,7 +2400,7 @@ CI retries/quarantine behavior does not hide persistent critical-suite instabili
 | TQE-004 | React Testing Library is the baseline for semantic Client Component testing. |
 | TQE-005 | Playwright is the canonical E2E/browser/visual automation framework. |
 | TQE-006 | Browser E2E normally runs against a production build. |
-| TQE-007 | Async Server Components are primarily verified through extracted lower-level logic plus E2E rather than forced synthetic unit rendering. |
+| TQE-007 | Server-rendered Astro pages are primarily verified through extracted lower-level logic plus E2E rather than forced synthetic unit rendering. |
 | TQE-008 | Supabase CLI + pgTAP are first-class database verification tools. |
 | TQE-009 | Lighthouse CI or equivalent deterministic lab tooling enforces representative performance regressions. |
 | TQE-010 | Automated accessibility uses axe/Playwright but never replaces manual accessibility assessment. |
@@ -2518,8 +2518,8 @@ CI retries/quarantine behavior does not hide persistent critical-suite instabili
 
 The current tool choices align with the upstream ecosystem at the time of this specification:
 
-- Next.js documents Vitest + React Testing Library for unit testing and recommends E2E for async Server Components where unit tooling does not fully model them.
-- Next.js documents Playwright as a supported E2E path and recommends running tests against production code when practical.
+- Astro documents Vitest (`getViteConfig`) and the Container API for unit testing, and E2E for full-page behavior.
+- Astro documents Playwright as a supported E2E path; tests run against the built output when practical.
 - Playwright supports Chromium, Firefox and WebKit, accessibility integration with `@axe-core/playwright`, screenshot comparison and CI sharding when scale requires it.
 - Supabase documents pgTAP and `supabase test db` for database structure, RLS, functions and integrity verification.
 - Lighthouse CI supports repeated automated Lighthouse runs and performance/resource-budget assertions.

@@ -1,7 +1,7 @@
 ---
 id: DOC-51
 title: "Repository, CI/CD & Developer Experience Implementation"
-document_status: APPROVED
+document_status: REVIEW
 canonical_format: markdown
 phase: "Technical Architecture"
 folder: 04-technical-architecture
@@ -789,7 +789,7 @@ FAST
 full unit/component suite
 local database reset + pgTAP
 RenderCV validation/build checks
-Next.js production build
+Astro production build
 critical Chromium E2E
 critical accessibility automation
 security/static/supply-chain checks available to the repository
@@ -2562,7 +2562,7 @@ The repository includes Storybook from V0. CI at minimum verifies that Storybook
 
 ## RenderCV generated-artifact repository policy
 
-`public/cv/*.pdf` and generated preview artifacts are build outputs and are **not committed** in the V0/V1.x baseline. CI validates/renders both locales and attaches changed CV artifacts for review; the deployment build runs the same pinned RenderCV pipeline before the Next.js build packages public artifacts.
+`public/cv/*.pdf` and generated preview artifacts are build outputs and are **not committed** in the V0/V1.x baseline. CI validates/renders both locales and attaches changed CV artifacts for review; the deployment build runs the same pinned RenderCV pipeline before the Astro build packages public artifacts.
 
 V0 bootstrap must prove the selected Vercel build image can run the pinned RenderCV toolchain reproducibly. If that gate fails, change the deployment artifact choreography deliberately; do not silently commit stale PDF binaries as a workaround.
 

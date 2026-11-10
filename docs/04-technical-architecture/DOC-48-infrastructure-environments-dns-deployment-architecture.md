@@ -1,7 +1,7 @@
 ---
 id: DOC-48
 title: "Infrastructure, Environments, DNS & Deployment Architecture"
-document_status: APPROVED
+document_status: REVIEW
 canonical_format: markdown
 phase: "Technical Architecture"
 folder: 04-technical-architecture
@@ -50,7 +50,7 @@ approved_at: 2026-09-15
 
 ## 1. Purpose
 
-The portfolio is deliberately designed as a managed, serverless-first web system rather than a self-hosted cluster. DOC-41 selected Next.js/Vercel and Supabase as the main runtime platforms; DOC-44 through DOC-47 defined data, identity, integrations and security. DOC-48 turns those decisions into a concrete deployment topology.
+The portfolio is deliberately designed as a managed, serverless-first web system rather than a self-hosted cluster. DOC-41 selected Astro on Vercel and Supabase as the main runtime platforms (ADR-004); DOC-44 through DOC-47 defined data, identity, integrations and security. DOC-48 turns those decisions into a concrete deployment topology.
 
 This document owns:
 
@@ -182,7 +182,7 @@ Local development is the default engineering environment.
 Baseline:
 
 ```text
-Next.js local process
+Astro dev server (local process)
 Supabase CLI local stack
 local Postgres migrations
 seeded synthetic runtime data
@@ -220,7 +220,7 @@ A developer running the site locally must not accidentally send real Contact ema
 
 ## 7. Vercel environment model
 
-Vercel supplies the hosting/deployment plane for the Next.js application.
+Vercel supplies the hosting/deployment plane for the Astro application through the official Astro Vercel adapter.
 
 The architecture maps its default environment classes as follows:
 
@@ -709,7 +709,7 @@ SENTRY_AUTH_TOKEN          (build/CI only where possible)
 
 Never:
 
-- import into Client Components;
+- import into client islands;
 - expose through error payloads;
 - serialize into page data;
 - echo in logs;
@@ -1086,7 +1086,7 @@ Reasons:
 Recovery portability instead comes from:
 
 - Git source;
-- standard Next.js application;
+- standard Astro application;
 - SQL migrations;
 - portable content;
 - provider adapters;
@@ -1201,7 +1201,7 @@ DOC-42/DOC-46 own application cache semantics.
 
 ## 49. Scheduled jobs
 
-Scheduled jobs run through the Vercel/Next.js job paths designed in DOC-46.
+Scheduled jobs run through the Vercel Cron / Astro API endpoint job paths designed in DOC-46.
 
 Initial jobs:
 
@@ -1690,7 +1690,7 @@ Version-control settings such as:
 
 - function region override;
 - cron routes/schedules;
-- redirects/rewrites not better represented by Next.js;
+- redirects/rewrites not better represented by Astro configuration;
 - function duration/memory override when measured.
 
 Do not copy provider defaults into config without purpose.
@@ -1891,7 +1891,7 @@ This is not a promise of one-click migration; it is a guard against unnecessary 
 
 The portfolio can theoretically move:
 
-- Next.js application to another compatible host;
+- Astro application to another compatible host (adapter swap);
 - PostgreSQL data to another PostgreSQL service;
 - email adapter to another provider;
 - verification adapter to another provider;

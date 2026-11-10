@@ -1,7 +1,7 @@
 ---
 id: DOC-44
 title: "Data Architecture, PostgreSQL, RLS & Storage"
-document_status: APPROVED
+document_status: REVIEW
 canonical_format: markdown
 phase: "Technical Architecture"
 folder: 04-technical-architecture
@@ -190,7 +190,7 @@ Browser public UI
 Browser admin auth
 → Supabase Auth may use publishable key
 
-Next.js application services/repositories
+Astro server application services/repositories
 → narrow server-owned database adapter
 → privileged secret-key database client when persistence access is required
 ```
@@ -226,7 +226,7 @@ alter table public.<table> enable row level security;
 revoke all on table public.<table> from anon, authenticated;
 ```
 
-There is no `anon` INSERT path for Guestbook, Sketches, Reports or Arcade scores. Public submissions pass through Next.js application services, which then use the privileged repository adapter.
+There is no `anon` INSERT path for Guestbook, Sketches, Reports or Arcade scores. Public submissions pass through the Astro server's application services, which then use the privileged repository adapter.
 
 ---
 
@@ -676,7 +676,7 @@ Zero updated rows means conflict/not-found and must not be silently treated as s
 
 ## 29. Public Community reads
 
-Public Server Components/application services select only approved rows and only public-safe columns.
+Public server-rendered pages/application services select only approved rows and only public-safe columns.
 
 No public projection includes:
 
@@ -2069,7 +2069,7 @@ Exact filenames may change, but responsibilities must remain explicit.
 
 The privileged database client module must:
 
-- import `server-only`;
+- live under server-only module paths enforced by import-boundary lint (DOC-51) so client islands cannot import them;
 - read validated server config centrally;
 - use the Supabase secret key (or approved equivalent);
 - never be imported into a Client Component;

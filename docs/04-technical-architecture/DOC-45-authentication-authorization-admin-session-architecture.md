@@ -1,7 +1,7 @@
 ---
 id: DOC-45
 title: "Authentication, Authorization & Admin Session Architecture"
-document_status: APPROVED
+document_status: REVIEW
 canonical_format: markdown
 phase: "Technical Architecture"
 folder: 04-technical-architecture
@@ -54,7 +54,7 @@ This document defines:
 - the production admin sign-in factors;
 - mandatory MFA policy and authenticator assurance level;
 - initial account provisioning and bootstrap requirements;
-- browser/server Supabase Auth clients for Next.js App Router;
+- browser/server Supabase Auth clients for Astro on-demand routes, middleware and Actions;
 - cookie-based SSR session handling and PKCE flows;
 - trusted identity verification versus untrusted session objects;
 - `/admin` route protection and redirect behavior;
@@ -378,7 +378,7 @@ Do not duplicate password/MFA state into `admin_profiles`.
 
 ---
 
-## Next.js / Supabase SSR architecture
+## Astro / Supabase SSR architecture
 
 ## 20. Cookie-based SSR session
 
@@ -410,7 +410,7 @@ Conceptual utility boundaries:
 lib/supabase/
 ├── browser-auth.ts
 ├── server-auth.ts
-├── session-proxy.ts
+├── session-middleware.ts
 └── privileged-data.ts   # separate DOC-44 server secret client
 ```
 
@@ -440,11 +440,11 @@ Do not expose the secret key merely because Admin is authenticated.
 
 ## 24. Session refresh proxy is not authorization
 
-Next.js request proxy/middleware may refresh cookies and perform coarse routing convenience.
+Astro middleware may refresh cookies and perform coarse routing convenience for on-demand Admin routes. Admin routes are never prerendered.
 
 It is **not** the final authorization boundary.
 
-Every protected Server Component/layout, Server Action and Route Handler must enforce authorization in trusted server code.
+Every protected Admin page, Astro Action and API endpoint must enforce authorization in trusted server code.
 
 A route remains secure even if the proxy is accidentally bypassed by a test, framework change or direct invocation.
 
@@ -543,19 +543,19 @@ An AAL1 session may exist transiently only to complete an MFA challenge/recovery
 
 ---
 
-## 30. Server Actions re-authorize
+## 30. Astro Actions re-authorize
 
-Every privileged Server Action calls the canonical authorization guard at invocation time.
+Every privileged Astro Action calls the canonical authorization guard at invocation time.
 
-Do not assume that rendering the page while authenticated proves that a later Server Action call remains authorized.
+Do not assume that rendering the page while authenticated proves that a later Astro Action call remains authorized.
 
 ---
 
-## 31. Route Handlers re-authorize
+## 31. API endpoints re-authorize
 
-Every privileged Admin Route Handler independently checks the Admin principal.
+Every privileged Admin API endpoint independently checks the Admin principal.
 
-No Route Handler trusts a browser-supplied `adminId`, role or AAL.
+No API endpoint trusts a browser-supplied `adminId`, role or AAL.
 
 ---
 
@@ -836,7 +836,7 @@ Do not build a fake client logout that leaves server credentials valid while onl
 
 ---
 
-## 50. Session state is not copied to Zustand
+## 50. Session state is not copied to client stores (nanostores)
 
 The frontend global UI store must not become the source of truth for Admin authentication.
 
@@ -1591,7 +1591,7 @@ Internally:
 
 UI may redirect rather than expose raw status pages, especially AAL1 → MFA.
 
-API/Server Action errors use stable codes and do not reveal allowlist details.
+API/Astro Action errors use stable codes and do not reveal allowlist details.
 
 ---
 
@@ -1617,7 +1617,7 @@ Do not cache active-Admin authorization across requests for a long TTL.
 
 If future browser reads use authenticated RLS, policies may include the JWT `aal` claim as an additional condition.
 
-However, normal privileged domain mutations still go through Next.js application services.
+However, normal privileged domain mutations still go through the Astro server's application services.
 
 Do not redesign the entire Admin backend into browser-to-database calls merely because Supabase can express MFA in RLS.
 
@@ -1795,8 +1795,8 @@ Verify:
 
 - anonymous `/admin/moderation` redirects to login;
 - direct route requests cannot bypass the guard;
-- Server Actions cannot be invoked without authorization;
-- Route Handlers cannot be invoked without authorization.
+- Astro Actions cannot be invoked without authorization;
+- API endpoints cannot be invoked without authorization.
 
 ---
 
@@ -1954,7 +1954,7 @@ The following must remain true regardless of implementation details:
 | `IAM-019` | A canonical `requireAdmin`-style server guard enforces identity, allowlist and AAL. |
 | `IAM-020` | `authenticated` Supabase role never means portfolio Admin by itself. |
 | `IAM-021` | All operational Admin pages and mutations require AAL2. |
-| `IAM-022` | Every privileged Server Action and Route Handler re-authorizes at invocation time. |
+| `IAM-022` | Every privileged Astro Action and API endpoint re-authorizes at invocation time. |
 | `IAM-023` | Audit actor identity is derived server-side from the verified principal. |
 | `IAM-024` | Baseline authorization does not duplicate Admin role into custom JWT claims. |
 | `IAM-025` | `/admin/login`, `/admin/mfa`, `/admin/recover`, callback and update-password flows are distinct. |
@@ -1968,7 +1968,7 @@ The following must remain true regardless of implementation details:
 | `IAM-033` | V1.x has no custom Remember Me session mode. |
 | `IAM-034` | Paid Supabase session controls are optional hardening, not correctness dependencies. |
 | `IAM-035` | Client-side idle locking cannot substitute for server session/authorization checks. |
-| `IAM-036` | Admin auth source of truth is never a Zustand/client store. |
+| `IAM-036` | Admin auth source of truth is never a nanostores/client store. |
 | `IAM-037` | AAL2 is enforced from trusted Auth state; client-supplied assurance values are ignored. |
 | `IAM-038` | Security-factor changes require AAL2 plus fresh proof/reauthentication. |
 | `IAM-039` | The security flow protects against casually deleting the final recovery factor. |
@@ -2020,7 +2020,7 @@ Approval closes the baseline identity/access model and gives downstream document
 - DOC-48 can configure domains/SMTP/session hardening against a known Auth flow;
 - DOC-49 can monitor Auth failure without redefining authorization;
 - DOC-50 can build the Auth/security test matrix against explicit invariants;
-- DOC-51 can implement the exact Supabase/Next.js utilities without deciding credential policy ad hoc.
+- DOC-51 can implement the exact Supabase/Astro utilities without deciding credential policy ad hoc.
 
 The next canonical document is:
 

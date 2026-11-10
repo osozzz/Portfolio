@@ -1,7 +1,7 @@
 ---
 id: DOC-49
 title: "Performance, Observability & Reliability Architecture"
-document_status: APPROVED
+document_status: REVIEW
 canonical_format: markdown
 phase: "Technical Architecture"
 folder: 04-technical-architecture
@@ -460,7 +460,7 @@ No provider call is required before selection visually changes.
 
 ## 20. Navigation performance
 
-Public navigation should preserve Next.js/App Router behavior without creating a second SPA router.
+Public navigation should preserve Astro routing with the ClientRouter without creating a second SPA router.
 
 Performance rules:
 

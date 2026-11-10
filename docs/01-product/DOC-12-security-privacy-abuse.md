@@ -1,7 +1,7 @@
 ---
 id: DOC-12
 title: "Security, Privacy & Abuse-Prevention Requirements"
-document_status: APPROVED
+document_status: REVIEW
 reconstructed: true
 canonical_format: markdown
 phase: Product Foundation
@@ -61,7 +61,7 @@ All public writes validate schema, type, length and allowed values server-side. 
 Evaluate/configure:
 
 - HTTPS/TLS and HSTS;
-- CSP suitable for Next.js/integrations;
+- CSP suitable for the Astro build/integrations;
 - X-Content-Type-Options;
 - Referrer Policy;
 - frame/embedding policy where appropriate;

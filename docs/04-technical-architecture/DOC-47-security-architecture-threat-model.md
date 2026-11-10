@@ -1,7 +1,7 @@
 ---
 id: DOC-47
 title: "Security Architecture & Threat Model"
-document_status: APPROVED
+document_status: REVIEW
 canonical_format: markdown
 phase: "Technical Architecture"
 folder: 04-technical-architecture
@@ -183,7 +183,7 @@ Highest-value assets include:
 - Arcade session/signing/verification state;
 - private provider/webhook signing secrets.
 
-These must never be serialized into public HTML/RSC payloads, client bundles, browser storage, analytics or ordinary logs.
+These must never be serialized into public HTML, serialized island props, client bundles, browser storage, analytics or ordinary logs.
 
 ## 6.2 Sensitive runtime data
 
@@ -274,7 +274,7 @@ UNTRUSTED INTERNET
     │
     ▼
 ┌────────────────────────────────────────────┐
-│ NEXT.JS SERVER BOUNDARY                    │
+│ ASTRO SERVER BOUNDARY                      │
 │ validation / origin / auth / abuse policy  │
 │ application services / provider adapters   │
 └────────────────────────────────────────────┘
@@ -359,7 +359,7 @@ Security is intentionally duplicated as **defense in depth**, but ownership is n
 Browser UX
 → helpful validation only
 
-Next.js transport boundary
+Astro transport boundary (Actions / API endpoints / middleware)
 → origin/body/auth/request checks
 
 Application service
@@ -392,7 +392,7 @@ Server-only modules include:
 - webhook verification;
 - cron execution logic.
 
-They must not be imported from Client Components.
+They must not be imported from client islands.
 
 Build/test gates must detect accidental client exposure.
 
@@ -582,7 +582,7 @@ The target characteristics are:
 
 ## 27. CSP implementation strategy
 
-Exact nonce/hash/SRI mechanics depend on the pinned Next.js release and caching model.
+Exact nonce/hash/SRI mechanics depend on the pinned Astro release (including its CSP support for hashed inline scripts) and the static/on-demand caching model.
 
 Before production, a prototype gate must compare:
 
@@ -606,7 +606,7 @@ A temporary `style-src` concession, if framework/runtime styling requires it, is
 
 ## 29. Trusted Types
 
-Trusted Types / `require-trusted-types-for 'script'` may be enabled as an additional XSS defense only after Next.js/library compatibility is verified.
+Trusted Types / `require-trusted-types-for 'script'` may be enabled as an additional XSS defense only after Astro/library compatibility is verified.
 
 It is a hardening enhancement, not a reason to delay the baseline CSP/XSS controls.
 
@@ -691,14 +691,14 @@ Contact, Guestbook, Sketch, Reports and Arcade mutations therefore use defense i
 
 Every cookie-authenticated privileged mutation must be CSRF-resistant.
 
-For Server Actions:
+For Astro Actions:
 
-- use the framework's current Server Action origin protections;
+- keep Astro's `security.checkOrigin` enabled (origin verification for on-demand non-GET requests, including Actions);
 - configure any allowed-origin override narrowly;
 - re-check Admin authorization inside the action;
 - never treat framework CSRF behavior as a replacement for authorization.
 
-For any cookie-authenticated Route Handler:
+For any cookie-authenticated API endpoint:
 
 - enforce same-origin Origin/Host policy;
 - use Fetch Metadata defense where appropriate;
@@ -783,7 +783,7 @@ A trusted initial URL does not automatically make every redirect target trusted.
 
 ---
 
-## 45. Next/Image remote policy
+## 45. Remote image policy (`astro:assets`)
 
 Remote image optimization patterns are explicit and narrow.
 
@@ -792,6 +792,14 @@ Tech Pulse does not proxy arbitrary article images in the baseline. Project medi
 Do not solve image convenience by configuring an unrestricted remote image wildcard.
 
 ---
+
+## 45A. Audio and 3D asset policy (ADR-005, ADR-006)
+
+Music tracks, GLB models and KTX2 textures are self-hosted static assets served from the site origin under the existing CSP (`media-src`/`connect-src`/`img-src` stay `'self'`); no runtime third-party loaders or decoders are fetched from CDNs. Draco/Basis decoders, if used, are self-hosted and version-pinned. Each music track appears in the committed audio license register; 3D assets have documented rights. Asset weight caps (DOC-49) also bound decompression cost on the client.
+
+## 45B. Presence and data-subject rights (ADR-007, ADR-008)
+
+Anonymous presence (V1.4) exposes only aggregate counts/traces: no visitor identifier, IP or fingerprint is returned to other visitors; presence endpoints are rate-limited like other public endpoints and fail closed to "presence unavailable". The Ley 1581 data-subject rights channel (consult/update/rectify/delete) authenticates requests through the existing accountless deletion capabilities or a verified contact channel and never discloses whether a given person submitted data.
 
 ## Request/resource exhaustion controls
 
@@ -1466,7 +1474,7 @@ Auth access/refresh tokens and cookies:
 - never enter error messages;
 - never enter ordinary logs;
 - are not copied into localStorage manually outside the Auth architecture;
-- are not passed to Client Components unless the Auth client genuinely requires its standard managed session mechanism;
+- are not passed to client islands unless the Auth client genuinely requires its standard managed session mechanism;
 - are excluded from URLs whenever possible.
 
 ---
@@ -1508,7 +1516,7 @@ DOC-44 baseline remains:
 
 > Public/runtime domain tables are not a direct browser data API.
 
-Public/visitor features go through the Next.js backend/application services.
+Public/visitor features go through the Astro server's application services.
 
 Authenticated Admin browser code also does not receive privileged DB authority.
 
@@ -1861,7 +1869,7 @@ They do not expose:
 
 ## 122. Supported framework requirement
 
-Production must run a supported Next.js/React/runtime combination and include current security fixes for the pinned supported major.
+Production must run a supported Astro/adapter/React/runtime combination and include current security fixes for the pinned supported major.
 
 A known critical framework security advisory is a release blocker until the deployment is on a fixed version or the issue is proven inapplicable with documented evidence.
 
@@ -1921,7 +1929,7 @@ Development tooling must follow DOC-19 and additionally:
 - never “fix” RLS/authorization by making it permissive;
 - never disable CSP/CSRF/MFA/rate controls merely to make a failing test pass;
 - never add `dangerouslySetInnerHTML` for convenience;
-- never expose privileged Supabase clients in Client Components;
+- never expose privileged Supabase clients in client islands;
 - never fetch arbitrary user URLs server-side without an approved architecture change;
 - never log request bodies/tokens while debugging security issues;
 - treat security architecture changes as ADR-worthy when they alter trust boundaries.
@@ -2165,7 +2173,7 @@ Before production deployment:
 - no unresolved CRITICAL/HIGH applicable advisories;
 - secret scan clean;
 - build output checked for leaked environment values;
-- current Next.js/React security status reviewed;
+- current Astro/React/three.js security status reviewed;
 - security-sensitive dependency upgrades include relevant regression tests.
 
 ---
@@ -2178,7 +2186,7 @@ Before production deployment:
 |---|---|---|---|---|
 | `THR-001` | Stored XSS via Guestbook/Sketch text | Admin session, visitors | HIGH | plain text, escaping, strict renderer, CSP |
 | `THR-002` | Admin credential stuffing/password compromise | Admin | HIGH | strong password, TOTP AAL2, provider controls |
-| `THR-003` | CSRF privileged action | moderation/audit | HIGH | same-origin, Server Action protections, authorization |
+| `THR-003` | CSRF privileged action | moderation/audit | HIGH | same-origin, Astro Action protections, authorization |
 | `THR-004` | Supabase secret exposed client-side | all runtime DB data | CRITICAL | server-only boundary, build scan, secret rotation |
 | `THR-005` | RLS/grant/RPC privilege error | private runtime data | HIGH | deny-by-default, migration tests, server data path |
 | `THR-006` | Contact spam/email amplification | provider quota/reputation | MEDIUM/HIGH | Turnstile, rate limits, idempotency |
@@ -2211,7 +2219,7 @@ The following must remain true:
 2. All writes are server-validated.
 3. Public UGC is plain/safe structured content, not arbitrary HTML.
 4. Stored XSS reaching Admin is treated as a high-priority threat.
-5. Privileged secrets never enter browser bundles/RSC props/logs/analytics.
+5. Privileged secrets never enter browser bundles/island props/logs/analytics.
 6. Public/runtime tables are not directly writable by browser clients in the baseline.
 7. Admin mutations require current AAL2 + active allowlist authorization.
 8. Route secrecy/noindex never counts as security.
@@ -2283,7 +2291,7 @@ The following must remain true:
 | `SECARC-015` | Untrusted objects are schema parsed; generic recursive merge into trusted configuration is prohibited. |
 | `SECARC-016` | Production enforces a deliberate CSP; broad wildcard script policies are rejected. |
 | `SECARC-017` | `unsafe-eval` is prohibited in production. |
-| `SECARC-018` | CSP nonce/hash/SRI strategy must be prototyped against the pinned Next.js caching/rendering architecture before enforcement. |
+| `SECARC-018` | CSP nonce/hash/SRI strategy must be prototyped against the pinned Astro static/on-demand rendering architecture before enforcement. |
 | `SECARC-019` | CSP progresses through Report-Only hardening to enforcement before public UGC/Admin production launch. |
 | `SECARC-020` | Script `unsafe-inline` requires an explicit documented security exception/remediation path. |
 | `SECARC-021` | Trusted Types is optional hardening after compatibility verification, not baseline correctness. |
@@ -2297,7 +2305,7 @@ The following must remain true:
 | `SECARC-029` | V1.x exposes no arbitrary public server-side URL fetch/proxy. |
 | `SECARC-030` | Server external fetches use configured HTTPS provider/feed allowlists and bounded redirect policy. |
 | `SECARC-031` | Future dynamic remote-fetch capability must reject private/loopback/link-local/reserved destinations and unsafe redirects. |
-| `SECARC-032` | Next/Image/remote media patterns remain narrow; arbitrary remote image proxying is prohibited. |
+| `SECARC-032` | `astro:assets` remote image domains/patterns remain narrow; arbitrary remote image proxying is prohibited. |
 | `SECARC-033` | Every public write/query has finite request/body/page/collection limits. |
 | `SECARC-034` | Sketch has structural complexity/render-budget limits in addition to serialized byte limits. |
 | `SECARC-035` | ReDoS-prone validation/heuristics are avoided and security-sensitive patterns are tested with adversarial input. |
@@ -2415,9 +2423,9 @@ These external references provide current implementation context but are subordi
 - Supabase API key/security guidance: <https://supabase.com/docs/guides/getting-started/api-keys>
 - Supabase secure-data guidance: <https://supabase.com/docs/guides/database/secure-data>
 - Cloudflare Turnstile server-side validation: <https://developers.cloudflare.com/turnstile/get-started/server-side-validation/>
-- Next.js support/security release policy: <https://nextjs.org/support-policy>
+- Astro security advisories: <https://github.com/withastro/astro/security>
 
-The implementation must also review security advisories for the **exact pinned Next.js/React version immediately before production/release**.
+The implementation must also review security advisories for the **exact pinned Astro/adapter/React version immediately before production/release**.
 
 ---
 
