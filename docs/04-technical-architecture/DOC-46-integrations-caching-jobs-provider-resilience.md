@@ -2185,7 +2185,7 @@ UI
 
 Adapters containing secrets/network-provider clients are marked/imported as server-only.
 
-Build tooling/lint rules should make accidental Client Component imports fail early.
+Build tooling/lint rules should make accidental client island imports fail early.
 
 ---
 

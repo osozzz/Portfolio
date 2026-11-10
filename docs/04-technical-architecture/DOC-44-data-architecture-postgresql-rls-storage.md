@@ -2072,7 +2072,7 @@ The privileged database client module must:
 - live under server-only module paths enforced by import-boundary lint (DOC-51) so client islands cannot import them;
 - read validated server config centrally;
 - use the Supabase secret key (or approved equivalent);
-- never be imported into a Client Component;
+- never be imported into a client island;
 - never export a raw client to arbitrary feature code;
 - be consumed through repository implementations.
 

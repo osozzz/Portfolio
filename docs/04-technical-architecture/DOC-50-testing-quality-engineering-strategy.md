@@ -2397,7 +2397,7 @@ CI retries/quarantine behavior does not hide persistent critical-suite instabili
 | TQE-001 | Quality engineering tests behavior at the lowest reliable layer and critical journeys again at real system boundaries. |
 | TQE-002 | No single test layer is sufficient evidence for the full system. |
 | TQE-003 | Vitest is the baseline unit/service/component test runner. |
-| TQE-004 | React Testing Library is the baseline for semantic Client Component testing. |
+| TQE-004 | React Testing Library is the baseline for semantic client island testing. |
 | TQE-005 | Playwright is the canonical E2E/browser/visual automation framework. |
 | TQE-006 | Browser E2E normally runs against a production build. |
 | TQE-007 | Server-rendered Astro pages are primarily verified through extracted lower-level logic plus E2E rather than forced synthetic unit rendering. |

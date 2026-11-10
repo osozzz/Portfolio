@@ -400,7 +400,7 @@ Build/test gates must detect accidental client exposure.
 
 ## 14. Public DTO rule
 
-A server object containing a secret/sensitive field must never be passed wholesale into a Client Component and then “ignored” there.
+A server object containing a secret/sensitive field must never be passed wholesale into a client island and then “ignored” there.
 
 Use deliberate projections:
 
@@ -409,7 +409,7 @@ Database/Admin model
         ↓ explicit mapper
 Public DTO
         ↓
-Client Component
+client island
 ```
 
 Serialization is a security boundary.
