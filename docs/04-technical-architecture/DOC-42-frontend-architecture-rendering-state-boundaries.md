@@ -1,7 +1,7 @@
 ---
 id: DOC-42
 title: "Frontend Architecture, Rendering & State Boundaries"
-document_status: APPROVED
+document_status: REVIEW
 canonical_format: markdown
 phase: "Technical Architecture"
 folder: 04-technical-architecture
@@ -55,12 +55,13 @@ approved_at: 2026-09-15
 
 ## 1. Purpose
 
-DOC-41 established the portfolio as a modular full-stack Next.js application with Server Components by default and deliberate client interaction islands. DOC-42 turns that principle into an implementation contract for the public frontend and the admin frontend.
+DOC-41 established the portfolio as a modular full-stack Astro application (ADR-004) with static/server-rendered HTML by default and deliberate client interaction islands. DOC-42 turns that principle into an implementation contract for the public frontend and the admin frontend.
 
 This document defines:
 
-- App Router route/layout topology;
-- Server Component versus Client Component boundaries;
+- Astro route/layout topology;
+- static/server-rendered Astro components versus hydrated islands;
+- the persistent shell (chrome, Dock, music player, 3D stage) across navigation;
 - route-backed versus ephemeral UI state;
 - the public System Shell runtime;
 - state ownership and state-management rules;
@@ -164,82 +165,76 @@ DOC-42 does not authorize:
 
 ## 5. Framework baseline
 
-DOC-41 selected Next.js App Router. DOC-42 assumes the implementation version is pinned during V0 to a currently patched supported release, rather than hard-coding a version into architecture prose.
+DOC-41 selected Astro (ADR-004). DOC-42 assumes the implementation version is pinned during V0 to a currently patched supported release, rather than hard-coding a version into architecture prose.
 
-As of this document's validation date, current Next.js documentation continues to support the architectural primitives used here:
+The architecture relies on these Astro primitives, verified against current Astro documentation at bootstrap:
 
-- App Router file-system routing;
-- Server Components by default;
-- Client Components through explicit `'use client'` boundaries;
-- nested layouts and route groups;
-- streaming with `loading.tsx` and Suspense;
-- `error.tsx` / `not-found.tsx` boundaries;
-- route-level code splitting and prefetching;
-- Server Actions for same-application mutations;
-- current `proxy.ts` convention where request interception is actually required.
+- file-based routing under `src/pages/` with dynamic `[param]` segments and `getStaticPaths` for static generation;
+- static output by default, with per-route on-demand server rendering (`export const prerender = false`) through the Vercel adapter;
+- `.astro` components that render HTML with no client JavaScript;
+- framework islands hydrated explicitly with `client:*` directives (React for complex islands);
+- View Transitions through `<ClientRouter />` with `transition:persist` for elements that must survive navigation;
+- Astro Actions and API endpoints (`src/pages/api/*`) for server mutations and protocols;
+- Content Collections with schema validation for repository-authored content;
+- built-in i18n routing;
+- `src/pages/404.astro` / `500.astro` error pages and middleware where request handling is actually required.
 
-Version-specific features such as newer cache/navigation optimizers may be evaluated at implementation time, but they must not become hidden dependencies of core product semantics.
+Version-specific features may be evaluated at implementation time, but they must not become hidden dependencies of core product semantics.
 
 ---
 
 ## 6. Public route topology
 
-The approved public route tree remains defined by DOC-31. The implementation baseline uses one locale segment and one persistent public System Shell route group.
+The approved public route tree remains defined by DOC-31. The implementation baseline uses one locale segment and one persistent public System Shell layout.
 
 Conceptual structure:
 
 ```text
-app/
-├── layout.tsx
-├── page.tsx                         # locale negotiation / redirect only
+src/
+├── layouts/
+│   ├── BaseLayout.astro             # <html>/<body>, tokens, fonts, ClientRouter
+│   └── PublicSystemShell.astro      # persistent public shell (§9)
 │
-├── [locale]/
-│   ├── layout.tsx                   # locale validation + message/data setup
-│   │
-│   └── (system)/
-│       ├── layout.tsx               # persistent PublicSystemShell
-│       ├── error.tsx
-│       ├── loading.tsx              # shell-safe route fallback, never full-screen spinner
-│       ├── not-found.tsx
-│       │
-│       ├── @detail/
-│       │   ├── default.tsx
-│       │   └── (.)projects/[slug]/page.tsx
-│       │
-│       ├── page.tsx                 # Home
-│       ├── projects/[slug]/page.tsx
-│       ├── achievements/page.tsx
-│       ├── arcade/page.tsx
-│       ├── arcade/glitch-runner/page.tsx
-│       ├── arcade/reflex-deploy/page.tsx
-│       ├── channel/page.tsx
-│       ├── social/page.tsx
-│       ├── social/guestbook/page.tsx
-│       ├── social/sketches/page.tsx
-│       ├── social/activity/page.tsx
-│       ├── contact/page.tsx
-│       ├── cv/page.tsx
-│       ├── making-of/page.tsx
-│       ├── changelog/page.tsx
-│       └── status/page.tsx
-│
-├── admin/
-│   ├── layout.tsx
-│   ├── login/page.tsx
-│   └── (protected)/...
-│
-├── api/...
-├── robots.ts
-└── sitemap.ts
+└── pages/
+    ├── index.astro                  # on-demand: locale negotiation / 307 redirect only
+    ├── 404.astro
+    ├── 500.astro
+    │
+    ├── [locale]/
+    │   ├── index.astro              # Home
+    │   ├── projects/[slug].astro    # Project Detail (one route, two presentations; §14)
+    │   ├── achievements.astro
+    │   ├── arcade/index.astro
+    │   ├── arcade/glitch-runner.astro
+    │   ├── arcade/reflex-deploy.astro
+    │   ├── channel.astro
+    │   ├── social/index.astro
+    │   ├── social/guestbook.astro
+    │   ├── social/sketches.astro
+    │   ├── social/activity.astro
+    │   ├── contact.astro
+    │   ├── cv.astro
+    │   ├── making-of.astro
+    │   ├── changelog.astro
+    │   ├── status.astro
+    │   ├── blog/index.astro         # V1.1
+    │   ├── blog/[slug].astro        # V1.1
+    │   ├── privacy.astro            # V1.0
+    │   └── terms.astro              # V1.2
+    │
+    ├── admin/...                    # on-demand, separate AdminLayout
+    ├── api/...                      # explicit API endpoint protocols only
+    ├── robots.txt.ts
+    └── sitemap (integration or endpoint)
 ```
 
-Route groups exist for implementation organization; they do not create public URL segments.
+Public professional routes are prerendered per locale via `getStaticPaths`. Routes that need request-time data (Contact submission handling, community, Arcade sessions, Admin, presence) opt into on-demand rendering individually.
 
 ---
 
 ## 7. Root layout responsibilities
 
-`app/layout.tsx` must stay deliberately small.
+`src/layouts/BaseLayout.astro` must stay deliberately small.
 
 It owns only concerns that truly span every route, including Admin:
 
@@ -248,7 +243,8 @@ It owns only concerns that truly span every route, including Admin:
 - global token/style imports;
 - font variables;
 - platform-wide error/telemetry bootstrap where later approved;
-- minimum theme/appearance bootstrap needed to avoid a destructive flash, implemented in a CSP-compatible way defined with DOC-47.
+- minimum theme/appearance bootstrap needed to avoid a destructive flash, implemented in a CSP-compatible way defined with DOC-47;
+- the `<ClientRouter />` for public routes (Admin may opt out).
 
 It must **not** mount the public Dock, public InputManager, public Widget state or public AudioManager because Admin does not share those runtimes.
 
@@ -256,13 +252,13 @@ It must **not** mount the public Dock, public InputManager, public Widget state 
 
 ## 8. Locale layout responsibilities
 
-`app/[locale]/layout.tsx` owns locale-specific server concerns:
+The `[locale]` route segment and its page setup own locale-specific concerns:
 
 - validate `locale` against the approved locale registry;
 - load the correct UI-message namespace;
 - set locale-aware metadata context;
 - expose language/direction information;
-- provide localized system messages where Client Components genuinely require them;
+- provide localized system messages to islands that genuinely require them, as scoped props;
 - never infer locale from IP/geolocation.
 
 The URL remains the canonical locale state.
@@ -273,18 +269,19 @@ Invalid locale values are handled deliberately through the localization routing 
 
 ## 9. Public System Shell layout
 
-`app/[locale]/(system)/layout.tsx` is the persistent public environment.
+`src/layouts/PublicSystemShell.astro` is the persistent public environment. Every public page renders inside it; with the ClientRouter, its persisted elements survive navigation.
 
 Its conceptual composition is:
 
-```tsx
+```astro
 <PublicSystemShell>
+  <ThreeStage transition:persist="stage" client:idle />      <!-- ADR-006 -->
   <SystemBackdrop />
-  <SystemChrome />
-  <MainWorkspace>{children}</MainWorkspace>
-  <RouteDetailSlot>{detail}</RouteDetailSlot>
-  <GlobalDock />
-  <SystemTransientLayer />
+  <SystemChrome transition:persist="chrome" />
+  <MainWorkspace><slot /></MainWorkspace>
+  <GlobalDock transition:persist="dock" />
+  <MusicPlayer transition:persist="music" client:idle />     <!-- ADR-005 -->
+  <SystemTransientLayer client:idle />
 </PublicSystemShell>
 ```
 
@@ -300,9 +297,10 @@ The Shell must preserve:
 - Settings host;
 - Terminal host when loaded;
 - URL-independent major overlay host;
-- semantic input scope management.
+- semantic input scope management;
+- the persistent music player and 3D stage (one audio graph, one WebGL context).
 
-It must not force every child route into a Client Component.
+It must not hydrate every child route. Persistence across navigation is a **V0 prototype gate** (ADR-004): music must continue uninterrupted, the 3D stage must keep its single context, and focus/announcements must be correct after each navigation.
 
 ---
 
@@ -311,17 +309,18 @@ It must not force every child route into a Client Component.
 The public shell is split into two layers:
 
 ```text
-PublicSystemShell          Server Component
+PublicSystemShell          Astro layout (static/server HTML)
         │
         ├── server-rendered shell structure
         ├── semantic landmarks
         ├── route-derived initial state
         ├── system messages / feature metadata
         │
-        └── SystemClientRuntime     Client boundary
-                ├── cross-cutting interaction store
+        └── SystemClientRuntime     persisted hydrated islands
+                ├── nanostores (cross-cutting interaction state)
                 ├── InputManager
-                ├── AudioManager
+                ├── AudioManager + MusicPlayer
+                ├── ThreeStage controller
                 ├── local preferences bridge
                 ├── transient surface manager
                 └── motion/environment controllers
@@ -333,7 +332,7 @@ The Client Runtime enhances the shell; it is not allowed to replace the entire s
 
 ## 11. Client boundary rule
 
-A module receives `'use client'` only when it requires one or more browser/client capabilities such as:
+A component is hydrated as an island (`client:*`) only when it requires one or more browser/client capabilities such as:
 
 - state/effect hooks;
 - DOM event handling;
@@ -346,15 +345,15 @@ A module receives `'use client'` only when it requires one or more browser/clien
 - browser media queries needed for behavior rather than CSS layout;
 - client-only third-party components.
 
-The preferred boundary is the **smallest stable interactive island**, not the page root.
+The preferred boundary is the **smallest stable interactive island**, not the page root. Prefer the least eager directive that works (`client:visible` / `client:idle` before `client:load`).
 
 A parent being interactive is not justification to import server-only data access beneath it.
 
 ---
 
-## 12. Server Component rule
+## 12. Static Astro component rule
 
-A component should remain a Server Component when it primarily:
+A component should remain a plain `.astro` component (no client JavaScript) when it primarily:
 
 - renders canonical professional content;
 - renders headings/prose/metadata;
@@ -364,7 +363,7 @@ A component should remain a Server Component when it primarily:
 - generates SEO-relevant markup;
 - composes noninteractive surfaces.
 
-Server Components may pass serializable data and server-rendered children into Client Components.
+Astro components may pass serializable props and slotted server-rendered children into islands.
 
 They must not import client-only services merely to simplify a component tree.
 
@@ -382,7 +381,7 @@ lib/content/server/*
 lib/integrations/server/*
 ```
 
-use server-only enforcement where appropriate.
+are imported only from Astro pages/endpoints/Actions/middleware, never from island code. Secrets are read through `astro:env/server` (or server-only environment access), and import-boundary lint rules (DOC-51) fail the build when island code reaches a server module.
 
 Likewise browser-only managers such as Gamepad, Web Audio and local preference adapters remain inside client-only modules.
 
@@ -390,25 +389,25 @@ Crossing this boundary must fail during development/build rather than silently b
 
 ---
 
-## 14. Route-backed Project Detail
+## 14. Route-backed Project Detail (Astro, ADR-004)
 
 Project Detail is both:
 
 - a real shareable route: `/[locale]/projects/[slug]`;
 - an iiSU-like route-backed detail surface during in-app navigation.
 
-The implementation baseline uses **Parallel Routes + Intercepting Routes** specifically for this use case.
-
-Expected behavior:
+There is **one route with two presentations**:
 
 ```text
-Home / current public space
+Home (persisted shell)
         │
-        └─ client navigation → /en/projects/dex-sphere
+        └─ in-app navigation → /en/projects/dex-sphere
                               │
                               ▼
-                    intercepted @detail slot
-                    background remains recognizable
+            ClientRouter swaps the workspace; the persisted
+            shell, backdrop context, music and 3D stage stay;
+            the detail renders as a floating surface over a
+            Home-like environment (Expanded/Wide)
 
 Direct URL / refresh
         │
@@ -416,27 +415,28 @@ Direct URL / refresh
 /en/projects/dex-sphere
         │
         ▼
-canonical project detail page
+canonical project detail rendered full-page inside the shell;
+closing navigates to Home
 ```
 
-The visual surface may be floating/overlay-like in Expanded/Wide and effectively full-screen in Compact, while retaining the same URL/content semantics.
+Mechanics: the detail page reads whether it was entered in-app (ClientRouter navigation state / `astro:before-swap` context) to choose the floating presentation; the HTML content is identical in both cases, so SEO and direct entry never depend on client state. Compact always uses the full-screen detail workspace.
 
-A V0 prototype must validate browser Back, refresh, focus restoration and responsive behavior before this pattern is duplicated elsewhere.
+A **V0 prototype gate** must validate browser Back/Forward, refresh, deep link, focus restoration to the originating selector, reduced motion and responsive behavior before this pattern is reused elsewhere. A failed prototype changes mechanics through an ADR; it does not drop the route-backed capability.
 
 ---
 
-## 15. Intercepting-route restraint
+## 15. Route-backed surface restraint
 
-Intercepting/parallel routes are **not** the generic solution for every modal.
+Route-backed surfaces are **not** the generic solution for every modal. (The earlier framework-specific mechanism for this is superseded by ADR-004.)
 
-Use route-backed interception only when all are true:
+Use a route-backed surface only when all are true:
 
 - the destination deserves its own URL;
 - direct navigation must reconstruct meaningful content;
 - browser Back/Forward should represent the transition;
 - preserving background context materially improves the experience.
 
-Settings, Command Palette, Terminal, temporary Achievement preview and ordinary confirmation dialogs remain URL-independent transient surfaces.
+Settings, Command Palette, Terminal, the music prompt, temporary Achievement preview and ordinary confirmation dialogs remain URL-independent transient surfaces.
 
 ---
 
@@ -478,8 +478,8 @@ Use client runtime state for:
 
 Use versioned local persistence for:
 
-- theme;
-- sound enabled/volume;
+- theme (and curated theme from V1.1);
+- music prompt answer, Music on/off, UI sounds on/off, volume;
 - motion preference override;
 - transparency preference;
 - widget layout preferences;
@@ -505,7 +505,7 @@ Do not duplicate route truth into a global store just because a component needs 
 Bad:
 
 ```text
-Next router says /channel
+URL says /channel
 +
 shellStore.currentPage = "channel"
 ```
@@ -524,65 +524,53 @@ DOC-42 proposes the following explicit stack:
 
 ### React local state
 
-Use `useState` / `useReducer` for state whose lifetime and consumers are local to one component/subtree.
+Use `useState` / `useReducer` for state whose lifetime and consumers are local to one island/subtree.
 
-### Selector-based external store
+### Cross-island store
 
-Use **Zustand as the baseline** for small cross-cutting browser state that must be observed by multiple distant interactive components.
-
-Prefer a vanilla store instance plus selector hooks rather than a module-global store where practical.
+Use **nanostores as the baseline** (ADR-004) for small cross-cutting browser state observed by multiple distant islands. Astro islands are independent roots, so a React context provider cannot span them; nanostores atoms/maps are framework-agnostic and are read in React islands through `@nanostores/react`.
 
 Candidate state includes:
 
-- selected contextual entity ID on Home;
+- selected contextual entity ID on Home (drives backdrop, widgets and the 3D stage);
 - current transient surface descriptor;
 - Customize Mode;
 - last meaningful input mode;
+- music state (prompt answer, playing/paused, ducked) and 3D stage state (active moment, fallback mode);
 - low-frequency shell coordination flags;
 - focus-return descriptors.
 
 ### Domain engines/stores
 
-Drawing and Arcade may own dedicated high-frequency engines/stores optimized for their needs; they must not pump every frame/pointer point through the general shell store.
+Drawing and Arcade own dedicated high-frequency engines (vanilla TypeScript + canvas); they must not pump every frame/pointer point through the shared stores.
 
 ### Server/remote data
 
-Do **not** put repository content, admin DB lists or generic server data into Zustand as a default cache.
+Do **not** put repository content, admin DB lists or generic server data into nanostores as a default cache.
 
-No Redux or TanStack Query is part of the V0 baseline. Either can be proposed later through an ADR if a concrete data-flow problem justifies it.
+No Redux, Zustand or TanStack Query is part of the V0 baseline. Any can be proposed later through an ADR if a concrete data-flow problem justifies it.
 
 ---
 
-## 19. Store creation and SSR safety
+## 19. Store lifecycle and SSR safety
 
-Cross-cutting client stores must not leak state between requests.
+Islands are server-rendered once for their initial HTML, and module-level stores exist on the server too. Therefore:
 
-The preferred pattern is:
-
-```text
-SystemClientRuntime mounts
-        ↓
-create shell store instance
-        ↓
-provide store reference to client descendants
-        ↓
-components subscribe with narrow selectors
-```
-
-Avoid server-shared mutable module singletons.
-
-Browser-only service singletons may exist only after entering the client runtime and must have explicit lifecycle/reset behavior.
+- stores are **never written during server rendering**; server-derived data reaches islands as props only;
+- stores are initialized on the client (on hydration or from local preferences) and persist across ClientRouter navigations because the module graph stays loaded;
+- persisted islands (MusicPlayer, ThreeStage, chrome) subscribe once and must not re-register listeners on every navigation;
+- browser-only service singletons may exist only after entering the client runtime and must have explicit lifecycle/reset behavior.
 
 ---
 
 ## 20. Selector discipline
 
-A component subscribes only to the slice it needs.
+A component subscribes only to the slice it needs: small, purpose-specific atoms or `computed` stores rather than one large map.
 
 Bad:
 
 ```ts
-const shell = useShellStore();
+const shell = useStore($shell); // whole shell object
 ```
 
 for a component that only needs `inputMode`.
@@ -590,10 +578,10 @@ for a component that only needs `inputMode`.
 Preferred conceptual form:
 
 ```ts
-const inputMode = useShellStore(selectInputMode);
+const inputMode = useStore($inputMode);
 ```
 
-The purpose is not micro-optimization everywhere; it is preventing the Personal Widget Field, Dock and DynamicBackdrop from all rerendering on unrelated state changes.
+The purpose is not micro-optimization everywhere; it is preventing the Personal Widget Field, Dock, DynamicBackdrop and 3D stage from all rerendering on unrelated state changes.
 
 ---
 
@@ -738,9 +726,10 @@ The service owns:
 - rate limiting/coalescing;
 - lazy asset loading;
 - visibility suspension;
-- semantic event-to-sound mapping.
+- semantic event-to-sound mapping;
+- the **background-music channel** (ADR-005): loading the track only after Yes, fade-in, pause on hidden document, ducking for Project Media video, yielding to Arcade audio, and separate Music/UI-sound enablement.
 
-Sound stays OFF on first visit as approved.
+UI sound stays OFF on first visit as approved, and music never plays before an explicit Yes in the music prompt. The `<audio>`/Web Audio graph lives in the persisted `MusicPlayer` island so navigation never restarts or cuts the track; components emit semantic events and never own audio elements.
 
 ---
 
@@ -756,6 +745,7 @@ portfolio.widgets.v1
 portfolio.onboarding.v1
 portfolio.personalization.v1
 portfolio.arcade-local.v1
+portfolio.audio.v1          # music prompt answer, Music/UI-sound flags, volume
 ```
 
 Each domain defines:
@@ -1026,18 +1016,19 @@ GSAP remains prohibited without a documented case per DOC-29/DOC-41.
 
 ---
 
-## 38. View Transitions and framework-specific navigation enhancements
+## 38. View Transitions and the persistent shell
 
-View Transitions and newer Next.js navigation/cache primitives are progressive enhancements, not product dependencies.
+Astro View Transitions (`<ClientRouter />`) are the mechanism for the persistent shell (ADR-004): `transition:persist` keeps the chrome, Dock, MusicPlayer and ThreeStage alive across navigation. Animated transitions themselves remain progressive enhancement.
 
-A future implementation may use them when the pinned framework release is verified to provide:
+The implementation must verify, as part of the V0 prototype gate:
 
-- correct browser Back behavior;
-- accessibility-compatible focus behavior;
+- correct browser Back/Forward behavior;
+- focus moves to the new main content (or the documented target) and the route change is announced;
 - interruptibility;
-- reduced-motion fallback;
+- reduced-motion fallback (no animated transition, persistence kept);
 - no duplicate visual state with Motion;
-- measurable benefit.
+- the fallback for browsers without the View Transition API still persists elements;
+- if client routing is unavailable, navigation degrades to full page loads: content stays complete, music stops and resumes only on explicit enablement.
 
 They must not produce a second competing navigation architecture.
 
@@ -1154,11 +1145,11 @@ Mandatory lazy boundaries include, at minimum:
 
 ## 45. Route prefetch policy
 
-Next.js route prefetching is useful for the app-like feel, but it is controlled by route weight and user intent.
+Astro prefetching (`data-astro-prefetch` / prefetch configuration) is useful for the app-like feel, but it is controlled by route weight and user intent.
 
 Baseline:
 
-- normal professional routes may use framework prefetch defaults;
+- normal professional routes may use hover/viewport prefetch;
 - Dock destinations should feel immediate;
 - heavy game runtime chunks must not be fetched merely because the Arcade link exists in the Dock;
 - a route shell/detail may prefetch without prefetching the active game engine;
@@ -1167,35 +1158,34 @@ Baseline:
 
 ---
 
-## 46. Loading and streaming architecture
+## 46. Loading architecture
 
 The public shell must never disappear behind a post-entry full-page spinner.
 
 Use:
 
-- route `loading.tsx` only for meaningful route content fallback;
-- granular Suspense around slow/external regions;
+- prerendered HTML for build-owned professional content (no remote fetch latency);
+- independent islands (or server islands where justified) for slow/external regions, each with its own loading state;
 - geometry-preserving skeletons per DOC-40;
 - independent widget loading;
-- stable shell/Dock during streamed route changes.
-
-Canonical build-owned professional content should usually be available without remote fetch latency.
+- a stable shell/Dock during ClientRouter navigations.
 
 ---
 
-## 47. Suspense boundary placement
+## 47. Loading boundary placement
 
-Suspense boundaries should align with real failure/loading domains.
+Loading boundaries should align with real failure/loading domains. Inside React islands, Suspense may scope loading; across the page, each slow region is its own island.
 
 Good candidates:
 
 - GitHub-derived Dev Activity widget;
 - Tech Pulse feed;
 - optional public leaderboard projection;
+- presence indicator (V1.4);
 - noncritical media sections;
 - admin data panels.
 
-Avoid one giant Suspense boundary around an entire route when only one provider-backed subsection is slow.
+Avoid making a whole route on-demand or client-rendered when only one provider-backed subsection is slow.
 
 ---
 
@@ -1204,15 +1194,15 @@ Avoid one giant Suspense boundary around an entire route when only one provider-
 Use route/feature boundaries intentionally:
 
 ```text
-global-error                catastrophic application/root failure
-(locale)/(system)/error     public route-space failure
-feature boundary            isolated external/complex feature failure
+500.astro                   catastrophic server/render failure
+404.astro (localized)       missing route or entity
+feature boundary            React error boundary inside an island
 widget boundary             external widget degradation
 ```
 
 Known empty/not-found states are not exceptions.
 
-A missing project slug uses `notFound()` / localized not-found treatment rather than throwing a generic server error.
+A missing project slug is excluded from `getStaticPaths` (404 at build) or, for on-demand routes, returns a localized 404 rather than throwing a generic server error.
 
 ---
 
@@ -1229,16 +1219,16 @@ Do not make “refresh the entire website” the default recovery for a failed s
 
 ---
 
-## 50. Localization library baseline
+## 50. Localization baseline
 
-DOC-42 proposes **next-intl** as the implementation baseline for system/UI localization because it supports App Router, Server Components, Client Components, locale routing and ICU-style messages without making the entire application client-rendered.
+DOC-42 uses **Astro's built-in i18n routing plus typed message catalogs**, with no third-party i18n library by default: messages are JSON per locale, a small typed `t()` helper resolves them in `.astro` components at build/render time, and islands receive only the messages they need as props. An ICU-capable formatter may be added only where plural/select rules require it.
 
-The package version is pinned during V0.
+Versions are pinned during V0.
 
 System messages and canonical professional narratives remain conceptually separate:
 
 ```text
-messages/
+src/i18n/
 ├── en.json
 └── es.json
 
@@ -1247,7 +1237,7 @@ content/
 └── projects/<slug>/en.md + es.md
 ```
 
-`next-intl` does not become the source of truth for professional project facts.
+The message catalogs do not become the source of truth for professional project facts.
 
 ---
 
@@ -1276,7 +1266,7 @@ Client message payloads must stay scoped.
 
 Do not serialize the entire translation catalog into every client island.
 
-Server Components should resolve translations on the server when possible. Client Components receive only the provider/messages necessary for their interactive subtree or use the framework/library mechanism that preserves selective loading.
+`.astro` components resolve translations at build/render time. Islands receive only the scoped messages they need as props (or a small per-feature catalog), never the whole catalog.
 
 Localized professional Markdown is rendered server-side.
 
@@ -1466,7 +1456,7 @@ DOC-35 approved Manrope + IBM Plex Mono.
 
 Frontend baseline:
 
-- use `next/font` or equivalently build-time self-hosted font handling;
+- self-host fonts through the Astro build (Astro font support or pinned font packages), with preload only for critical faces;
 - no runtime request to Google Fonts/CDN is required for approved primary fonts;
 - expose font families as CSS variables;
 - load only required subsets/weights/axes;
@@ -1515,7 +1505,7 @@ Detailed media performance budgets belong to DOC-49.
 
 Public/admin forms use native semantic `<form>` behavior first.
 
-For same-app mutations, Server Actions may provide the transport adapter per DOC-41/DOC-43.
+For same-app mutations, Astro Actions provide the transport adapter per DOC-41/DOC-43; forms post with native `action` so they work before hydration.
 
 Frontend behavior includes:
 
@@ -1542,7 +1532,7 @@ It should not require:
 - Arcade/Drawing code;
 - large client-side form framework.
 
-The form can receive a small Client Component only for interaction affordances/pending feedback while preserving native semantics and server-authoritative submission.
+The form can be enhanced by a small island only for interaction affordances/pending feedback while preserving native semantics and server-authoritative submission.
 
 ---
 
@@ -1776,7 +1766,7 @@ features/home/widget-layout/normalize-preferences.ts
 
 ## 75. Navigation implementation
 
-Use Next.js routing as the authoritative route engine.
+Use Astro file-based routing with the ClientRouter (`navigate()`) as the authoritative route engine.
 
 Navigation adapters may wrap routing to provide semantic behavior such as:
 
@@ -1898,7 +1888,7 @@ client preference check
 show short boot/onboarding if eligible
 ```
 
-Skip/reduced-motion preferences bypass/simplify presentation without changing capability.
+Skip/reduced-motion preferences bypass/simplify presentation without changing capability. Boot may drive the persisted 3D stage but never blocks content (MOT-041); the music prompt is shown only after Boot completes or is skipped (ADR-005).
 
 Boot replay is an explicit Settings action.
 
@@ -2083,11 +2073,12 @@ Baseline frontend dependencies should each own a clear capability.
 
 Approved/proposed categories:
 
-- Next.js / React — framework/runtime;
-- Motion — interaction motion;
+- Astro — framework/routing/rendering;
+- React — complex interactive islands;
+- Motion — interaction motion inside islands;
+- three.js + React Three Fiber — 3D stage only (ADR-006);
 - Tailwind — styling utilities;
-- Zustand — small cross-cutting client state;
-- next-intl — i18n;
+- nanostores (+ `@nanostores/react`) — small cross-island client state;
 - Phosphor — general icon system;
 - schema validation library chosen/pinned with backend/content architecture;
 - testing/component tooling defined by DOC-50/51.
@@ -2166,7 +2157,7 @@ Analytics consent/privacy details remain owned by DOC-17/DOC-47.
 
 In addition to DOC-07/DOC-49 budgets:
 
-- Server Components remain default;
+- static Astro HTML remains default;
 - route-level code splitting is preserved;
 - browser-only libraries are not imported into server/static content paths;
 - dynamic imports align with real heavy feature boundaries;
@@ -2212,12 +2203,12 @@ Any explicit Alejandro location/time data is canonical professional/contact cont
 
 ## 99. Public shell failure strategy
 
-If SystemClientRuntime fails to hydrate:
+If the SystemClientRuntime islands fail to hydrate:
 
 - canonical content remains visible;
 - links remain usable where server markup can provide them;
 - Contact/CV/project pages remain understandable;
-- advanced selector motion, custom widgets, gamepad, audio and ephemeral overlays may degrade;
+- advanced selector motion, custom widgets, gamepad, audio, the 3D stage and ephemeral overlays may degrade (the 3D stage to its static rendition);
 - a fatal opaque blank screen is unacceptable.
 
 This is a guiding progressive-enhancement requirement, not a promise that every advanced interaction works without JS.
@@ -2246,12 +2237,14 @@ A concrete baseline:
 
 ```text
 src/
-├── app/
-│   ├── layout.tsx
-│   ├── page.tsx
+├── pages/
+│   ├── index.astro
 │   ├── [locale]/...
 │   ├── admin/...
 │   └── api/...
+├── layouts/
+├── actions/
+├── content/            # Content Collections config
 │
 ├── components/
 │   ├── primitives/
@@ -2273,7 +2266,9 @@ src/
 ├── runtime/
 │   ├── shell/
 │   ├── input/
-│   ├── audio/
+│   ├── audio/          # AudioManager + MusicPlayer
+│   ├── stage/          # ThreeStage (ADR-006)
+│   ├── stores/         # nanostores
 │   ├── preferences/
 │   ├── overlays/
 │   └── analytics/
@@ -2287,7 +2282,6 @@ src/
 │   └── integrations/
 │
 ├── i18n/
-├── messages/
 ├── styles/
 └── types/
 
@@ -2328,7 +2322,7 @@ Where useful for clarity, runtime-specific modules may use conventions such as:
 
 ```text
 *.server.ts
-*.client.tsx
+*.island.tsx
 ```
 
 or runtime-owned folders.
@@ -2417,9 +2411,10 @@ A failed prototype changes implementation detail through an ADR; it does not sil
 The following are explicitly rejected:
 
 ```text
-'use client' on every page/layout
+client:load on every component/layout
 one giant AppContext containing everything
-one giant Zustand store containing everything
+one giant nanostores map containing everything
+a second WebGL context or audio element per page
 server content copied into global client state
 window.innerWidth-driven layout
 pixel-based persisted Widget positions
@@ -2434,7 +2429,7 @@ raw provider fetches inside widgets
 raw DB rows passed into UI
 CSS magic numbers replacing approved tokens
 all-glass every surface
-a custom router on top of Next.js
+a custom router on top of Astro's ClientRouter
 URL and store both claiming to own current route
 executable arbitrary MDX as canonical source
 client-only translations for SEO-relevant content
@@ -2447,15 +2442,15 @@ hydration gate that renders nothing until useEffect
 
 DOC-42 is approved with the following accepted baseline:
 
-- App Router and server-first rendering remain the frontend foundation;
-- the public System Shell persists without forcing all route content client-side;
-- Project Detail uses a route-backed intercepted/parallel-route baseline with a required prototype gate;
+- Astro static/server-first rendering remains the frontend foundation (ADR-004);
+- the public System Shell persists through View Transitions without forcing route content client-side;
+- Project Detail is one route with in-app floating and direct full-page presentations, with a required prototype gate;
 - URL state, ephemeral UI state, local preferences and domain-local high-frequency state remain separate;
-- Zustand is acceptable as the small cross-cutting client-state baseline, not a server-data cache;
-- InputManager/AudioManager are centralized client runtime services;
+- nanostores is the small cross-island client-state baseline, not a server-data cache;
+- InputManager/AudioManager are centralized client runtime services; MusicPlayer and ThreeStage are persisted shell elements;
 - Widget Field personalization uses a typed registry/resolver and logical local persistence;
 - responsive layout is CSS/container-query first;
-- next-intl is acceptable as the ES/EN UI localization baseline;
+- Astro i18n routing plus typed message catalogs is the ES/EN UI localization baseline;
 - canonical professional content passes through a typed validated server content layer;
 - Markdown remains non-executable by default;
 - heavy features are explicitly lazy bounded;
@@ -2464,7 +2459,7 @@ DOC-42 is approved with the following accepted baseline:
 - the frontend is progressively enhanced enough that professional content is not hostage to optional client runtime success.
 ## Storybook isolated-component baseline
 
-V0 uses **Storybook** as the isolated component environment. Use the official Storybook integration compatible with the pinned Next.js version at bootstrap; the architecture does not pin a package version in this document.
+V0 uses **Storybook** as the isolated component environment. Use the official Storybook React integration for React island components (Astro components are covered by page-level tests) at bootstrap; the architecture does not pin a package version in this document.
 
 Required global decorators/controls cover:
 
@@ -2487,19 +2482,19 @@ Storybook is development/CI tooling, not a Production route or public dependency
 
 | ID | Decision |
 |---|---|
-| `FEA-001` | The frontend uses Next.js App Router as the authoritative routing/rendering system; no shadow/custom SPA router is introduced. |
-| `FEA-002` | Server Components remain the default and `'use client'` is applied at the smallest stable interactive boundary. |
-| `FEA-003` | The public System Shell is server-rendered and enhanced by a bounded `SystemClientRuntime` rather than being a fully client-rendered app root. |
+| `FEA-001` | The frontend uses Astro routing with the ClientRouter as the authoritative routing/rendering system; no shadow/custom SPA router is introduced (ADR-004). |
+| `FEA-002` | Static `.astro` components remain the default and hydration (`client:*`) is applied at the smallest stable interactive island with the least eager directive. |
+| `FEA-003` | The public System Shell is server-rendered and enhanced by bounded persisted islands (`SystemClientRuntime`) rather than being a fully client-rendered app root. |
 | `FEA-004` | Root layout stays minimal and does not mount public-only interaction runtimes for Admin. |
 | `FEA-005` | Locale is a route-level server-readable segment under `/[locale]`. |
-| `FEA-006` | Project Detail uses a Parallel/Intercepting Route baseline so in-app navigation can preserve background context while direct URLs remain canonical. |
-| `FEA-007` | The intercepted Project Detail architecture requires a V0 Back/refresh/focus/responsive prototype gate before broad reuse. |
-| `FEA-008` | Route-backed interception is reserved for genuinely shareable/history-worthy surfaces; ordinary Settings/Palette/Terminal/dialogs remain transient state. |
+| `FEA-006` | Project Detail is one route presented as a floating surface over the persisted shell when entered in-app and full-page on direct entry; direct URLs remain canonical (ADR-004). |
+| `FEA-007` | The Project Detail presentation requires a V0 Back/refresh/focus/responsive prototype gate before broad reuse. |
+| `FEA-008` | Route-backed surfaces are reserved for genuinely shareable/history-worthy content; Settings/Palette/Terminal/music prompt/dialogs remain transient state. |
 | `FEA-009` | URL state, ephemeral UI state, persisted local preferences and domain-local runtime state are separate ownership classes. |
 | `FEA-010` | Route identity is normally derived from the router and is not duplicated into a global store. |
 | `FEA-011` | React local state is preferred for subtree-local state. |
-| `FEA-012` | Zustand is the baseline selector-based store for small cross-cutting client interaction state; it is not the generic server-data cache. |
-| `FEA-013` | Cross-cutting stores are instantiated client-side with request-safe lifecycle rather than server-shared mutable singleton state. |
+| `FEA-012` | nanostores is the baseline store for small cross-island client interaction state; it is not the generic server-data cache (ADR-004). |
+| `FEA-013` | Shared stores are never written during server rendering; they initialize client-side and persist across ClientRouter navigations. |
 | `FEA-014` | Components subscribe to narrow store selectors to avoid unrelated Shell/Widget/Backdrop rerenders. |
 | `FEA-015` | Selection state persists minimum identity and derives rich presentation/context from canonical registries/data. |
 | `FEA-016` | Home browsing selection does not create browser history entries; route state wins on conflict. |
@@ -2526,9 +2521,9 @@ Storybook is development/CI tooling, not a Production route or public dependency
 | `FEA-037` | One centralized Release Registry drives Coming Soon routing, Dock state, metadata, sitemap, command availability and runtime eligibility. |
 | `FEA-038` | Drawing, each Arcade game, Terminal and other heavy optional experiences are explicit lazy feature boundaries. |
 | `FEA-039` | Heavy game engines are not prefetched simply because an Arcade/Dock link is visible. |
-| `FEA-040` | Streaming/Suspense boundaries align with real slow/failure domains and never replace the post-entry shell with a full-page spinner. |
+| `FEA-040` | Loading boundaries (islands, Suspense inside islands) align with real slow/failure domains and never replace the post-entry shell with a full-page spinner. |
 | `FEA-041` | Missing resources use localized not-found semantics; provider/widget failures are contained by narrow error boundaries. |
-| `FEA-042` | next-intl is the baseline implementation library for ES/EN system/UI localization and is pinned during V0. |
+| `FEA-042` | Astro i18n routing plus typed per-locale message catalogs is the ES/EN system/UI localization baseline; islands receive scoped messages as props. |
 | `FEA-043` | System UI messages remain separate from canonical localized professional content. |
 | `FEA-044` | Root locale negotiation is deterministic: `portfolio_locale` cookie → supported `Accept-Language` → English fallback, with a 307 private/no-store redirect and no geolocation; canonical routes remain locale-prefixed. |
 | `FEA-045` | Canonical YAML/Markdown passes through one validated typed content compilation/access layer rather than ad-hoc parsing in routes. |
@@ -2570,6 +2565,9 @@ Storybook is development/CI tooling, not a Production route or public dependency
 | `FEA-081` | `Save Local` Drawing drafts use a versioned IndexedDB-backed `DrawingDraftRepository`, separate from high-frequency canvas state. |
 | `FEA-082` | Accountless content deletion capabilities are stored only in a typed local `PrivacyReceiptRepository`; they do not create visitor identity. |
 | `FEA-083` | Storybook is the approved V0 isolated-component environment. |
+| `FEA-084` | Chrome, Dock, MusicPlayer and ThreeStage are persisted with `transition:persist`; persistence is a V0 prototype gate (ADR-004). |
+| `FEA-085` | AudioManager owns a background-music channel separate from UI sounds; music loads and plays only after the visitor's Yes (ADR-005). |
+| `FEA-086` | ThreeStage is the only WebGL context; three.js loads lazily, renders on demand and falls back to a static/2D rendition (ADR-006). |
 
 ---
 
@@ -2577,8 +2575,8 @@ Storybook is development/CI tooling, not a Production route or public dependency
 
 The following remain downstream decisions rather than implementer discretion:
 
-- exact pinned Next.js/React/Tailwind/Motion/Zustand/next-intl versions → DOC-51 implementation bootstrap;
-- exact Server Action/Route Handler contracts → DOC-43;
+- exact pinned Astro/adapter/React/Tailwind/Motion/nanostores/three.js versions → DOC-51 implementation bootstrap;
+- exact Astro Action/API endpoint contracts → DOC-43;
 - exact request/response schemas and DTOs → DOC-43;
 - exact PostgreSQL schema / generated DB types → DOC-44;
 - exact Admin session/proxy/auth route protection → DOC-45;
@@ -2597,15 +2595,14 @@ The following remain downstream decisions rather than implementer discretion:
 
 Informative references validated while drafting this document:
 
-- Next.js App Router documentation: <https://nextjs.org/docs>
-- Next.js Server/Client rendering guidance: <https://nextjs.org/learn/react-foundations/server-and-client-components>
-- Next.js layouts/pages: <https://nextjs.org/learn/dashboard-app/creating-layouts-and-pages>
-- Next.js navigation/code splitting/prefetch: <https://nextjs.org/learn/dashboard-app/navigating-between-pages>
-- Next.js streaming/Suspense: <https://nextjs.org/learn/dashboard-app/streaming>
-- Next.js errors/not-found: <https://nextjs.org/learn/dashboard-app/error-handling>
-- Next.js Server Actions/mutations: <https://nextjs.org/learn/dashboard-app/mutating-data>
-- React Server Components: <https://react.dev/reference/rsc/server-components>
-- React `use client`: <https://react.dev/reference/rsc/use-client>
-- next-intl: <https://next-intl.dev/>
+- Astro documentation: <https://docs.astro.build/>
+- Astro islands: <https://docs.astro.build/en/concepts/islands/>
+- Astro View Transitions: <https://docs.astro.build/en/guides/view-transitions/>
+- Astro on-demand rendering: <https://docs.astro.build/en/guides/on-demand-rendering/>
+- Astro Actions: <https://docs.astro.build/en/guides/actions/>
+- Astro Content Collections: <https://docs.astro.build/en/guides/content-collections/>
+- Astro i18n routing: <https://docs.astro.build/en/guides/internationalization/>
+- Sharing state between islands (nanostores): <https://docs.astro.build/en/recipes/sharing-state-islands/>
+- React Three Fiber: <https://r3f.docs.pmnd.rs/>
 
 Provider/framework references are informative. The approved product/interface behavior remains authoritative if framework implementation guidance changes.
