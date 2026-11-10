@@ -14,3 +14,7 @@ Future accessibility, security, performance, release-readiness and architecture 
 - `REVIEW-FINAL-DOC00-51-AUDIT-002.md` — **PASS** — post-amendment verification; P0/P1/P2/P3 = 0 and V0 cleared for repository bootstrap.
 - `AMENDMENT-PRE-REPO-GOVERNANCE-002.md` — **APPROVED** — human issue ownership, required Project/Wiki companion model, local-only tool configuration and no tool-authorship/co-authorship attribution.
 - `REVIEW-PRE-REPO-GOVERNANCE-001.md` — **PASS** — post-amendment verification of human issue ownership, non-attribution, required Project/Wiki boundaries and local-only tool configuration.
+
+- `PROPOSAL-REOPEN-001-baseline-revision.md` — **APPROVED** — owner-approved reopening: Astro stack, background music, three.js layer, non-goal revision, Colombian legal baseline and SRS.
+- `AMENDMENT-REOPEN-001.md` — **APPROVED** — every change made under the reopening, with its governing ADR.
+- `REVIEW-CROSS-DOCUMENT-CONSISTENCY-003.md` — **PASS** — post-reopening verification; P0/P1/P2/P3 = 0 and V0 re-cleared for repository bootstrap (Astro).
