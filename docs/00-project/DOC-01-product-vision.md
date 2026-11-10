@@ -101,8 +101,8 @@ The portfolio may evolve as a living product with Dev Log, Changelog, Tech Pulse
 - **VIS-002** iiSU is the principal interaction inspiration, not an asset source or brand template.
 - **VIS-003** Home work/project exploration is the default first meaningful experience.
 - **VIS-004** Playful features are optional enrichment, never prerequisites for professional information.
-- **VIS-005** The first impression dazzles without requiring any visitor action. Boot, 3D and music are enhancements over content that renders first (ADR-005, ADR-006, ADR-007).
 - **VIS-005** The portfolio itself is treated as a product/case study with engineering evidence.
 - **VIS-006** Bilingual ES/EN support is part of the product identity, not a later translation patch.
 - **VIS-007** Mobile, keyboard and accessibility quality are indicators of product craftsmanship.
 - **VIS-008** Real or curated truthful data is preferred over fake “system” aesthetics.
+- **VIS-009** The first impression dazzles without requiring any visitor action. Boot, 3D and music are enhancements over content that renders first (ADR-005, ADR-006, ADR-007).

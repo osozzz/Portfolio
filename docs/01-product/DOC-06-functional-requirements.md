@@ -12,8 +12,8 @@ depends_on:
   - DOC-31
 decision_families:
   - FR
-last_updated: 2026-09-15
-approved_at: 2026-09-15
+last_updated: 2026-11-10
+approved_at: 2026-11-10
 ---
 
 # DOC-06 — Functional Requirements
@@ -31,7 +31,7 @@ Functional requirements define externally observable capability. Interface geome
 | ID | Capability | Requirement |
 |---|---|---|
 | FR-001 | Locale-prefixed public routing | All public core routes resolve under `/en` and `/es`; language changes preserve meaningful destination/context. |
-| FR-002 | Boot | First visit may show a short skippable Boot; returning visit skips by default; reduced-motion alternative exists. |
+| FR-002 | Boot | First visit may show a short skippable cinematic Boot that never delays the content's LCP and completes with a 2D rendition when 3D is unavailable; returning visit skips by default; reduced-motion alternative exists (ADR-006). |
 | FR-003 | Global Dock | Expose Home, Achievements, Arcade, Channel, Social, Contact in a fixed order from V1.0. A later-release major space remains activatable and resolves to a localized route-backed Coming Soon surface until its feature release; it is never a dead control. |
 | FR-004 | Home collections | Home exposes Projects, Experience, Education and Certifications; Projects is default. |
 | FR-005 | Project selection | Browsing changes selected project/context without automatically opening detail or polluting history. |
@@ -48,7 +48,7 @@ Functional requirements define externally observable capability. Interface geome
 | FR-016 | Contact success | Show an in-context success result after authoritative server acceptance. |
 | FR-017 | Settings | Expose theme, language, sound, motion, transparency and applicable privacy/local-data controls. |
 | FR-018 | Theme | Support light, dark and system behavior with separately tuned visual states. |
-| FR-019 | Sound | Sound defaults off first visit; user can enable/mute and control volume. |
+| FR-019 | Sound | UI sound defaults off first visit; user can enable/mute UI sounds and music separately and control volume (ADR-005). |
 | FR-020 | Motion preference | Support automatic/full/reduced behavior; system preference is respected conservatively. |
 | FR-021 | Transparency preference | Support Automatic, Full, Reduced and Off. |
 | FR-022 | Command Palette | Provide alternative navigation/actions via keyboard and a touch-accessible entry path. |
@@ -95,6 +95,15 @@ Functional requirements define externally observable capability. Interface geome
 | FR-063 | Widget preference persistence | Widget preferences persist locally using a versioned logical schema and can be reset; they do not require visitor authentication. |
 | FR-064 | Widget responsive mapping | The same logical widget preferences recompose across Compact/Medium/Expanded/Wide; Compact surfaces one priority widget plus access to additional eligible widgets rather than shrinking the desktop field. |
 | FR-065 | Accessible widget editing | Reorder/size/pin operations provide keyboard and explicit control alternatives; drag is never the sole customization path. |
+| FR-066 | Music prompt | First-time visitors are offered background music once, after Boot, through a non-modal prompt with equal-weight Yes/No; ignoring it means no music; the answer persists locally and the prompt is not shown again (V1.0, ADR-005). |
+| FR-067 | Background music | After Yes, music fades in at low volume, persists across navigation, pauses when the tab is hidden, ducks for Project Media video, yields to Arcade audio, and can be stopped in one action from an always-visible control (V1.0, ADR-005). |
+| FR-068 | 3D signature stage | Boot, Home project objects and the optional Project Detail architecture viewer may use one persistent lazy-loaded 3D stage with a static/2D fallback under no-WebGL, reduced motion, Save-Data or low capability (V1.0, ADR-006). |
+| FR-069 | Privacy policy | A Personal Data Processing Policy is published at `/[locale]/privacy` in ES/EN and linked from the footer and every data-collection point (V1.0, ADR-008). |
+| FR-070 | Contact authorization | Contact requires an explicit, unchecked-by-default authorization checkbox linked to the privacy policy; proof is recorded as policy version + time (V1.0, ADR-008). |
+| FR-071 | Blog | A Markdown blog with index and post routes, per-locale availability and RSS (V1.1, ADR-007). |
+| FR-072 | Curated themes | Settings offers owner-authored curated themes (palette, backdrop, optional track) without changing layout (V1.1, ADR-007). |
+| FR-073 | Terms and UGC declaration | Terms of Use are published at `/[locale]/terms` in ES/EN, and Guestbook/Sketch submissions require the 18+/legal-representative declaration (V1.2, ADR-008). |
+| FR-074 | Anonymous presence | An ambient indicator shows aggregate anonymous presence without identity, chat or messages, and disappears silently when unavailable (V1.4, ADR-007). |
 
 ## 3. Traceability rule
 
