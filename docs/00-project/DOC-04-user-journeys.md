@@ -10,8 +10,8 @@ depends_on:
   - DOC-03
 decision_families:
   - JRN
-last_updated: 2026-09-15
-approved_at: 2026-09-15
+last_updated: 2026-11-10
+approved_at: 2026-11-10
 ---
 
 # DOC-04 — User Journeys & Experience Outcomes
@@ -27,13 +27,15 @@ Journeys describe goals and outcomes, not fixed page-by-page choreography. Inter
 ## 2. JRN-01 — First visit / professional scan
 
 1. Visitor lands on locale route or a shared project URL.
-2. First-visit Boot runs briefly or is skipped/reduced.
+2. First-visit cinematic Boot runs briefly or is skipped/reduced. The content renders first and the Boot and 3D layer enhance it (ADR-006).
 3. Home presents a featured project immediately.
-4. Visitor browses projects without changing browser history for each selection.
-5. `Explore` opens a stable Project Detail route.
-6. Visitor reviews Overview/Architecture/Challenges/Media as available.
-7. Visitor returns and opens Experience/Education/Certifications or CV.
-8. Contact is directly reachable from Dock.
+4. Once the first impression settles, a non-modal music prompt offers background music with equal-weight **Yes** and **No** buttons. The site stays fully usable behind it. Ignoring it means no music, and sound remains OFF unless the visitor says Yes (ADR-005).
+5. Visitor browses projects without changing browser history for each selection.
+6. `Explore` opens a stable Project Detail route.
+7. Visitor reviews Overview/Architecture/Challenges/Media as available.
+8. Visitor returns and opens Experience/Education/Certifications or CV.
+9. Contact is directly reachable from Dock.
+10. If music is on, it continues across navigation and can be stopped in one action from the always-visible sound control.
 
 **Outcome:** professional value is clear within minutes even if the visitor never touches Arcade/Social.
 
@@ -49,7 +51,7 @@ Home → flagship project → Architecture/Challenges → repository/demo when p
 
 ## 5. JRN-04 — Returning visitor
 
-Boot is skipped by default. Local preferences restore. Optional explicit remembered display name may produce one small greeting. Last Home selection may be remembered for the session, not necessarily permanently. User can clear local personalization.
+Boot is skipped by default. Local preferences restore, including the stored music answer: the music prompt is not shown again, and the sound control reflects the stored choice. Optional explicit remembered display name may produce one small greeting. Last Home selection may be remembered for the session, not necessarily permanently. User can clear local personalization.
 
 ## 6. JRN-05 — Mobile project exploration
 
