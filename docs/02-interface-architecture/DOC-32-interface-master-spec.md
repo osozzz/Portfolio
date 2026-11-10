@@ -1,7 +1,7 @@
 ---
 id: DOC-32
 title: "Interface Architecture Master Specification & Decision Registry"
-document_status: APPROVED
+document_status: REVIEW
 canonical_format: markdown
 phase: "Interface Architecture"
 folder: 02-interface-architecture
@@ -257,7 +257,7 @@ Signature motion:
 
 ## Audio / delight
 
-First-visit sound = OFF. No persistent background music in V1.x.
+First-visit sound = OFF. Background music plays only after the visitor answers Yes in the non-blocking music prompt, and an always-available sound control toggles it (ADR-005, DOC-30).
 
 Audio is semantic through AudioManager. No pointer-hover sound. Repeated navigation sound is rate-limited.
 
@@ -364,23 +364,23 @@ Docs, repo, architecture/design foundations, routing/i18n, data/content model, S
 
 ### V1.0 Professional Portfolio
 
-Boot, fixed six-space Dock with localized route-backed Coming Soon surfaces for later spaces, Home/Projects, Experience/Education/Certifications, Project Detail/Media, controlled Personal Widget Field personalization, Contact, CV, Settings, ES/EN, theme/sound, responsive system, SEO/404.
+Cinematic Boot, three.js signature stage with fallbacks, music prompt and sound control, fixed six-space Dock with localized route-backed Coming Soon surfaces for later spaces, Home/Projects, Experience/Education/Certifications, Project Detail/Media, controlled Personal Widget Field personalization, Contact, CV, Settings, ES/EN, theme/sound, responsive system, SEO/404, privacy policy. Published only after passing its exit criteria (ADR-007).
 
 ### V1.1 Personality
 
-Achievements, Palette, Terminal, Making Of, Changelog, basic Status, Easter eggs, returning personalization.
+Achievements, Palette, Terminal, Making Of, Changelog, basic Status, Easter eggs, returning personalization, Markdown blog, curated themes.
 
 ### V1.2 Community
 
-Social, Guestbook, Sketch Wall, Drawing, reporting, moderation and Admin.
+Social, Guestbook, Sketch Wall, Drawing, reporting, moderation, Admin, Terms of Use and UGC age declaration.
 
 ### V1.3 Arcade
 
-Two games, sessions, leaderboards and validation.
+Two games, sessions, leaderboards and validation. More games only after V1.3 via scope review (ADR-007).
 
 ### V1.4 Live System
 
-Tech Pulse, Dev Log, GitHub integration, advanced Currently Building, dynamic OG and richer status/caching.
+Tech Pulse, Dev Log, GitHub integration, advanced Currently Building, dynamic OG, richer status/caching and anonymous presence.
 
 V1.0 must already be a complete professional portfolio.
 

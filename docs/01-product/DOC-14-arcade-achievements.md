@@ -1,7 +1,7 @@
 ---
 id: DOC-14
 title: "Arcade, Achievements & Playful Progression Requirements"
-document_status: APPROVED
+document_status: REVIEW
 reconstructed: true
 canonical_format: markdown
 phase: Product Foundation
@@ -104,7 +104,7 @@ Contact/CV should not trigger game achievements/confetti. Real certifications ar
 
 ## 12. Decisions
 
-- **ARC-001** Initial Arcade contains two games only.
+- **ARC-001** Initial Arcade (V1.3) contains two games only. Additional games may be proposed after V1.3 ships, through the DOC-02 §11 scope-change gate (ADR-007).
 - **ARC-002** Scores are server-validated, not direct public DB writes.
 - **ARC-003** Arcade identity is nickname-based and accountless.
 - **ARC-004** Visitor achievements can remain local.
