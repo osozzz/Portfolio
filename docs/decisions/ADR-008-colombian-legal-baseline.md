@@ -2,7 +2,7 @@
 id: ADR-008
 title: "Colombian Legal Baseline and Minors Handling"
 record_type: adr
-decision_status: PROPOSED
+decision_status: APPROVED
 date: 2026-11-09
 owners:
   - Alejandro Osorno

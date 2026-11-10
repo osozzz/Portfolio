@@ -2,7 +2,7 @@
 id: ADR-004
 title: "Astro Application Framework and Island Architecture"
 record_type: adr
-decision_status: PROPOSED
+decision_status: APPROVED
 date: 2026-11-09
 owners:
   - Alejandro Osorno

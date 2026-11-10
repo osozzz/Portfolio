@@ -2,7 +2,7 @@
 id: ADR-005
 title: "Background Music, Music Prompt and Audio Defaults"
 record_type: adr
-decision_status: PROPOSED
+decision_status: APPROVED
 date: 2026-11-09
 owners:
   - Alejandro Osorno

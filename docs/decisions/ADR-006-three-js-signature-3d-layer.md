@@ -2,7 +2,7 @@
 id: ADR-006
 title: "three.js Signature 3D Layer and Asset Budget"
 record_type: adr
-decision_status: PROPOSED
+decision_status: APPROVED
 date: 2026-11-09
 owners:
   - Alejandro Osorno

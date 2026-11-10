@@ -2,7 +2,7 @@
 id: ADR-007
 title: "DOC-02 Non-Goal Revision"
 record_type: adr
-decision_status: PROPOSED
+decision_status: APPROVED
 date: 2026-11-09
 owners:
   - Alejandro Osorno
