@@ -1,7 +1,7 @@
 ---
 id: DOC-07
 title: "Non-Functional Requirements"
-document_status: APPROVED
+document_status: REVIEW
 reconstructed: true
 canonical_format: markdown
 phase: Product Foundation
@@ -28,7 +28,7 @@ These requirements define quality boundaries that apply across features. A featu
 
 | ID | Area | Requirement |
 |---|---|---|
-| NFR-001 | Performance | Target good Core Web Vitals on representative hardware; provisional LCP <2.5s, CLS <0.1, INP <200ms for core routes. |
+| NFR-001 | Performance | Target good Core Web Vitals on representative hardware; provisional LCP <2.5s, CLS <0.1, INP <200ms for core routes, measured with the first impression active (NFR-034). |
 | NFR-002 | Initial payload | Keep core initial JS intentionally small; heavy Drawing/Arcade/admin/viewer code must not load for unrelated visits. |
 | NFR-003 | Media | No autoplay heavy video; responsive images, intrinsic dimensions, modern formats and deliberate preload/lazy-load policy. |
 | NFR-004 | Responsiveness | Compact/Medium/Expanded/Wide are first-class; layouts recompose before shrinking. |
@@ -61,6 +61,11 @@ These requirements define quality boundaries that apply across features. A featu
 | NFR-031 | Widget layout portability | Persist widget intent as logical pin/order/size preferences, never viewport-specific pixel coordinates, so preferences remain valid across responsive modes and future layout tuning. |
 | NFR-032 | Customization accessibility | Widget customization must be operable without drag-and-drop, preserve focus, announce meaningful changes and remain usable with reduced motion/transparency. |
 | NFR-033 | Widget-field performance | Personalization must not introduce continuous layout polling, expensive drag loops in normal browsing, or block initial project content; expensive widget data remains independently lazy/cached. |
+| NFR-034 | First-impression performance | NFR-001 budgets are measured with the full first impression active (cinematic Boot, 3D stage, music prompt). Boot and 3D never delay the content's LCP; content HTML renders first and the cinematic layer enhances it (ADR-006, ADR-007). |
+| NFR-035 | 3D weight | three.js and 3D assets load lazily, never on the critical path, within a per-route weight cap set in DOC-49 (compressed GLB with Meshopt/Draco, KTX2 textures). The render loop is on-demand and pauses when the tab is hidden, the stage is off-screen or reduced motion is preferred (ADR-006). |
+| NFR-036 | 3D fallback | A static/2D rendition replaces the 3D stage when WebGL is unavailable, reduced motion is preferred, Save-Data is on, or the device reports low power/memory. No content or capability depends on the 3D stage (ADR-006). |
+| NFR-037 | Audio weight | Music files load only after the visitor answers Yes in the music prompt, never before first paint, and stream or load progressively so playback start does not block interaction (ADR-005). |
+| NFR-038 | Audio control | Any music that plays can be paused/stopped in one action from an always-visible control (WCAG 2.2 SC 1.4.2); music never starts before an explicit Yes (ADR-005). |
 
 ## 3. Measurement policy
 
