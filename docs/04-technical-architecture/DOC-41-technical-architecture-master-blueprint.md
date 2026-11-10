@@ -1,7 +1,7 @@
 ---
 id: DOC-41
 title: "Technical Architecture Master Blueprint & System Context"
-document_status: APPROVED
+document_status: REVIEW
 canonical_format: markdown
 phase: "Technical Architecture"
 folder: 04-technical-architecture
@@ -129,13 +129,13 @@ Any later need for these requires scope and architecture review rather than bein
 
 The portfolio uses a **modular full-stack web application** architecture.
 
-At the deployment level, the default shape is one Next.js application plus managed services:
+At the deployment level, the default shape is one Astro application (static-first with on-demand server rendering; ADR-004) plus managed services:
 
 ```text
 Browser
    │
    ▼
-Next.js Application on Vercel
+Astro Application on Vercel (static output + server functions via adapter)
    │
    ├── Static/build-authored professional content
    ├── Server rendering / application services
@@ -193,7 +193,7 @@ Trusted automation that:
 - validates RenderCV;
 - produces static/generated assets;
 - runs tests and analysis;
-- creates deployable Next.js output.
+- creates deployable Astro output (static assets plus server functions for on-demand routes).
 
 CI has environment-specific credentials only where required and must not make production data mutations during generic preview builds.
 
@@ -211,14 +211,16 @@ The stack is now promoted from “candidate” to **Technical Architecture basel
 |---|---|---|
 | Language | TypeScript | application and shared contracts |
 | Package manager | pnpm | reproducible project commands/workspace dependency management |
-| Web framework | Next.js App Router | routing, RSC, server rendering, route handlers, server actions, metadata |
-| UI runtime | React | interface composition and interactive islands |
+| Web framework | Astro (ADR-004) | file-based routing, static generation by default, on-demand server rendering, API endpoints, Actions, View Transitions, Content Collections, metadata |
+| UI runtime | React islands; plain Astro components; vanilla TypeScript + canvas | React for complex interactive islands, plain Astro for static content, vanilla TS for Drawing Pad/Arcade |
+| Cross-island state | nanostores | shared selection/preferences/audio/3D state between islands |
+| 3D | three.js via React Three Fiber (ADR-006) | one persistent, lazy-loaded signature stage with fallbacks |
 | Styling | Tailwind CSS + CSS Custom Properties + targeted CSS | composition + canonical design tokens + complex material/effect rules |
-| Motion | Motion | primary React motion system |
+| Motion | Astro View Transitions + Motion | route/persistent-shell transitions; primary motion system inside React islands |
 | Database | PostgreSQL via Supabase | runtime relational persistence |
 | Managed auth | Supabase Auth | admin authentication/session foundation |
 | Object storage | Supabase Storage where runtime storage is needed | UGC/runtime media; exact bucket model later |
-| Deployment | Vercel | Next.js hosting, functions, CDN/preview deployments |
+| Deployment | Vercel + Astro Vercel adapter | static hosting, functions, CDN/preview deployments |
 | Email | Resend behind adapter | Contact delivery |
 | Anti-bot | Turnstile or equivalent, risk-based | public-write abuse resistance |
 | Analytics | **disabled by default in V0/V1.0** behind a no-op wrapper until a separate privacy/provider decision enables it | avoid accidental tracking while preserving a stable instrumentation seam |
@@ -246,8 +248,8 @@ At V0 initialization:
 
 The architecture aligns with current official platform direction at the time of this document:
 
-- Next.js App Router is the route model that supports React Server Components and current full-stack patterns.
-- Supabase's current Next.js SSR guidance uses cookie-based server-side auth and separate browser/server clients; its `@supabase/ssr` helper remains an abstraction we will isolate behind our own module because provider APIs can evolve.
+- Astro renders static HTML by default, server-renders individual routes on demand through an adapter, hydrates islands selectively and supports persistent elements across navigation through View Transitions (ADR-004).
+- Supabase's server-side auth guidance uses cookie-based sessions and separate browser/server clients (`@supabase/ssr`), which is framework-agnostic and works with Astro's server context; we isolate it behind our own module because provider APIs can evolve.
 - Supabase recommends RLS for exposed relational data.
 - Vercel's current guidance for new applications favors Vercel Functions with the Node.js runtime by default rather than designing around legacy Edge Functions.
 - Resend supports sending-domain verification with SPF/DKIM and recommends intentional DMARC configuration.
@@ -364,9 +366,9 @@ Properties:
 
 The app-like aesthetic does not justify turning the whole site into a client-rendered SPA.
 
-### 9.2 Server Component candidates
+### 9.2 Static/server-rendered Astro components
 
-Prefer Server Components for:
+Prefer plain Astro components (no client JavaScript) for:
 
 - route layouts;
 - professional content;
@@ -376,9 +378,9 @@ Prefer Server Components for:
 - CV route metadata/content;
 - non-interactive case-study composition.
 
-### 9.3 Client Component candidates
+### 9.3 Client island candidates
 
-Use Client Components for explicit interaction domains:
+Use hydrated islands for explicit interaction domains (React unless noted):
 
 - Dock active/transition state where needed;
 - Project selector interactive controller;
@@ -386,20 +388,22 @@ Use Client Components for explicit interaction domains:
 - command palette;
 - terminal;
 - settings/local preferences;
-- audio manager;
-- Drawing Pad;
-- Arcade games;
+- audio manager and music player (persistent shell element; ADR-005);
+- 3D stage (persistent shell element; ADR-006);
+- music prompt;
+- Drawing Pad (vanilla TypeScript + canvas);
+- Arcade games (vanilla TypeScript + canvas);
 - gamepad adapter;
 - local achievement engine;
 - interactive media viewer.
 
-A parent does not become a Client Component merely because one descendant is interactive.
+A page does not become client-rendered merely because one region is interactive; only that island hydrates, with the least eager directive that works.
 
 ### 9.4 Client boundary rule
 
-Client boundaries should be **feature islands**, not page-wide `"use client"` declarations.
+Client boundaries are **feature islands**, never whole pages hydrated for convenience.
 
-Server-fetched/validated serializable data may cross into an island as props. Provider clients, privileged secrets and database service credentials never cross the boundary.
+Server-fetched/validated serializable data may cross into an island as props. Islands share state only through nanostores (ADR-004), never through a page-wide client tree. Provider clients, privileged secrets and database service credentials never cross the boundary.
 
 ---
 
@@ -547,7 +551,7 @@ UI-facing mutation mechanisms are adapters. Business rules live in domain/applic
 ```text
 UI Form / Game / Admin UI
         ↓
-Server Action or Route Handler
+Astro Action or API endpoint
         ↓
 Validation + Request Context
         ↓
@@ -560,9 +564,9 @@ PostgreSQL / Storage / Email / External Provider
 
 This avoids business rules being duplicated inside route files.
 
-### 14.2 Server Actions
+### 14.2 Astro Actions
 
-Prefer Server Actions for:
+Prefer Astro Actions for:
 
 - same-origin form mutations tightly coupled to a rendered route;
 - actions that do not require a stable external HTTP contract;
@@ -573,9 +577,9 @@ Likely examples:
 - Contact submit;
 - simple admin form mutations where an explicit protocol is unnecessary.
 
-### 14.3 Route Handlers
+### 14.3 API endpoints
 
-Prefer Route Handlers for:
+Prefer Astro API endpoints (server-rendered `src/pages/api/*` routes) for:
 
 - explicit application protocols;
 - Arcade session/result endpoints;
@@ -586,7 +590,7 @@ Prefer Route Handlers for:
 
 ### 14.4 No duplicated mutation logic
 
-If both a Server Action and Route Handler expose the same capability, both call the same application service and validation schema.
+If both an Astro Action and an API endpoint expose the same capability, both call the same application service and validation schema.
 
 ---
 
@@ -834,7 +838,7 @@ Expected policy includes:
 - mutation responses containing user-specific state;
 - sensitive request data.
 
-The precise framework caching primitives are selected in Frontend/Backend Architecture after the Next.js version is pinned. We do not couple the architecture to one experimental cache API in prose.
+The precise caching primitives (static generation, CDN cache headers, on-demand rebuilds) are selected in Frontend/Backend Architecture after the Astro and adapter versions are pinned. We do not couple the architecture to one experimental cache API in prose.
 
 ---
 
@@ -916,7 +920,7 @@ Primary trust boundaries:
 [Browser — untrusted]
         │ HTTPS
         ▼
-[Next.js server boundary]
+[Astro server boundary (on-demand routes, Actions, endpoints)]
         │
         ├── [Public request validation / rate-limit boundary]
         ├── [Admin auth/authz boundary]
@@ -1112,7 +1116,7 @@ DNS / HTTPS
     ↓
 Vercel CDN / Routing
     ↓
-Next.js static output + Vercel Functions
+Astro static output + Vercel Functions (adapter)
     ↓
 Supabase + external providers
 ```
@@ -1190,10 +1194,12 @@ Exact file names may evolve, but dependency direction should resemble:
 
 ```text
 portfolio/
-├── app/                         # Next.js routing/composition
+├── src/pages/                   # Astro routing/composition
 │   ├── [locale]/
 │   ├── admin/
-│   └── api/                     # explicit route-handler protocols only
+│   └── api/                     # explicit API endpoint protocols only
+├── src/actions/                 # Astro Actions (thin adapters over services)
+├── src/content/                 # Content Collections config/schemas (DOC-36)
 │
 ├── features/                    # feature/domain modules
 │   ├── home/
@@ -1260,7 +1266,7 @@ Forbidden direction examples:
 Database adapter → React component
 Integration SDK → design-system primitive
 Canonical content parser → admin UI
-Game loop → global app router internals
+Game loop → global router/View Transitions internals
 ```
 
 Shared modules should be extracted only when two real consumers share stable semantics, not because two files contain similar lines.
@@ -1410,7 +1416,7 @@ install locked dependencies
 → localization/parity validation
 → RenderCV projection/validation/build/verify
 → unit/integration tests
-→ Next.js build
+→ Astro build
 → artifact checks
 → E2E/smoke against deployable environment where appropriate
 ```
@@ -1467,10 +1473,10 @@ Exact coverage/gates belong to Quality Architecture.
 
 When implementation begins, development tooling must not:
 
-- make a page `"use client"` just to simplify one interaction;
+- hydrate a whole page or layout just to simplify one interaction;
 - bypass services and write directly to Supabase from arbitrary components;
 - place service-role keys in browser code;
-- create a new API endpoint when a server action/use-case service already owns the capability without explaining why;
+- create a new API endpoint when an Astro Action/use-case service already owns the capability without explaining why;
 - create one generic global store for all app state;
 - store canonical professional content in DB “because a table exists”;
 - infer project status from GitHub commits;
@@ -1554,8 +1560,8 @@ DOC-41 is the master blueprint. The recommended next specification sequence is:
 
 | ID | Proposed document | Normative ownership |
 |---|---|---|
-| DOC-42 | Frontend Architecture, Rendering & State Boundaries | App Router/RSC/client islands/state/modules |
-| DOC-43 | Backend, API & Application Service Architecture | mutations, route handlers, actions, errors/idempotency |
+| DOC-42 | Frontend Architecture, Rendering & State Boundaries | Astro rendering/islands/persistent shell/state/modules |
+| DOC-43 | Backend, API & Application Service Architecture | mutations, API endpoints, Actions, errors/idempotency |
 | DOC-44 | Data Architecture, PostgreSQL, RLS & Storage | schema, migrations, indexes, storage, retention |
 | DOC-45 | Authentication, Authorization & Admin Session Architecture | admin auth/session/recovery/MFA/authz |
 | DOC-46 | Integrations, Caching, Jobs & Provider Resilience | GitHub/news/email/cache/webhooks/scheduling |
@@ -1597,14 +1603,14 @@ These are deferred to named downstream documents, not left as implementer discre
 
 DOC-41 is approved with the following accepted baseline:
 
-- the product remains a modular full-stack Next.js web app, not a microservice system;
-- TypeScript/Next.js/Supabase/Vercel/Resend remain the intended baseline;
+- the product remains a modular full-stack Astro web app, not a microservice system;
+- TypeScript/Astro/Supabase/Vercel/Resend remain the intended baseline (ADR-004);
 - server-first rendering with targeted client islands is the default;
 - canonical professional content stays outside runtime DB authority;
 - runtime DB access is server/service-oriented rather than arbitrary component-level Supabase access;
 - public writes are server-authoritative;
 - Node.js is the default server runtime;
-- Server Actions and Route Handlers are adapters over reusable application services;
+- Astro Actions and API endpoints are adapters over reusable application services;
 - external providers are normalized/cached behind adapters;
 - local personalization remains a distinct versioned local-data domain;
 - V1.x feature bundles remain release/lazy bounded;
@@ -1626,20 +1632,20 @@ DOC-41 was explicitly approved on **2026-09-15**. Its `TAM-*` decisions are ther
 | `TAM-001` | The product uses a modular full-stack web application / modular-monolith architecture. |
 | `TAM-002` | TypeScript is the application language baseline. |
 | `TAM-003` | pnpm is the package-manager baseline, consistent with the approved RenderCV command interface. |
-| `TAM-004` | Next.js App Router is the web-framework baseline. |
-| `TAM-005` | Server rendering/React Server Components are the default; client components are deliberate interaction islands. |
+| `TAM-004` | Astro is the web-framework baseline (ADR-004). |
+| `TAM-005` | Static/server-rendered HTML is the default; hydrated islands are deliberate interaction boundaries. |
 | `TAM-006` | Tailwind + CSS custom properties + targeted CSS implement layout/tokens/material details. |
 | `TAM-007` | Motion remains the primary React motion library; GSAP requires documented need. |
 | `TAM-008` | Supabase PostgreSQL/Auth/Storage is the managed data/auth/storage baseline. |
-| `TAM-009` | Vercel is the managed Next.js deployment baseline. |
+| `TAM-009` | Vercel with the Astro adapter is the managed deployment baseline. |
 | `TAM-010` | Resend behind an adapter is the Contact email baseline. |
 | `TAM-011` | Node.js is the default server runtime; Edge requires a measured use case. |
 | `TAM-012` | Canonical professional content remains repository/build-owned, separate from runtime DB state. |
 | `TAM-013` | Runtime DB access is server/service-oriented; arbitrary component-level Supabase querying is not the default pattern. |
 | `TAM-014` | Privileged/service-role secrets are server-only and are not the default convenience path for all data access. |
 | `TAM-015` | Tables exposed through Supabase Data API require intentional privileges/RLS. |
-| `TAM-016` | Server Actions are preferred for tightly coupled same-origin UI mutations; Route Handlers own explicit HTTP/application protocols. |
-| `TAM-017` | Server Actions/Route Handlers delegate business rules to application services rather than duplicating them. |
+| `TAM-016` | Astro Actions are preferred for tightly coupled same-origin UI mutations; API endpoints own explicit HTTP/application protocols. |
+| `TAM-017` | Astro Actions/API endpoints delegate business rules to application services rather than duplicating them. |
 | `TAM-018` | Request, authoring and external-provider validation are separate explicit validation layers. |
 | `TAM-019` | Local visitor personalization is versioned and domain-separated rather than one global opaque blob. |
 | `TAM-020` | Widget Field layout persistence stores logical intent, never pixel coordinates. |
@@ -1664,6 +1670,10 @@ DOC-41 was explicitly approved on **2026-09-15**. Its `TAM-*` decisions are ther
 | `TAM-039` | DOC-42 through DOC-51 are the proposed detailed Technical Architecture decomposition. |
 | `TAM-040` | Missing details listed as deferred in DOC-41 belong to named downstream documents and are not silent implementer discretion. |
 | `TAM-041` | `Currently Building` remains repository-authored managed status in the approved V1.x baseline; adding runtime/Admin mutation requires a future source-of-truth migration ADR. |
+| `TAM-042` | Cross-island state uses nanostores; no page-wide client tree is introduced to share state (ADR-004). |
+| `TAM-043` | The persistent shell (chrome, Dock, music player, 3D stage) survives navigation through Astro View Transitions; this is a V0 prototype gate (ADR-004). |
+| `TAM-044` | The 3D stage is one persistent lazy-loaded WebGL context with static/2D fallbacks; three.js is never on the critical path (ADR-006). |
+| `TAM-045` | Background music is owned by AudioManager in the persistent shell and loads only after the visitor opts in (ADR-005). |
 
 ---
 
@@ -1671,11 +1681,11 @@ DOC-41 was explicitly approved on **2026-09-15**. Its `TAM-*` decisions are ther
 
 These sources are **informative implementation references**, not normative product documents:
 
-- Next.js documentation: <https://nextjs.org/docs>
+- Astro documentation: <https://docs.astro.build/>
 - Supabase SSR Auth: <https://supabase.com/docs/guides/auth/server-side>
-- Supabase Next.js guide: <https://supabase.com/docs/guides/getting-started/quickstarts/nextjs>
+- Astro Vercel adapter: <https://docs.astro.build/en/guides/integrations-guide/vercel/>
 - Supabase Auth / RLS context: <https://supabase.com/docs/guides/auth>
-- Vercel + Next.js: <https://vercel.com/frameworks/nextjs>
+- Vercel + Astro: <https://vercel.com/docs/frameworks/frontend/astro>
 - Resend: <https://resend.com/>
 
 If a provider's current implementation guidance changes, update the relevant downstream implementation document; do not reinterpret product behavior from a provider change.
