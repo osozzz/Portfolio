@@ -1782,6 +1782,17 @@ Minimum applicable exit criteria:
 - rollback/recovery path remains valid;
 - required manual QA charter completed.
 
+**V1.0 additional exit criteria (ADR-005, ADR-006, ADR-007).** V1.0 is published only when, in addition to the above:
+
+- the cinematic Boot is skippable, never delays LCP and completes with its 2D rendition when 3D is unavailable;
+- the 3D stage meets the DOC-49 §16A budgets on representative desktop and mid-range mobile, and its static/2D fallback is verified under no-WebGL, reduced motion and Save-Data;
+- NFR-001 budgets pass with the full first impression active (NFR-034);
+- the music prompt is non-modal, equal-weight, keyboard/screen-reader operable in ES/EN, never shown again after an answer, and music never plays before Yes;
+- the always-visible sound/music control stops music in one action in every responsive mode (WCAG 2.2 SC 1.4.2);
+- music and the 3D stage persist across navigation (ADR-004 prototype gate passed);
+- the audio license register lists every shipped track with its license;
+- the Personal Data Processing Policy page is published in ES/EN and has passed lawyer review (ADR-008).
+
 DOC-51 defines which checks are merge-blocking vs release-only.
 
 ---
@@ -1801,6 +1812,8 @@ V1.0 Professional Core prioritizes:
 - responsive/accessibility;
 - SEO/meta basics;
 - Coming Soon routes;
+- Boot, 3D stage and fallbacks, music prompt/control and persistence across navigation;
+- privacy policy page;
 - performance/security fundamentals.
 
 Community/Arcade tests should not be required for a feature that is not yet released, except foundation contracts that already exist.
@@ -2511,6 +2524,9 @@ CI retries/quarantine behavior does not hide persistent critical-suite instabili
 | `TQE-115` | Real PostgreSQL rate-limit concurrency/expiry behavior is an integration/security test gate. |
 | `TQE-116` | Retention, capability-based deletion, Drawing IndexedDB persistence and privacy-receipt behavior receive explicit tests. |
 | `TQE-117` | Dock zoom QA separates 320 CSS-px, browser page zoom, independent text scaling and short-landscape cases. |
+| `TQE-118` | V1.0 exit criteria include the first-impression items: Boot, 3D stage budgets and fallbacks, music prompt/control, persistence across navigation, audio license register and the reviewed privacy policy. |
+| `TQE-119` | Visual regression covers Liquid Glass over both the live 3D stage and its static rendition. |
+| `TQE-120` | E2E verifies that music continues across ClientRouter navigation and that no second WebGL context is created. |
 
 ---
 

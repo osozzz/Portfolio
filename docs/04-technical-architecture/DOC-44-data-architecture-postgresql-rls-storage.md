@@ -495,6 +495,9 @@ Baseline columns:
 | `last_moderated_at` | `timestamptz null` | latest moderation action |
 | `last_moderated_by` | `uuid null` | FK to admin profile |
 | `retention_until` | `timestamptz null` | policy hook, not universal auto-delete |
+| `age_declaration_at` | `timestamptz` | time the submitter ticked "I am 18+ or have my legal representative's authorization" (ADR-008); required, no age stored |
+| `terms_version` | `text` | Terms of Use version accepted with the submission (ADR-008) |
+| `privacy_policy_version` | `text` | Personal Data Processing Policy version shown at submission (Ley 1581 proof of authorization) |
 
 Key checks:
 
@@ -504,6 +507,8 @@ moderation_status ∈ pending, approved, rejected, hidden
 moderation_version >= 1
 trimmed nickname length within DB safety cap
 approved => published_at is not null
+age_declaration_at is not null
+terms_version and privacy_policy_version are non-empty
 ```
 
 Unique idempotency constraint:
@@ -1028,6 +1033,14 @@ contact_submissions_with_body
 The Contact form is not a covert CRM.
 
 ---
+
+## 41A. Contact authorization proof (ADR-008)
+
+Ley 1581 / Decreto 1377 require keeping proof of the visitor's prior, express and informed authorization. Without creating an inbox, the Contact operation ledger (§42) stores only `privacy_policy_version` and `authorization_at` for each operation, and the delivered email includes the same stamp. No name, email or body is added to the ledger.
+
+## 41B. Anonymous presence persists nothing (V1.4, ADR-007)
+
+Presence counts/traces come from ephemeral realtime channel state (for example Supabase Realtime Presence) and are never written to PostgreSQL. No presence table, visitor identifier or history exists; abuse limits follow DOC-47 §45B.
 
 ## 42. Contact operation ledger
 
@@ -2379,6 +2392,9 @@ Provider documentation is informative. Approved product/application invariants r
 | `DTA-098` | Community submissions and accepted Arcade scores store only a digest of a high-entropy one-resource deletion capability. |
 | `DTA-099` | Domain retention horizons follow the canonical DOC-44 retention matrix and are exercised by cleanup jobs/tests. |
 | `DTA-100` | Report/reaction/ban/audit machine-code allowlists are canonical and DB-enforced; hidden→approved restore is absent in V1.2. |
+| `DTA-101` | `community_submissions` records `age_declaration_at`, `terms_version` and `privacy_policy_version`; no age or birth date is stored (ADR-008). |
+| `DTA-102` | The Contact operation ledger keeps only `privacy_policy_version` and `authorization_at` as proof of authorization; it never stores message content (ADR-008). |
+| `DTA-103` | Anonymous presence is ephemeral realtime state and is never persisted (ADR-007). |
 
 ---
 
