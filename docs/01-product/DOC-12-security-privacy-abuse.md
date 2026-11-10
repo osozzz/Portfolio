@@ -11,8 +11,8 @@ depends_on:
   - DOC-08
 decision_families:
   - SEC
-last_updated: 2026-09-15
-approved_at: 2026-09-15
+last_updated: 2026-11-10
+approved_at: 2026-11-10
 ---
 
 # DOC-12 — Security, Privacy & Abuse-Prevention Requirements
@@ -61,7 +61,7 @@ All public writes validate schema, type, length and allowed values server-side. 
 Evaluate/configure:
 
 - HTTPS/TLS and HSTS;
-- CSP suitable for Next.js/integrations;
+- CSP suitable for the Astro build/integrations;
 - X-Content-Type-Options;
 - Referrer Policy;
 - frame/embedding policy where appropriate;

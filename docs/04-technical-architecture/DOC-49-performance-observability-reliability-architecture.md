@@ -52,8 +52,8 @@ depends_on:
 
 decision_families:
   - POR
-last_updated: 2026-09-15
-approved_at: 2026-09-15
+last_updated: 2026-11-10
+approved_at: 2026-11-10
 ---
 
 # DOC-49 — Performance, Observability & Reliability Architecture
@@ -324,6 +324,8 @@ Each heavy feature receives its own budget report:
 - Terminal;
 - Command Palette if separated;
 - media viewer;
+- 3D stage (three.js + React Three Fiber);
+- music player;
 - Admin application.
 
 A single lazy feature exceeding roughly **250 KB compressed JavaScript** triggers review for:
@@ -404,6 +406,35 @@ Rules:
 
 ---
 
+## 16A. 3D stage budget (ADR-006)
+
+Initial values (proposed in the reopening revision; tightening allowed, loosening requires an explicit exception):
+
+| Item | Budget |
+|---|---|
+| three.js + React Three Fiber + stage code | ≤ 250 KB compressed JS, lazy chunk, never in the initial route payload |
+| 3D assets for the Home first impression (GLB + KTX2) | ≤ 1.5 MB compressed total; any single model ≤ 500 KB |
+| 3D assets on Compact | ≤ 600 KB compressed total, otherwise the static/2D rendition is used |
+| Optional Project Detail architecture viewer | ≤ 800 KB compressed per project, loaded only on explicit open |
+| Geometry | ≤ 150k visible triangles and ≤ 100 draw calls per frame |
+| Textures | KTX2/Basis; ≤ 2048² on Expanded/Wide, ≤ 1024² on Compact |
+| Frame rate | 60 fps target on representative desktop; ≥ 30 fps floor on representative mid-range mobile, otherwise fall back to the static rendition |
+| Idle | 0 rendered frames while nothing animates (on-demand loop) |
+
+Loading rules: 3D chunks and assets start after the LCP element has rendered (idle/visible trigger), are never preloaded in HTML, and are skipped entirely under the fallback conditions in DOC-28. The NFR-001 budgets are measured with the stage active (NFR-034). The Boot completes with its 2D rendition if the assets are not ready within the Boot duration.
+
+## 16B. Music budget (ADR-005)
+
+| Item | Budget |
+|---|---|
+| Music fetch | nothing before the visitor answers Yes; never in the initial route payload |
+| Format | Opus/WebM with AAC fallback, ~96–128 kbps |
+| Track size | ≤ 3 MB per track; streamed/progressive so playback can start before full download |
+| Start latency | audible fade-in begins ≤ 1 s after Yes on a representative connection |
+| Player code | ≤ 30 KB compressed JS within the persisted shell runtime |
+
+Music never competes with LCP or input handling; decoding happens off the main interaction path.
+
 ## 17. Liquid Glass performance budget
 
 Glass is a visual material, not an excuse for unbounded compositing.
@@ -460,7 +491,7 @@ No provider call is required before selection visually changes.
 
 ## 20. Navigation performance
 
-Public navigation should preserve Next.js/App Router behavior without creating a second SPA router.
+Public navigation should preserve Astro routing with the ClientRouter without creating a second SPA router.
 
 Performance rules:
 
@@ -2006,6 +2037,9 @@ Drawing and Arcade demonstrate isolated high-frequency state without root-shell 
 | POR-105 | DOC-51 consumes these targets as CI/CD gates rather than redefining them. |
 | `POR-106` | Sentry is the V0/V1.0 runtime error-monitoring baseline behind wrappers; product analytics is disabled/no-op until separately enabled. |
 | `POR-107` | Detailed operational telemetry defaults to at most 30-day retention, subject to shorter provider-plan limits; analytics remains disabled in V1.0. |
+| `POR-108` | The 3D stage has its own lazy-feature budget (≤ 250 KB compressed JS) and per-route asset caps (Home ≤ 1.5 MB, Compact ≤ 600 KB, architecture viewer ≤ 800 KB) (ADR-006). |
+| `POR-109` | The 3D stage renders 0 frames at idle, targets 60 fps on desktop and falls back below a 30 fps mobile floor (ADR-006). |
+| `POR-110` | Music loads only after Yes, streams progressively, is ≤ 3 MB per track and starts its fade-in within ≤ 1 s (ADR-005). |
 
 ---
 

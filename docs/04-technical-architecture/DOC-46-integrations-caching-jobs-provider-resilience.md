@@ -37,8 +37,8 @@ depends_on:
 
 decision_families:
   - ICJ
-last_updated: 2026-09-15
-approved_at: 2026-09-15
+last_updated: 2026-11-10
+approved_at: 2026-11-10
 ---
 
 # DOC-46 — Integrations, Caching, Jobs & Provider Resilience
@@ -75,7 +75,7 @@ This document defines:
 - Supabase Auth recovery-email delivery boundary;
 - Cloudflare Turnstile verification integration;
 - cache ownership and cache layers;
-- Next.js public read caching and invalidation;
+- public read caching and invalidation (prerendering, Vercel CDN response cache, cache tags);
 - durable external-feed snapshots in PostgreSQL;
 - conditional requests, ETags and source freshness;
 - stale-while-error behavior;
@@ -342,7 +342,7 @@ Browser-safe when required
 → analytics public/site identifier if selected
 ```
 
-No secret is copied into canonical content files, Client Components, localStorage, analytics or error payloads.
+No secret is copied into canonical content files, client islands, localStorage, analytics or error payloads.
 
 ---
 
@@ -388,7 +388,7 @@ The portfolio may use four distinct cache layers:
 
 ```text
 L1 — Browser/CDN/static asset cache
-L2 — Next.js server/read-model cache
+L2 — Vercel CDN response cache for on-demand public read models
 L3 — Durable integration snapshot in PostgreSQL
 L4 — Remote-provider conditional cache semantics (ETag / Last-Modified)
 ```
@@ -411,36 +411,38 @@ These may use long-lived immutable browser/CDN caching when filenames or URLs ch
 
 ---
 
-## 14. L2 — Next.js read-model cache
+## 14. L2 — public read-model response cache (Astro on Vercel)
 
-For public server-rendered data that can be shared across visitors, the preferred current Next.js 16-era model is Cache Components using stable framework primitives such as:
+Astro has no framework data cache, so shared public read models use two mechanisms (ADR-004):
+
+- **prerendering** for build-owned data (canonical content, blog), refreshed by deploy;
+- **on-demand routes/endpoints with explicit CDN caching** for runtime public projections, using:
 
 ```text
-'use cache'
-cacheLife(...)
-cacheTag(...)
-revalidateTag(..., 'max')
-updateTag(...) where read-your-own-writes is required
+Cache-Control: public, s-maxage=<ttl>, stale-while-revalidate=<window>
+cache tags on the response (Vercel CDN cache tags)
+tag invalidation after the mutations that affect the projection
+Vercel ISR through the Astro adapter where a whole page fits that model
 ```
 
 The architectural requirement is broader than any one API:
 
 > Public read models may be cached by explicit lifetime/tag policy; authenticated/private state is never accidentally promoted into a shared public cache.
 
-If the pinned Next.js version changes, equivalent stable APIs may be used without changing this invariant.
+If the pinned Astro/adapter/Vercel versions change, equivalent stable mechanisms may be used without changing this invariant.
 
 ---
 
-## 15. Cache Components baseline
+## 15. Response-cache baseline
 
-When the project pins a Next.js release supporting stable Cache Components, `cacheComponents: true` is the preferred baseline.
+Caching is opt-in per route/endpoint and declared next to the read model.
 
 Reasons:
 
-- caching is opt-in and explicit;
-- public cached boundaries can coexist with dynamic server islands;
-- cache lifetime and tagging remain visible near the read model;
-- revalidation can be targeted rather than route-wide by default.
+- caching is explicit and visible near the read model;
+- prerendered/cached pages can coexist with on-demand islands or endpoints for live regions;
+- lifetime and tagging are reviewable per projection;
+- invalidation can be targeted by tag rather than site-wide by default.
 
 A prototype/upgrade gate must verify behavior against the actually pinned framework version before production.
 
@@ -448,13 +450,13 @@ A prototype/upgrade gate must verify behavior against the actually pinned framew
 
 ## 16. Request data and cached functions
 
-Cached functions/components must not accidentally capture visitor-specific request state.
+Cached responses must not accidentally capture visitor-specific request state.
 
 Do not read:
 
 ```text
-cookies()
-headers()
+request cookies (Astro.cookies)
+request headers
 Admin identity
 visitor-specific personalization
 ```
@@ -499,13 +501,13 @@ Accepted Arcade score
 → invalidate leaderboard:<game>:<leaderboard_version>
 ```
 
-Avoid global `revalidatePath('/')`-style invalidation as a default.
+Avoid site-wide cache purges as a default.
 
 ---
 
 ## 19. Read-your-own-writes
 
-When a Server Action requires immediate fresh data for the actor after a successful mutation, `updateTag`-style semantics may be used where supported.
+When an Astro Action requires immediate fresh data for the actor after a successful mutation, the action response carries the authoritative new state; the shared cache is invalidated by tag without blocking the response.
 
 For public shared feeds where slight delay is acceptable, stale-while-revalidate semantics are preferred.
 
@@ -537,7 +539,7 @@ This preserves DOC-45's immediate `admin_profiles.disabled_at` kill-switch behav
 
 ## 21. Why provider data needs a durable snapshot
 
-Next.js server cache alone is not the canonical resilience layer for GitHub/Tech Pulse.
+The CDN response cache alone is not the canonical resilience layer for GitHub/Tech Pulse.
 
 A deployment, cache eviction or runtime instance change should not erase the last known good external feed and force the next visitor to depend on the provider.
 
@@ -959,8 +961,8 @@ Tech Pulse sources are explicitly allowlisted in repository configuration.
 Suggested source contract:
 
 ```yaml
-id: nextjs-blog
-name: Next.js
+id: astro-blog
+name: Astro
 kind: rss
 url: https://...
 enabled: true
@@ -1286,7 +1288,7 @@ Secret key
 → server-only
 ```
 
-The secret never reaches rendered HTML, Client Components or browser logs.
+The secret never reaches rendered HTML, client islands or browser logs.
 
 ---
 
@@ -1384,7 +1386,7 @@ Available mechanisms are:
 ```text
 request-time synchronous work
 build/CI work
-Next.js after() best-effort post-response work
+Vercel waitUntil() best-effort post-response work
 Vercel Cron scheduled jobs
 provider-native delivery/idempotency
 narrow database transactions/functions
@@ -1394,9 +1396,9 @@ A queue is introduced only when a real workflow requires durable asynchronous re
 
 ---
 
-## 71. `after()` role
+## 71. `waitUntil()` role
 
-Current stable Next.js `after()` semantics may be used for **best-effort, non-critical post-response work**.
+Vercel's `waitUntil()` (from `@vercel/functions`, available to Astro on Vercel) may be used for **best-effort, non-critical post-response work**.
 
 Suitable examples:
 
@@ -2183,7 +2185,7 @@ UI
 
 Adapters containing secrets/network-provider clients are marked/imported as server-only.
 
-Build tooling/lint rules should make accidental Client Component imports fail early.
+Build tooling/lint rules should make accidental client island imports fail early.
 
 ---
 
@@ -2322,7 +2324,7 @@ The following remain true regardless of provider/SDK details:
 
 1. External providers never own the professional core.
 2. Provider calls are server-owned and adapter-normalized.
-3. GitHub/Tech Pulse never fetch directly from Client Components.
+3. GitHub/Tech Pulse never fetch directly from client islands.
 4. External feed reads prefer durable normalized snapshots over visitor-time provider calls.
 5. Provider cache supports fresh, stale-allowed and expired states.
 6. Stale data is bounded and never presented forever as current.
@@ -2372,8 +2374,8 @@ The following remain true regardless of provider/SDK details:
 | `ICJ-006` | Integrations are classified as delivery, enrichment, verification or build/tool boundaries. |
 | `ICJ-007` | Provider failures map into stable normalized error categories. |
 | `ICJ-008` | Caching is part of external-provider resilience, not only performance optimization. |
-| `ICJ-009` | Cache architecture distinguishes static/CDN, Next.js read cache, durable provider snapshot and remote conditional-cache semantics. |
-| `ICJ-010` | Current Next.js Cache Components APIs are the preferred public shared-cache baseline when supported by the pinned stable framework version. |
+| `ICJ-009` | Cache architecture distinguishes static assets, CDN response cache for public read models, durable provider snapshot and remote conditional-cache semantics. |
+| `ICJ-010` | Public shared read models use prerendering or explicit CDN response caching with cache tags and targeted invalidation (ADR-004). |
 | `ICJ-011` | Shared public cache scopes never read/capture Admin identity or visitor-specific private request state. |
 | `ICJ-012` | Public runtime read models use targeted tags/invalidation rather than broad global invalidation by default. |
 | `ICJ-013` | `updateTag`-style immediate invalidation is reserved for read-your-own-writes use where supported; public feeds may use SWR. |
@@ -2429,7 +2431,7 @@ The following remain true regardless of provider/SDK details:
 | `ICJ-063` | Human-verification failure preserves user input and remains accessible/recoverable. |
 | `ICJ-064` | Turnstile production/non-production configurations are isolated. |
 | `ICJ-065` | No general-purpose queue/worker fleet is introduced in V1.x. |
-| `ICJ-066` | Stable Next.js `after()` may perform best-effort non-critical post-response refresh/work only. |
+| `ICJ-066` | `waitUntil()` may perform best-effort non-critical post-response refresh/work only. |
 | `ICJ-067` | `after()` is never the sole correctness mechanism for Contact delivery, moderation audit, Arcade finalization or security mutations. |
 | `ICJ-068` | Vercel Cron is the baseline scheduled-job provider while Vercel remains the deployment platform. |
 | `ICJ-069` | Cron endpoints require `CRON_SECRET` Bearer verification and `no-store` behavior. |
@@ -2493,10 +2495,10 @@ The next canonical document is:
 
 These references are implementation context, not higher authority than approved project decisions:
 
-- Next.js Cache Components: <https://nextjs.org/docs/app/api-reference/config/next-config-js/cacheComponents>
-- Next.js `use cache`: <https://nextjs.org/docs/app/api-reference/directives/use-cache>
-- Next.js cache tags/revalidation: <https://nextjs.org/docs/app/getting-started/revalidating>
-- Next.js `after()`: <https://nextjs.org/docs/app/api-reference/functions/after>
+- Astro on-demand rendering: <https://docs.astro.build/en/guides/on-demand-rendering/>
+- Astro Vercel adapter (ISR, functions): <https://docs.astro.build/en/guides/integrations-guide/vercel/>
+- Vercel CDN cache and cache tags: <https://vercel.com/docs/edge-cache>
+- Vercel `waitUntil()`: <https://vercel.com/docs/functions/functions-api-reference/vercel-functions-package>
 - GitHub REST API best practices: <https://docs.github.com/en/rest/using-the-rest-api/best-practices-for-using-the-rest-api>
 - GitHub REST API rate limits: <https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api>
 - GitHub REST authentication: <https://docs.github.com/en/rest/authentication/authenticating-to-the-rest-api>

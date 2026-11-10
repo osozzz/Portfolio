@@ -34,7 +34,7 @@ depends_on:
   - ADR-002
 decision_families:
   - DTA
-last_updated: 2026-09-15
+last_updated: 2026-11-10
 ---
 
 # DOC-44 — Data Architecture, PostgreSQL, RLS & Storage
@@ -190,7 +190,7 @@ Browser public UI
 Browser admin auth
 → Supabase Auth may use publishable key
 
-Next.js application services/repositories
+Astro server application services/repositories
 → narrow server-owned database adapter
 → privileged secret-key database client when persistence access is required
 ```
@@ -226,7 +226,7 @@ alter table public.<table> enable row level security;
 revoke all on table public.<table> from anon, authenticated;
 ```
 
-There is no `anon` INSERT path for Guestbook, Sketches, Reports or Arcade scores. Public submissions pass through Next.js application services, which then use the privileged repository adapter.
+There is no `anon` INSERT path for Guestbook, Sketches, Reports or Arcade scores. Public submissions pass through the Astro server's application services, which then use the privileged repository adapter.
 
 ---
 
@@ -495,6 +495,9 @@ Baseline columns:
 | `last_moderated_at` | `timestamptz null` | latest moderation action |
 | `last_moderated_by` | `uuid null` | FK to admin profile |
 | `retention_until` | `timestamptz null` | policy hook, not universal auto-delete |
+| `age_declaration_at` | `timestamptz` | time the submitter ticked "I am 18+ or have my legal representative's authorization" (ADR-008); required, no age stored |
+| `terms_version` | `text` | Terms of Use version accepted with the submission (ADR-008) |
+| `privacy_policy_version` | `text` | Personal Data Processing Policy version shown at submission (Ley 1581 proof of authorization) |
 
 Key checks:
 
@@ -504,6 +507,8 @@ moderation_status ∈ pending, approved, rejected, hidden
 moderation_version >= 1
 trimmed nickname length within DB safety cap
 approved => published_at is not null
+age_declaration_at is not null
+terms_version and privacy_policy_version are non-empty
 ```
 
 Unique idempotency constraint:
@@ -676,7 +681,7 @@ Zero updated rows means conflict/not-found and must not be silently treated as s
 
 ## 29. Public Community reads
 
-Public Server Components/application services select only approved rows and only public-safe columns.
+Public server-rendered pages/application services select only approved rows and only public-safe columns.
 
 No public projection includes:
 
@@ -1028,6 +1033,14 @@ contact_submissions_with_body
 The Contact form is not a covert CRM.
 
 ---
+
+## 41A. Contact authorization proof (ADR-008)
+
+Ley 1581 / Decreto 1377 require keeping proof of the visitor's prior, express and informed authorization. Without creating an inbox, the Contact operation ledger (§42) stores only `privacy_policy_version` and `authorization_at` for each operation, and the delivered email includes the same stamp. No name, email or body is added to the ledger.
+
+## 41B. Anonymous presence persists nothing (V1.4, ADR-007)
+
+Presence counts/traces come from ephemeral realtime channel state (for example Supabase Realtime Presence) and are never written to PostgreSQL. No presence table, visitor identifier or history exists; abuse limits follow DOC-47 §45B.
 
 ## 42. Contact operation ledger
 
@@ -2069,10 +2082,10 @@ Exact filenames may change, but responsibilities must remain explicit.
 
 The privileged database client module must:
 
-- import `server-only`;
+- live under server-only module paths enforced by import-boundary lint (DOC-51) so client islands cannot import them;
 - read validated server config centrally;
 - use the Supabase secret key (or approved equivalent);
-- never be imported into a Client Component;
+- never be imported into a client island;
 - never export a raw client to arbitrary feature code;
 - be consumed through repository implementations.
 
@@ -2379,6 +2392,9 @@ Provider documentation is informative. Approved product/application invariants r
 | `DTA-098` | Community submissions and accepted Arcade scores store only a digest of a high-entropy one-resource deletion capability. |
 | `DTA-099` | Domain retention horizons follow the canonical DOC-44 retention matrix and are exercised by cleanup jobs/tests. |
 | `DTA-100` | Report/reaction/ban/audit machine-code allowlists are canonical and DB-enforced; hidden→approved restore is absent in V1.2. |
+| `DTA-101` | `community_submissions` records `age_declaration_at`, `terms_version` and `privacy_policy_version`; no age or birth date is stored (ADR-008). |
+| `DTA-102` | The Contact operation ledger keeps only `privacy_policy_version` and `authorization_at` as proof of authorization; it never stores message content (ADR-008). |
+| `DTA-103` | Anonymous presence is ephemeral realtime state and is never persisted (ADR-007). |
 
 ---
 
