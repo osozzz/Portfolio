@@ -1,7 +1,7 @@
 ---
 id: DOC-34
 title: "Color, Theme & Environmental Palette"
-document_status: REVIEW
+document_status: APPROVED
 canonical_format: markdown
 phase: "Visual Design Foundation"
 folder: 03-visual-design
@@ -23,8 +23,8 @@ depends_on:
   - ADR-001
 decision_families:
   - CLR
-last_updated: 2026-09-15
-approved_at: 2026-09-15
+last_updated: 2026-11-10
+approved_at: 2026-11-10
 ---
 
 # DOC-34 — Color, Theme & Environmental Palette

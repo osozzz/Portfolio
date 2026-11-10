@@ -1,7 +1,7 @@
 ---
 id: DOC-35
 title: "Typography, Iconography & Graphic Language"
-document_status: REVIEW
+document_status: APPROVED
 canonical_format: markdown
 phase: "Visual Design Foundation"
 folder: 03-visual-design
@@ -26,8 +26,8 @@ decision_families:
   - TYP
   - ICO
   - GFX
-last_updated: 2026-09-15
-approved_at: 2026-09-15
+last_updated: 2026-11-10
+approved_at: 2026-11-10
 ---
 
 # DOC-35 — Typography, Iconography & Graphic Language

@@ -1,7 +1,7 @@
 ---
 id: DOC-39
 title: "Liquid Glass Material Specification"
-document_status: REVIEW
+document_status: APPROVED
 canonical_format: markdown
 phase: "Visual Design Foundation"
 folder: 03-visual-design
@@ -18,8 +18,8 @@ depends_on:
   - DOC-38
 decision_families:
   - MAT
-last_updated: 2026-09-15
-approved_at: 2026-09-15
+last_updated: 2026-11-10
+approved_at: 2026-11-10
 ---
 
 # DOC-39 — Liquid Glass Material Specification

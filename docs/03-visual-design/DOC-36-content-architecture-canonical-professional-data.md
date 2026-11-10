@@ -1,7 +1,7 @@
 ---
 id: DOC-36
 title: "Content Architecture & Canonical Professional Data"
-document_status: REVIEW
+document_status: APPROVED
 canonical_format: markdown
 phase: "Visual Design Foundation"
 folder: 03-visual-design
@@ -47,8 +47,8 @@ depends_on:
   - ADR-001
 decision_families:
   - CNT
-last_updated: 2026-09-15
-approved_at: 2026-09-15
+last_updated: 2026-11-10
+approved_at: 2026-11-10
 ---
 
 # DOC-36 — Content Architecture & Canonical Professional Data

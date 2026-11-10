@@ -1,7 +1,7 @@
 ---
 id: DOC-33
 title: "Visual Identity & Design Direction"
-document_status: REVIEW
+document_status: APPROVED
 canonical_format: markdown
 phase: "Visual Design Foundation"
 folder: 03-visual-design
@@ -22,8 +22,8 @@ depends_on:
   - ADR-001
 decision_families:
   - VID
-last_updated: 2026-09-15
-approved_at: 2026-09-15
+last_updated: 2026-11-10
+approved_at: 2026-11-10
 ---
 
 # DOC-33 — Visual Identity & Design Direction
