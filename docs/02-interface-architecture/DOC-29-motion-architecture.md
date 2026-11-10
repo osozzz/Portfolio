@@ -9,8 +9,8 @@ depends_on:
   - none
 decision_families:
   - MOT
-last_updated: 2026-09-15
-approved_at: 2026-09-15
+last_updated: 2026-11-10
+approved_at: 2026-11-10
 ---
 
 # DOC-29 — Motion & Transition Architecture
@@ -208,6 +208,22 @@ Avoid long fake-terminal startup logs.
 
 Returning visitors do not replay Boot automatically.
 
+Boot is the cinematic first impression (ADR-006, ADR-007):
+
+- it may use the 3D stage (see "3D stage motion") but **never delays the content's LCP**: content HTML renders first and Boot plays as an enhancement layer over or around it;
+- it has no critical network dependency and never strands the visitor; if 3D assets are not ready within the Boot budget, Boot completes with its 2D rendition;
+- it never waits for audio permission (AFD-009); the music prompt appears only after Boot completes or is skipped (ADR-005).
+
+## 3D stage motion (ADR-006)
+
+The three.js stage is one persistent canvas in the shell, used only in signature moments (Boot, project objects in the Home selector, optional Project Detail architecture viewer).
+
+- **On-demand loop:** frames render only while something animates or the visitor interacts; there is no continuous idle loop (see Idle animation budget).
+- **Pauses:** the loop stops when the document is hidden, the stage is off-screen or covered by an opaque surface, or reduced motion is preferred.
+- **Coordination:** 3D selection motion follows the same project-selection choreography and timing classes as 2D; the 3D object and the 2D summary change as one event.
+- **Interruptibility:** 3D transitions are interruptible like every other transition; a new selection retargets rather than queues.
+- **Reduced motion / fallback:** the stage is replaced by its static/2D rendition (NFR-036); no camera moves, spins or parallax.
+
 ## Theme and language
 
 Theme change can coordinate material/text/environment transition but must remain short. Never use `transition: all` globally.
@@ -251,10 +267,12 @@ Layout animation, FLIP-like transitions and shared layout IDs are acceptable whe
 Tooling direction:
 
 - CSS — simple/local
-- Motion — primary React interaction/layout animation system
+- Astro View Transitions — route-level transitions and persistence of the shell, audio player and 3D stage across navigation (ADR-004)
+- Motion — primary interaction/layout animation system inside React islands
+- React Three Fiber — 3D stage animation, on demand only (ADR-006)
 - GSAP — only if a documented use case cannot reasonably be handled otherwise
 
-View Transitions API should be evaluated as progressive enhancement.
+View Transitions remain progressive enhancement: navigation must work, with focus and announcements correct, when they are unsupported or reduced motion is active.
 
 ## Reduced motion
 
@@ -265,7 +283,8 @@ Typical mapping:
 - parallax → off
 - spring overshoot → off
 - idle continuous motion → off
-- Boot → shorter/simpler
+- Boot → shorter/simpler, 2D rendition
+- 3D stage → static/2D rendition
 - direct manipulation → remains direct
 
 Durations also become shorter.
@@ -358,3 +377,7 @@ Prioritize polish on:
 - MOT-038 — Cancellation/failure always leaves valid final state.
 - MOT-039 — Hydration does not trigger unnecessary entrance animation.
 - MOT-040 — Signature motion effort concentrates on Dock, Project, Environment, Widget Expansion, Achievements and Boot.
+- MOT-041 — Boot never delays the content's LCP and completes with its 2D rendition if 3D assets are not ready (ADR-006).
+- MOT-042 — The 3D stage renders on demand only and pauses when hidden, off-screen, covered or under reduced motion (ADR-006).
+- MOT-043 — 3D and 2D selection changes are one choreographed event with shared timing classes.
+- MOT-044 — The music prompt appears only after Boot completes or is skipped and animates without spatial motion under reduced motion (ADR-005).

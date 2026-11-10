@@ -9,8 +9,8 @@ depends_on:
   - none
 decision_families:
   - CMP
-last_updated: 2026-09-15
-approved_at: 2026-09-15
+last_updated: 2026-11-10
+approved_at: 2026-11-10
 ---
 
 # DOC-27 — Component Inventory & UI Primitives
@@ -179,7 +179,11 @@ Renders mode-appropriate hints automatically.
 - SystemClock
 - LanguageControl
 - ThemeControl
-- SoundControl
+- SoundControl (Sound/Music toggle; anchor of MusicPrompt)
+- MusicPrompt (non-modal Yes/No popover; ADR-005)
+- MusicPlayer (persistent shell element; ADR-004/ADR-005)
+- ThreeStage (persistent 3D stage with static/2D fallback; ADR-006)
+- PresenceIndicator (V1.4; ADR-007)
 - SettingsControl
 - SystemStatusIndicator
 
@@ -407,9 +411,9 @@ The UI consumes RenderCV artifacts; it never generates the CV client-side.
 
 - SettingsSurface
 - SettingsSection
-- ThemeSettings
+- ThemeSettings (light/dark; curated-theme picker from V1.1)
 - LanguageSettings
-- SoundSettings
+- SoundSettings (Music, UI sounds, Volume)
 - MotionSettings
 - TransparencySettings
 - PrivacySettings
@@ -490,16 +494,18 @@ src/
 
 Props express meaning, not arbitrary visual internals. Favor composition over giant universal Card components.
 
-## Server/client boundaries
+## Rendering and island boundaries
 
-Prefer Server Components for static/content-heavy information where possible. Use client components where interaction actually requires it.
+Prefer plain Astro components (static HTML, no client JavaScript) for static/content-heavy information. Hydrate a React island only where interaction actually requires it, with the least eager hydration directive that works. Drawing Pad and Arcade games are vanilla TypeScript + canvas islands. Cross-island state uses nanostores (ADR-004, DOC-42).
 
 Heavy lazy-loaded candidates:
 
 - Drawing
 - Glitch Runner
 - Reflex Deploy
-- interactive Architecture Viewer
+- interactive Architecture Viewer (including the optional 3D viewer)
+- ThreeStage / three.js
+- MusicPlayer audio assets
 - Admin
 - heavy Media Viewer
 
@@ -567,7 +573,7 @@ Maintain a living matrix, for example:
 - CMP-019 — Codebase uses feature-based organization plus shared component families.
 - CMP-020 — Component names describe responsibility rather than appearance.
 - CMP-021 — Composition is preferred over giant variant-based components.
-- CMP-022 — Server Components are preferred wherever interactivity is not required.
+- CMP-022 — Plain Astro components without client JavaScript are preferred wherever interactivity is not required (ADR-004).
 - CMP-023 — Heavy subsystems are lazy-loaded.
 - CMP-024 — Components receive typed domain/data-layer data rather than uncontrolled direct integration calls.
 - CMP-025 — Translation logic is centralized.
@@ -581,3 +587,4 @@ Maintain a living matrix, for example:
 - CMP-032 — `WidgetField` owns controlled responsive slot composition and applies logical local preferences.
 - CMP-033 — Widget customization controls are explicit components; drag is optional enhancement, not the only interaction.
 - CMP-034 — Local widget preference schemas are versioned/migratable rather than unstructured storage blobs.
+- CMP-035 — MusicPlayer and ThreeStage are persistent shell elements that survive navigation; feature components never create their own audio element or WebGL context (ADR-005, ADR-006).

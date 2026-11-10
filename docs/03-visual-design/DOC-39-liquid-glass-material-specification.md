@@ -18,8 +18,8 @@ depends_on:
   - DOC-38
 decision_families:
   - MAT
-last_updated: 2026-09-15
-approved_at: 2026-09-15
+last_updated: 2026-11-10
+approved_at: 2026-11-10
 ---
 
 # DOC-39 — Liquid Glass Material Specification
@@ -1225,6 +1225,15 @@ The first usable rendering cannot depend on advanced effects.
 
 ---
 
+## 64.1 Glass over the 3D stage (ADR-006)
+
+When Liquid Glass surfaces sit above the live 3D canvas:
+
+- glass samples the stage like any environment layer; blur/refraction cost is budgeted together with the 3D frame cost, and the on-demand loop must not force continuous glass recomposition at idle;
+- reading regions over moving 3D content use frosted/solid reading surfaces (readability over spectacle);
+- under reduced transparency or the 3D fallback, glass behaves exactly as over a static environment;
+- visual regression covers glass over both the live stage and its static rendition (DOC-50).
+
 ## 65. Asset policy
 
 Material textures/highlights must be:
@@ -1338,6 +1347,7 @@ DOC-39 implementation is successful when:
 | MAT-030 | Material must be tested against multiple artwork complexities, themes, quality tiers and input/responsive modes. |
 | MAT-031 | Material assets must be original/procedural/licensed; no proprietary Apple/iisu assets are reused. |
 | MAT-032 | Exact blur/opacity/highlight values remain prototype-tunable without changing the semantic material architecture. |
+| MAT-033 | Glass over the live 3D stage uses frosted/solid reading regions for text and is budgeted together with 3D frame cost (ADR-006). |
 
 ---
 

@@ -9,8 +9,8 @@ depends_on:
   - none
 decision_families:
   - RSP
-last_updated: 2026-09-15
-approved_at: 2026-09-15
+last_updated: 2026-11-10
+approved_at: 2026-11-10
 ---
 
 # DOC-28 — Responsive Behavior & Layout Rules
@@ -298,6 +298,20 @@ No autoplay project video backgrounds. Use poster and user-initiated playback.
 
 Consider Save-Data/constrained network behavior later: smaller assets, reduced preloading, no optional video previews.
 
+## 3D stage capability (ADR-006)
+
+The 3D stage is progressive enhancement. A static/2D rendition replaces it when any of these hold:
+
+| Condition | Result |
+|---|---|
+| WebGL unavailable or context lost | static/2D rendition |
+| `prefers-reduced-motion: reduce` or Motion = Reduced | static/2D rendition |
+| Save-Data / constrained connection | static/2D rendition; 3D assets not fetched |
+| low device memory / low-power hint | static/2D rendition |
+| Compact | 3D only where the DOC-49 Compact budget allows; otherwise static/2D |
+
+The fallback preserves every capability and all content; only spectacle is lost.
+
 ## Responsive motion
 
 Compact generally uses shorter travel distance, fewer simultaneous layers and less optical distortion. Semantic transition remains the same.
@@ -374,3 +388,5 @@ Representative QA:
 - RSP-036 — Expanded/Wide Home use a central Personal Field rather than a fixed right-hand widget sidebar.
 - RSP-037 — Widget personalization persists logical intent and is remapped per responsive mode; pixel coordinates are never portable state.
 - RSP-038 — Widget customization remains accessible without spatial drag and recomposes to list/sheet controls on Compact when needed.
+- RSP-039 — The 3D stage falls back to a static/2D rendition under no-WebGL, reduced motion, Save-Data or low-capability conditions without losing content or capability (ADR-006).
+- RSP-040 — On Compact the music prompt is a non-modal card above the Dock and the Sound/Music control stays in the chrome (ADR-005).

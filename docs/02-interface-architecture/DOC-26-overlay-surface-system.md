@@ -9,8 +9,8 @@ depends_on:
   - none
 decision_families:
   - SUR
-last_updated: 2026-09-15
-approved_at: 2026-09-15
+last_updated: 2026-11-10
+approved_at: 2026-11-10
 ---
 
 # DOC-26 — Overlay & Surface System
@@ -47,6 +47,18 @@ Popovers:
 - remain keyboard accessible;
 - may become Sheets on Compact;
 - never contain another major overlay.
+
+### Music prompt (non-modal popover, ADR-005)
+
+The first-visit music prompt is an **S1 Popover anchored to the Sound/Music control** in the top chrome, so the visitor learns where music is controlled later. It is explicitly **non-modal**:
+
+- no OverlayBackdrop, no dim/blur, no scroll lock and no focus trap;
+- it does not take focus on appearance; it is announced politely and reachable in normal focus order;
+- the page and Dock remain fully interactive behind it;
+- **Yes** starts music; **No**, Escape/Back or the close affordance mean no music; any of these answers is stored locally and the prompt never reappears;
+- if the visitor simply ignores it, it stays unobtrusively anchored until answered or until the session ends, and music stays off;
+- on Compact it renders as a small non-modal card above the Dock (not a Sheet), never covering primary content or the Dock;
+- it never coexists with a System Dialog; if a major surface opens, the prompt yields and returns afterwards.
 
 ## Sheets
 
@@ -100,7 +112,8 @@ Example:
 
 `/[locale]/projects/dex-sphere`
 
-Expanded/Wide: large contextual surface over Home environment.  
+Expanded/Wide, opened from within the app: large contextual surface over the persisted Home environment (Astro View Transitions; ADR-004, DOC-42).  
+Expanded/Wide, direct entry or reload: the same route renders full-page with the shell; closing navigates to Home.  
 Compact: full-screen detail workspace.
 
 Same route/content, different presentation.
@@ -302,3 +315,5 @@ Centralize expensive full-screen blur. Capability tiers may simplify blur/refrac
 - SUR-028 — Full-screen blur layers are centralized for performance.
 - SUR-029 — Important surfaces receive explicit accessibility semantics.
 - SUR-030 — Every feature chooses a documented surface type before implementation.
+- SUR-031 — The music prompt is a non-modal Popover anchored to the Sound/Music control (Compact: non-modal card above the Dock); it never uses OverlayBackdrop, scroll lock or a focus trap (ADR-005).
+- SUR-032 — Route-backed Project Detail renders over the persisted Home when opened in-app and full-page on direct entry (ADR-004).

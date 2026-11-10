@@ -26,8 +26,8 @@ decision_families:
   - TYP
   - ICO
   - GFX
-last_updated: 2026-09-15
-approved_at: 2026-09-15
+last_updated: 2026-11-10
+approved_at: 2026-11-10
 ---
 
 # DOC-35 — Typography, Iconography & Graphic Language
@@ -375,6 +375,10 @@ The portfolio uses a small graphic motif vocabulary rather than generic decorati
 
 No motif is required on every screen.
 
+### 18.1 Avatar placeholders
+
+Guestbook entries and leaderboard nicknames use **original generated placeholder avatars**: deterministic geometric marks derived from a non-identifying seed (for example the entry ID), drawn with the graphic-language primitives and token colors. No Gravatar, no third-party avatar service and no uploaded images (DOC-02 §10). Placeholders must not resemble real people or brands, carry no meaning beyond decoration (`alt=""` with the nickname as visible text) and render in Light and Dark.
+
 ---
 
 ## 19. Field Grid
@@ -688,6 +692,8 @@ Before final implementation, typography/iconography must be visually checked aga
 | GFX-008 | Project-specific motifs may affect content/environment but never replace global typography/iconography |
 | GFX-009 | Typography and icon assets are performance-budgeted and must have approved licensing/distribution before production |
 | GFX-010 | Font/icon failure must not prevent core portfolio use |
+| GFX-011 | Fonts are self-hosted from the repository build; no runtime third-party font CDN request is made |
+| GFX-012 | Visitor avatars are original deterministic placeholders; no Gravatar/third-party avatars and no uploads |
 
 ---
 
