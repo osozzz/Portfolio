@@ -1,7 +1,7 @@
 ---
 id: DOC-30
 title: "Audio, Feedback & Delight System"
-document_status: APPROVED
+document_status: REVIEW
 canonical_format: markdown
 phase: "Interface Architecture"
 folder: 02-interface-architecture
@@ -51,7 +51,31 @@ Reasons include autoplay restrictions, workplace/recruiter context, accessibilit
 
 Preference is remembered locally after explicit enablement.
 
-No persistent background music in V1.x.
+Background music is the one exception to "sound only after enablement": it is offered once through the music prompt below and never plays before an explicit Yes (ADR-005). The earlier rule "no persistent background music in V1.x" is superseded.
+
+## Music prompt (V1.0, ADR-005)
+
+The site **asks** a first-time visitor whether they want background music.
+
+- Two buttons, **Yes** and **No**, with equal visual weight. No is never de-emphasized, pre-selected or hidden (no dark pattern).
+- The prompt is **non-modal**: it does not trap focus, does not dim or block the page, and the site is fully usable behind it. **Ignoring it means no music.**
+- It appears only after the first impression has settled (after Boot completes or is skipped). It never covers the LCP content or the Dock.
+- **Yes** is the user gesture that unlocks the AudioContext; music then starts at low volume with a fade-in. **No** dismisses the prompt and keeps music off.
+- The answer (Yes or No) is stored locally. Returning visitors are not asked again; they use the always-visible sound control.
+- Keyboard and screen-reader operable; reachable in normal focus order without stealing focus on appearance; announced politely. Labels are localized ES/EN (DOC-10).
+- Under reduced motion the prompt appears without spatial animation.
+
+Suggested copy (final copy owned by DOC-10): EN "Play background music?" · **Yes** / **No**; ES "¿Reproducir música de fondo?" · **Sí** / **No**.
+
+## Background music playback (V1.0, ADR-005)
+
+- **Control:** a music/sound control is always visible in the top chrome (DOC-21) and toggles music in one action (WCAG 2.2 SC 1.4.2).
+- **Separation:** Settings exposes **Music** and **UI sounds** as separate controls; muting one does not change the other.
+- **Persistence across navigation:** the player lives in the persistent shell (ADR-004); route changes never restart or cut the track.
+- **Visibility:** music pauses when the document is hidden and resumes (with fade-in) only if it was playing.
+- **Ducking/yielding:** music ducks or pauses during Project Media video and yields to Arcade game audio; it resumes afterwards if still enabled.
+- **Themes:** curated themes (V1.1, DOC-34) may specify an optional track; the visitor's Music setting still governs playback.
+- **Licensing:** royalty-free tracks only, CC0 preferred; attribution-required licenses are credited in Making Of or the footer; every track is listed in the committed **audio license register** (title, source URL, license, retrieval date/proof).
 
 ## Audio categories/events
 
@@ -93,7 +117,9 @@ Central subsystem owns:
 - AudioContext unlock after valid user interaction
 - document visibility handling
 
-Top chrome needs only quick mute/unmute. Settings may expose Sound + Volume. Category mixer controls are unnecessary V1.0 complexity.
+AudioManager also owns the background-music channel (track loading after Yes, fade, pause on hidden, ducking, Arcade yield) as a separate channel from UI sounds.
+
+Top chrome needs only the quick sound/music control. Settings exposes Music, UI sounds and Volume. A per-category mixer beyond Music vs UI sounds is unnecessary V1.0 complexity.
 
 ## Navigation audio
 
@@ -272,9 +298,9 @@ Terminal can accept useful ES/EN aliases; commands like `sudo` can remain univer
 
 ## Licensing and performance
 
-Every sound asset needs clear ownership/license. Do not copy proprietary console/UI sounds.
+Every sound asset needs clear ownership/license. Do not copy proprietary console/UI sounds. Music tracks are recorded in the audio license register (ADR-005).
 
-Load core SFX only after sound enablement/user interaction. Arcade-specific audio loads with the Arcade bundle. A CV-only visitor should not download game audio.
+Load core SFX only after sound enablement/user interaction. Load music only after Yes in the music prompt or explicit enablement, never before first paint (NFR-037). Arcade-specific audio loads with the Arcade bundle. A CV-only visitor should not download game audio.
 
 When the tab is hidden, pause/stop appropriate audio and gameplay. Do not replay queued sounds on return.
 
@@ -290,7 +316,8 @@ Avoid feedback overload.
 
 Expose real controls only:
 
-- Sound On/Off
+- Music On/Off
+- UI sounds On/Off
 - Volume
 - Motion Automatic/Full/Reduced
 - Transparency Automatic/Full/Reduced/Off
@@ -309,7 +336,7 @@ Do not record raw secret key sequences, terminal command text by default or unpu
 
 - AFD-001 — Feedback may combine visual/motion/audio/text but meaning never depends on audio.
 - AFD-002 — Sound defaults OFF for first-time visitors.
-- AFD-003 — No persistent background music in V1.x.
+- ~~AFD-003 — No persistent background music in V1.x.~~ **SUPERSEDED by ADR-005** (see AFD-036–AFD-042).
 - AFD-004 — Audio is controlled through one semantic AudioManager.
 - AFD-005 — Feature components never directly play specific audio files.
 - AFD-006 — Normal pointer hover produces no sound.
@@ -342,3 +369,10 @@ Do not record raw secret key sequences, terminal command text by default or unpu
 - AFD-033 — User settings override optional delight behavior.
 - AFD-034 — Analytics do not record raw secret inputs or unpublished creative content.
 - AFD-035 — Every delight feature passes accessibility/privacy/performance/responsive review.
+- AFD-036 — First-time visitors are asked about background music through a non-modal Yes/No prompt; ignoring it means no music (ADR-005).
+- AFD-037 — Yes and No have equal visual weight; neither is pre-selected.
+- AFD-038 — The music answer is stored locally and the prompt is not shown again to returning visitors.
+- AFD-039 — An always-visible control toggles music in one action (WCAG 2.2 SC 1.4.2).
+- AFD-040 — Music and UI sounds are separate settings.
+- AFD-041 — Music persists across navigation, pauses on hidden documents, ducks for Project Media video and yields to Arcade audio.
+- AFD-042 — Every music track is listed in the committed audio license register; CC0 preferred.
