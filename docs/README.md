@@ -2,7 +2,7 @@
 
 This directory is the Markdown-first source-of-truth package for the interactive personal portfolio.
 
-> **Current state:** DOC-00–DOC-51 and ADR-001–ADR-003 are `APPROVED`. `REVIEW-FINAL-DOC00-51-AUDIT-002` is `PASS` with no unresolved P0–P3 findings. `AMENDMENT-PRE-REPO-GOVERNANCE-002` adds human issue ownership, required Project/Wiki boundaries and tool-neutral authorship rules. The V0 gate is **CLEARED_FOR_REPOSITORY_BOOTSTRAP**; DOC-51 requires repository/project setup before normal feature code.
+> **Current state:** DOC-00–DOC-51 and ADR-001–ADR-003 are `APPROVED`. `REVIEW-FINAL-DOC00-51-AUDIT-002` is `PASS` with no unresolved P0–P3 findings. `AMENDMENT-PRE-REPO-GOVERNANCE-002` adds human issue ownership, required Project/Wiki boundaries and tool-neutral authorship rules. The V0 gate is **SUSPENDED_PENDING_REVISION** under `PROPOSAL-REOPEN-001` (approved 2026-11-09); repository bootstrap (#88) waits until `REVIEW-CROSS-DOCUMENT-CONSISTENCY-003` passes.
 
 ## Governing north star
 
