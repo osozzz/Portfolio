@@ -1,7 +1,7 @@
 ---
 id: DOC-43
 title: "Backend, API & Application Service Architecture"
-document_status: APPROVED
+document_status: REVIEW
 canonical_format: markdown
 phase: "Technical Architecture"
 folder: 04-technical-architecture
@@ -54,7 +54,7 @@ This document defines:
 
 - backend layering and dependency direction;
 - command/query application-service boundaries;
-- Server Action versus Route Handler ownership;
+- Astro Action versus API endpoint ownership;
 - explicit HTTP/application protocols;
 - request-context construction;
 - validation and normalization;
@@ -98,7 +98,7 @@ Preferred shape:
 Browser / Server-rendered UI
         ↓
 Transport Adapter
-Server Action / Route Handler
+Astro Action / API endpoint
         ↓
 Request Context + Validation
         ↓
@@ -130,7 +130,7 @@ We deliberately reject, for V1.x:
 - CQRS infrastructure with separate databases;
 - a generic enterprise `UnitOfWork` abstraction;
 - an ORM/repository abstraction so broad that domain-specific queries become harder to understand;
-- internal HTTP calls from the Next.js server to its own `/api` endpoints;
+- internal HTTP calls from the Astro server to its own `/api` endpoints;
 - direct database writes from browser code.
 
 “Service-first” does **not** mean “enterprise framework.” It means business rules have a stable home.
@@ -331,7 +331,7 @@ Rules:
 
 ## 9. Transport taxonomy
 
-### 9.1 Server Actions
+### 9.1 Astro Actions
 
 Baseline for same-application form mutations where progressive enhancement and direct UI integration are useful.
 
@@ -347,7 +347,7 @@ Likely admin uses:
 
 provided the UI does not require a reusable JSON protocol.
 
-### 9.2 Route Handlers
+### 9.2 API endpoints
 
 Baseline for explicit JSON/binary application protocols.
 
@@ -364,21 +364,21 @@ Primary uses:
 
 ### 9.3 Server-rendered reads
 
-A Server Component or server page that already executes in the application should call the query service/repository path directly.
+An Astro page/component rendering on the server (at build or on demand) should call the query service/repository path directly.
 
 Do **not** do:
 
 ```text
-Server Component
+Astro page
 → fetch("https://our-own-site/api/guestbook")
-→ Route Handler
+→ API endpoint
 → database
 ```
 
 Use:
 
 ```text
-Server Component
+Astro page
 → ListApprovedGuestbookQuery
 → repository
 ```
@@ -391,18 +391,18 @@ Internal HTTP is unnecessary latency and duplicates auth/cache/error semantics.
 
 | Use case | Baseline transport | Why |
 |---|---|---|
-| Contact submit | Server Action | same-origin form, progressive enhancement, no external API contract |
-| Guestbook submit | Server Action by default | simple form semantics; can later expose Route Handler only if client workflow proves necessary |
-| Guestbook list | direct server query; Route Handler only for client pagination | avoid self-HTTP |
-| Sketch publish | Route Handler | structured drawing payload and explicit protocol |
-| Sketch list | direct server query; Route Handler for incremental client loading if needed | same reason |
-| Report content | Route Handler | reusable from Guestbook/Sketch detail surfaces |
-| Reactions | Route Handler if feature ships | explicit accountless mutation protocol |
-| Arcade create session | Route Handler | explicit protocol |
-| Arcade finalize session | Route Handler | explicit protocol + idempotent result contract |
-| Leaderboard | direct server query; Route Handler for refresh/pagination | public read projection |
-| Admin simple mutations | Server Action | same-app authenticated tooling |
-| Provider webhook | Route Handler | external HTTP contract |
+| Contact submit | Astro Action | same-origin form, progressive enhancement, no external API contract |
+| Guestbook submit | Astro Action by default | simple form semantics; can later expose API endpoint only if client workflow proves necessary |
+| Guestbook list | direct server query; API endpoint only for client pagination | avoid self-HTTP |
+| Sketch publish | API endpoint | structured drawing payload and explicit protocol |
+| Sketch list | direct server query; API endpoint for incremental client loading if needed | same reason |
+| Report content | API endpoint | reusable from Guestbook/Sketch detail surfaces |
+| Reactions | API endpoint if feature ships | explicit accountless mutation protocol |
+| Arcade create session | API endpoint | explicit protocol |
+| Arcade finalize session | API endpoint | explicit protocol + idempotent result contract |
+| Leaderboard | direct server query; API endpoint for refresh/pagination | public read projection |
+| Admin simple mutations | Astro Action | same-app authenticated tooling |
+| Provider webhook | API endpoint | external HTTP contract |
 
 Transport may change only when the use case changes; it must not duplicate business logic.
 
@@ -428,7 +428,7 @@ If Dex-Sphere or another product later needs to consume portfolio data externall
 
 ## 12. Route naming baseline
 
-Exact Next.js folder syntax belongs to implementation, but the conceptual protocol names are:
+Exact Astro file syntax (`src/pages/api/...` endpoints, `src/actions/...`) belongs to implementation, but the conceptual protocol names are:
 
 ```text
 POST /api/arcade/sessions
@@ -442,9 +442,9 @@ POST /api/social/reactions        # only if feature ships
 POST /api/webhooks/resend         # only when webhook processing is enabled
 ```
 
-Guestbook submission remains a Server Action baseline rather than adding an API route just for symmetry.
+Guestbook submission remains an Astro Action baseline rather than adding an API route just for symmetry.
 
-No `/api/admin/*` route family is required merely because Admin exists; authenticated Server Actions can remain the simpler boundary for V1.x moderation mutations.
+No `/api/admin/*` route family is required merely because Admin exists; authenticated Astro Actions can remain the simpler boundary for V1.x moderation mutations.
 
 ---
 
@@ -515,7 +515,7 @@ Domain-specific codes may extend this list but must remain stable and documented
 
 ---
 
-## 15. Route Handler HTTP mapping
+## 15. API endpoint HTTP mapping
 
 Baseline mappings:
 
@@ -541,7 +541,7 @@ Do not return HTTP 200 with `{success:false}` for an explicit JSON protocol unle
 
 ## 16. JSON response envelope
 
-Route Handlers use one small shape:
+API endpoints use one small shape:
 
 Success:
 
@@ -572,9 +572,9 @@ Do not add generic pagination/meta fields to every response if the use case does
 
 ---
 
-## 17. Server Action return contract
+## 17. Astro Action return contract
 
-Server Actions use the same semantic `AppResult<T>` family but do not pretend to expose HTTP status codes to the component.
+Astro Actions use the same semantic `AppResult<T>` family but do not pretend to expose HTTP status codes to the component.
 
 A Contact form receives enough data to render:
 
@@ -836,7 +836,7 @@ Baseline:
 
 ```text
 Contact form
-→ Server Action
+→ Astro Action
 → schema validation + normalization
 → release/abuse policy
 → stable operation ID
@@ -903,7 +903,7 @@ Conceptual flow:
 
 ```text
 Guestbook form
-→ Server Action
+→ Astro Action
 → schema/size validation
 → abuse evaluation
 → idempotency check
@@ -1577,7 +1577,7 @@ No public/shared caching of moderation/report/audit projections.
 
 Use normalized cached snapshots; provider calls do not occur independently from every component.
 
-Precise Next.js cache APIs are implementation-version-specific and remain downstream detail.
+Precise caching mechanics (prerendering, CDN cache headers, on-demand rebuilds) are implementation-version-specific and remain downstream detail (DOC-46).
 
 ---
 
@@ -1736,7 +1736,7 @@ Examples:
 
 ## 69. Content-Type and body policy
 
-Mutation Route Handlers accept only their documented media type.
+Mutation API endpoints accept only their documented media type.
 
 Baseline JSON protocols use:
 
@@ -1990,8 +1990,8 @@ DOC-50 owns full testing strategy, but DOC-43 requires architecture that enables
 
 - application-service unit tests with fake/in-memory ports;
 - repository integration tests against isolated database environment;
-- Route Handler contract tests;
-- Server Action behavior tests where practical;
+- API endpoint contract tests;
+- Astro Action behavior tests where practical;
 - idempotency/concurrency tests;
 - provider adapter tests with mocked provider responses;
 - webhook signature/idempotency tests;
@@ -2250,7 +2250,7 @@ A PR that cannot answer these questions is not backend-ready.
 Implementation tooling must:
 
 - read DOC-41, DOC-42, DOC-43 and relevant product/security docs before backend work;
-- keep Route Handlers/Server Actions thin;
+- keep API endpoints/Astro Actions thin;
 - not call Supabase directly from public/client components;
 - not create generic CRUD repositories merely for speed;
 - not create new `/api` routes for server-internal reads;
@@ -2345,7 +2345,7 @@ Implementation should verify exact current APIs against pinned dependency/provid
 
 Primary references:
 
-- Next.js App Router / Server Actions / Route Handlers documentation: `https://nextjs.org/docs/app`
+- Astro Actions / endpoints / on-demand rendering documentation: `https://docs.astro.build/`
 - Supabase server-side/auth/database documentation: `https://supabase.com/docs`
 - Resend Email API: `https://resend.com/docs/api-reference/emails/send-email`
 - Resend idempotency keys: `https://resend.com/docs/dashboard/emails/idempotency-keys`
@@ -2360,13 +2360,13 @@ Documentation examples are references, not permission to override this architect
 |---|---|
 | `BEA-001` | Backend uses thin transports over explicit application services and infrastructure ports. |
 | `BEA-002` | The backend remains part of the modular monolith; V1.x does not introduce microservices. |
-| `BEA-003` | Business rules do not live directly in Server Actions or Route Handlers. |
+| `BEA-003` | Business rules do not live directly in Astro Actions or API endpoints. |
 | `BEA-004` | Server-rendered code calls query/application services directly rather than self-fetching the app's own API. |
 | `BEA-005` | Commands and queries are conceptually separated without adopting CQRS infrastructure. |
 | `BEA-006` | Application services may use functions or classes; boundary clarity matters more than OOP ceremony. |
 | `BEA-007` | RequestContext is normalized server-side and does not expose raw cookies/IP to domain logic. |
-| `BEA-008` | Server Actions are the baseline for same-app form mutations such as Contact. |
-| `BEA-009` | Route Handlers own explicit JSON/webhook/game/drawing protocols. |
+| `BEA-008` | Astro Actions are the baseline for same-app form mutations such as Contact. |
+| `BEA-009` | API endpoints own explicit JSON/webhook/game/drawing protocols. |
 | `BEA-010` | V1.x does not promise a supported third-party public API. |
 | `BEA-011` | API transports use explicit typed response/error contracts and meaningful HTTP status codes. |
 | `BEA-012` | Provider/database exceptions are normalized and never returned raw to clients. |
@@ -2420,7 +2420,7 @@ Documentation examples are references, not permission to override this architect
 | `BEA-060` | Backend invariants assume concurrency even at low traffic. |
 | `BEA-061` | Sensitive/task-specific payloads are excluded from routine logs, analytics and traces. |
 | `BEA-062` | Security-sensitive errors expose stable safe codes rather than thresholds/internal implementation. |
-| `BEA-063` | Sketch Route Handler accepts structured controlled data, not arbitrary multipart image upload in V1.x. |
+| `BEA-063` | Sketch API endpoint accepts structured controlled data, not arbitrary multipart image upload in V1.x. |
 | `BEA-064` | UGC backend contracts do not accept arbitrary HTML/script/embed fields. |
 | `BEA-065` | Application services return semantic codes; UI owns ES/EN localization. |
 | `BEA-066` | Protocols spanning deployments use explicit schema/rules versions where needed, especially Arcade and Drawing. |
