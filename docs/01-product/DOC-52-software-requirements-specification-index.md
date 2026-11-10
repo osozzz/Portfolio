@@ -1,7 +1,7 @@
 ---
 id: DOC-52
 title: "Software Requirements Specification (SRS) Index"
-document_status: REVIEW
+document_status: APPROVED
 canonical_format: markdown
 phase: Product Foundation
 folder: 01-product
@@ -15,6 +15,7 @@ depends_on:
 decision_families:
   - SRS
 last_updated: 2026-11-10
+approved_at: 2026-11-10
 ---
 
 # DOC-52 — Software Requirements Specification (SRS) Index

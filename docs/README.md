@@ -2,7 +2,7 @@
 
 This directory is the Markdown-first source-of-truth package for the interactive personal portfolio.
 
-> **Current state:** DOC-00–DOC-51 and ADR-001–ADR-003 are `APPROVED`. `REVIEW-FINAL-DOC00-51-AUDIT-002` is `PASS` with no unresolved P0–P3 findings. `AMENDMENT-PRE-REPO-GOVERNANCE-002` adds human issue ownership, required Project/Wiki boundaries and tool-neutral authorship rules. The V0 gate is **SUSPENDED_PENDING_REVISION** under `PROPOSAL-REOPEN-001` (approved 2026-11-09); repository bootstrap (#88) waits until `REVIEW-CROSS-DOCUMENT-CONSISTENCY-003` passes.
+> **Current state:** DOC-00–DOC-52 and ADR-001–ADR-008 are `APPROVED`. `REVIEW-FINAL-DOC00-51-AUDIT-002` is `PASS` with no unresolved P0–P3 findings. `AMENDMENT-PRE-REPO-GOVERNANCE-002` adds human issue ownership, required Project/Wiki boundaries and tool-neutral authorship rules. The baseline was reopened and revised under `PROPOSAL-REOPEN-001` / `AMENDMENT-REOPEN-001` (Astro, music, three.js, non-goals, Colombian legal baseline, SRS); `REVIEW-CROSS-DOCUMENT-CONSISTENCY-003` is `PASS`. The V0 gate is **CLEARED_FOR_REPOSITORY_BOOTSTRAP**; DOC-51 requires repository/project setup before normal feature code.
 
 ## Governing north star
 
@@ -32,7 +32,7 @@ This directory is the Markdown-first source-of-truth package for the interactive
 | DOC-17 | SEO, Metadata, Analytics & Discoverability Requirements | `01-product` | **APPROVED** |
 | DOC-18 | Delivery Roadmap, GitHub Workflow & Release Governance | `01-product` | **APPROVED** |
 | DOC-19 | Implementation Tooling, Automation & Authorship Governance | `01-product` | **APPROVED** |
-| DOC-52 | Software Requirements Specification (SRS) Index | `01-product` | **REVIEW** |
+| DOC-52 | Software Requirements Specification (SRS) Index | `01-product` | **APPROVED** |
 | DOC-20 | Interface Philosophy & Interaction Model | `02-interface-architecture` | **APPROVED** |
 | DOC-21 | Screen Anatomy | `02-interface-architecture` | **APPROVED** |
 | DOC-22 | Navigation Grammar | `02-interface-architecture` | **APPROVED** |
@@ -98,7 +98,7 @@ DOC-19 contains the implementation-tooling and authorship-governance version of 
 
 ## Review gate
 
-Latest operational verification: `reviews/REVIEW-PRE-REPO-GOVERNANCE-001.md` — **PASS**. It confirms the post-audit governance amendment, human issue ownership, required Project/Wiki boundaries and no tool-authorship attribution while preserving the cleared V0 repository-bootstrap gate.
+Latest operational verification: `reviews/REVIEW-CROSS-DOCUMENT-CONSISTENCY-003.md` — **PASS**. It verifies the post-reopening baseline (Astro, music, three.js, non-goals, Colombian legal baseline, SRS) and re-clears the V0 repository-bootstrap gate. `REVIEW-PRE-REPO-GOVERNANCE-001.md` remains the governance verification.
 
 `REVIEW-FINAL-DOC00-51-AUDIT-002.md` remains the deep final architecture consistency audit with P0/P1/P2/P3 = 0.
 

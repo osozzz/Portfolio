@@ -1,7 +1,7 @@
 ---
 id: DOC-00
 title: "Master Guide, Governance & Documentation Map"
-document_status: REVIEW
+document_status: APPROVED
 reconstructed: true
 canonical_format: markdown
 phase: Product Foundation
@@ -62,7 +62,7 @@ A lower item cannot silently override a higher item. DOC-32 is not a blanket ove
 | SUPERSEDED | Replaced by a later decision/document; retained for traceability. |
 | ARCHIVED | Historical only. |
 
-DOC-00–DOC-19 were historically reconstructed from prior planning and initially reviewed before approval; all numbered documents DOC-00–DOC-52 are `APPROVED` once the PROPOSAL-REOPEN-001 revision closes. `reconstructed: true` records provenance only and does not reduce authority.
+DOC-00–DOC-19 were historically reconstructed from prior planning and initially reviewed before approval; all numbered documents DOC-00–DOC-52 are `APPROVED`. `reconstructed: true` records provenance only and does not reduce authority.
 
 ### Separate governance vocabularies
 
@@ -117,7 +117,7 @@ DOC-33 through DOC-40 are the approved Visual Design Foundation. DOC-36 (Content
 
 ### 04-technical-architecture — specification complete; consistency-amended
 
-The Technical Architecture package is specification-complete after DOC-51 approval. DOC-41 is the approved master blueprint; DOC-42 owns frontend architecture; DOC-43 owns backend/application-service architecture; DOC-44 owns Data/PostgreSQL/RLS/Storage architecture; DOC-45 owns Authentication/Authorization/Admin Session architecture; DOC-46 owns Integrations/Caching/Jobs/Provider Resilience architecture; DOC-47 owns Security Architecture & Threat Model; DOC-48 owns Infrastructure/Environments/DNS/Deployment architecture; DOC-49 owns Performance/Observability/Reliability architecture; DOC-50 owns Testing & Quality Engineering; and DOC-51 owns Repository/CI/CD/Developer Experience. `REVIEW-FINAL-DOC00-51-AUDIT-001` identified pre-V0 gaps; `AMENDMENT-PRE-V0-CONSISTENCY-001` resolves them and `REVIEW-FINAL-DOC00-51-AUDIT-002` passes with no unresolved P0–P3 findings. The V0 gate is **SUSPENDED_PENDING_REVISION** under `PROPOSAL-REOPEN-001` (approved 2026-11-09); repository bootstrap (#88) waits until `REVIEW-CROSS-DOCUMENT-CONSISTENCY-003` passes. DOC-51 still makes repository/project operations the first execution step once the gate is re-cleared. DOC-08 continues to record mandatory engineering coverage so those concerns are not forgotten.
+The Technical Architecture package is specification-complete after DOC-51 approval. DOC-41 is the approved master blueprint; DOC-42 owns frontend architecture; DOC-43 owns backend/application-service architecture; DOC-44 owns Data/PostgreSQL/RLS/Storage architecture; DOC-45 owns Authentication/Authorization/Admin Session architecture; DOC-46 owns Integrations/Caching/Jobs/Provider Resilience architecture; DOC-47 owns Security Architecture & Threat Model; DOC-48 owns Infrastructure/Environments/DNS/Deployment architecture; DOC-49 owns Performance/Observability/Reliability architecture; DOC-50 owns Testing & Quality Engineering; and DOC-51 owns Repository/CI/CD/Developer Experience. `REVIEW-FINAL-DOC00-51-AUDIT-001` identified pre-V0 gaps; `AMENDMENT-PRE-V0-CONSISTENCY-001` resolves them and `REVIEW-FINAL-DOC00-51-AUDIT-002` passes with no unresolved P0–P3 findings. The baseline was reopened under `PROPOSAL-REOPEN-001` (Astro stack, background music, three.js layer, non-goal revision, Colombian legal baseline, SRS); `AMENDMENT-REOPEN-001` records the changes and `REVIEW-CROSS-DOCUMENT-CONSISTENCY-003` passes with no unresolved P0–P3 findings. The V0 gate is **CLEARED_FOR_REPOSITORY_BOOTSTRAP** on the Astro baseline; DOC-51 makes repository/project operations the next execution step before normal feature code. DOC-08 continues to record mandatory engineering coverage so those concerns are not forgotten.
 
 ## 6. Product release model
 

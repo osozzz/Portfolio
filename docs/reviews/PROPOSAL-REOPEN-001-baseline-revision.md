@@ -13,7 +13,7 @@ supersedes_gate: "V0 CLEARED_FOR_REPOSITORY_BOOTSTRAP (suspended until this revi
 
 # PROPOSAL-REOPEN-001 — Baseline Reopening
 
-> **Status: APPROVED by the owner on 2026-11-09.** The V0 gate is suspended until this revision closes. Approving this proposal authorizes the revision work it
+> **Status: APPROVED by the owner on 2026-11-09. Revision closed on 2026-11-10** by `AMENDMENT-REOPEN-001` and `REVIEW-CROSS-DOCUMENT-CONSISTENCY-003` (PASS); the V0 gate is re-cleared. Approving this proposal authorizes the revision work it
 > describes. It does not approve any document change by itself. Each change still goes through its
 > ADR or amendment and the normal DOC-00 approval rules.
 

@@ -19,4 +19,4 @@ This package turns the product foundation into traceable requirements and cross-
 | DOC-17 SEO, Metadata, Analytics & Discoverability Requirements | APPROVED — reconstructed baseline |
 | DOC-18 Delivery Roadmap, GitHub Workflow & Release Governance | APPROVED — reconstructed baseline |
 | DOC-19 Implementation Tooling, Automation & Authorship Governance | APPROVED — reconstructed baseline |
-| DOC-52 Software Requirements Specification (SRS) Index | REVIEW — added by PROPOSAL-REOPEN-001 |
+| DOC-52 Software Requirements Specification (SRS) Index | APPROVED — added by PROPOSAL-REOPEN-001 |

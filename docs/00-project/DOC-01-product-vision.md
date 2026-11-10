@@ -1,7 +1,7 @@
 ---
 id: DOC-01
 title: "Product Vision, Positioning & Success Criteria"
-document_status: REVIEW
+document_status: APPROVED
 reconstructed: true
 canonical_format: markdown
 phase: Product Foundation
