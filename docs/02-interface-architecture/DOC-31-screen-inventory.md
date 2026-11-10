@@ -1,7 +1,7 @@
 ---
 id: DOC-31
 title: "Screen & Workspace Inventory"
-document_status: APPROVED
+document_status: REVIEW
 canonical_format: markdown
 phase: "Interface Architecture"
 folder: 02-interface-architecture
@@ -44,7 +44,11 @@ Technical route vocabulary remains English across languages. Example: `/es/proje
 ├── /cv
 ├── /making-of
 ├── /changelog
-└── /status
+├── /status
+├── /blog
+│   └── /[slug]
+├── /privacy
+└── /terms
 ```
 
 Admin is separate:
@@ -62,6 +66,7 @@ Further admin subdivisions appear only when justified.
 No dedicated public route initially:
 
 - Boot Sequence
+- Music prompt
 - Onboarding
 - Settings
 - Command Palette
@@ -79,6 +84,7 @@ No dedicated public route initially:
 | Experience | Route | Surface | Auth | Release |
 |---|---|---|---|---|
 | Boot | None | System/Cinematic | Public | V1.0 |
+| Music prompt | None | Non-modal prompt (DOC-26) | Public | V1.0 |
 | Onboarding | None | Overlay/Coach Marks | Public | V1.0 |
 | Home / Projects | `/[locale]` | Primary Workspace | Public | V1.0 |
 | Experience | Home collection | Primary subcontext | Public | V1.0 |
@@ -108,6 +114,11 @@ No dedicated public route initially:
 | Making Of | `/making-of` | Route Detail | Public | V1.1 |
 | Changelog | `/changelog` | Route Content | Public | V1.1 |
 | System Status | `/status` | Route Content | Public | V1.1/V1.4 |
+| Blog index | `/blog` | Route Content | Public | V1.1 |
+| Blog post | `/blog/[slug]` | Route Content | Public | V1.1 |
+| Privacy policy | `/privacy` | Route Content | Public | V1.0 |
+| Terms of Use | `/terms` | Route Content | Public | V1.2 |
+| Presence indicator | None (chrome/Status) | Ambient status element | Public | V1.4 |
 | 404 | framework fallback | Primary Workspace | Public | V1.0 |
 | Admin | `/admin/...` | Admin Workspace | Admin only | V1.2 |
 
@@ -119,7 +130,11 @@ Unreleased subroutes normally 404 until their owning release. Coming Soon major 
 
 ## Boot
 
-First-visit cinematic only, skippable and reduced-motion aware. It has no critical network dependency; a service failure can never strand the visitor at an initialization screen.
+First-visit cinematic only, skippable and reduced-motion aware. It has no critical network dependency; a service failure can never strand the visitor at an initialization screen. It may use the 3D stage but never delays the content's LCP and completes with its 2D rendition when 3D is unavailable (ADR-006; DOC-29).
+
+## Music prompt
+
+Non-modal prompt shown once to first-time visitors after Boot completes or is skipped: "Play background music?" with equal-weight **Yes** and **No** (ES/EN). The site stays fully usable behind it; ignoring it means no music. The answer is stored locally and the prompt is not shown again. Positioned so it never covers the LCP content or the Dock. Rules: DOC-30; surface: DOC-26; decision: ADR-005.
 
 ## Onboarding
 
@@ -162,7 +177,8 @@ Project discovery metadata may include canonical categories/facets such as Perso
 
 Route: `/[locale]/projects/[slug]`
 
-Expanded: route-backed floating surface.  
+Expanded, opened from Home: route-backed floating surface over the persisted Home (Astro View Transitions; ADR-004, DOC-42).  
+Expanded, direct entry: the same route renders full-page with the shell; Back/Home lead to Home.  
 Compact: full-screen detail workspace.
 
 Potential content:
@@ -175,7 +191,7 @@ Potential content:
 
 Only expose internal navigation for meaningful sections.
 
-Architecture may range from responsive static SVG to a richer interactive viewer for major projects.
+Architecture may range from responsive static SVG to a richer interactive viewer for major projects, including an optional 3D architecture viewer on the shared 3D stage with a static fallback (ADR-006).
 
 ## Project Media
 
@@ -358,9 +374,9 @@ Generated PDFs are artifacts, never the editable source.
 
 Transient sections:
 
-- Appearance
+- Appearance (light/dark; curated themes from V1.1)
 - Language
-- Sound
+- Sound (Music On/Off, UI sounds On/Off, Volume)
 - Motion
 - Transparency
 - Privacy
@@ -368,7 +384,18 @@ Transient sections:
 - Local Data
 - About/System
 
-Potential local data includes theme, language, sound, volume, motion, transparency, onboarding, optional remembered name, local achievements, versioned Widget Field pin/order/size preferences, Drawing drafts and accountless privacy receipts. `Local Data` must distinguish harmless preferences from user-created drafts and deletion capabilities, offer appropriate clear/reset/export/copy actions, and use versioned local schemas rather than one unstructured blob.
+Potential local data includes theme, language, music answer and Music/UI-sound settings, volume, motion, transparency, onboarding, optional remembered name, local achievements, versioned Widget Field pin/order/size preferences, Drawing drafts and accountless privacy receipts. `Local Data` must distinguish harmless preferences from user-created drafts and deletion capabilities, offer appropriate clear/reset/export/copy actions, and use versioned local schemas rather than one unstructured blob.
+
+## Blog
+
+Route: `/[locale]/blog` and `/[locale]/blog/[slug]` (V1.1). Markdown posts authored in Astro Content Collections; no CMS (ADR-007). Route Content surface with readable long-form layout, publication date, reading time and links to related projects/Dev Log entries. Indexable; RSS per locale (DOC-17).
+
+## Legal pages
+
+- `/[locale]/privacy` — Personal Data Processing Policy (V1.0, Ley 1581; ADR-008).
+- `/[locale]/terms` — Terms of Use (V1.2).
+
+Plain, readable Route Content in ES and EN, linked from the footer, Contact and community composers. Both are marked "pending lawyer review" until reviewed.
 
 ## Command Palette
 
@@ -490,8 +517,11 @@ Guestbook nickname, score nickname, sketch nickname and Contact identity remain 
 - ES/EN
 - light/dark
 - sound preference
+- cinematic Boot and 3D signature stage with fallbacks
+- music prompt and music/sound control
 - responsive system
 - SEO/404
+- privacy policy page
 
 ### V1.1 — Personality
 
@@ -504,6 +534,8 @@ Guestbook nickname, score nickname, sketch nickname and Contact identity remain 
 - Easter eggs
 - custom cursor
 - returning personalization
+- Markdown blog
+- curated themes
 
 Achievement data/local persistence foundation may be prepared internally in V1.0 before public Achievements ships.
 
@@ -516,6 +548,7 @@ Achievement data/local persistence foundation may be prepared internally in V1.0
 - reporting
 - moderation
 - Admin
+- Terms of Use and UGC age declaration
 
 Activity is optional if scope pressure exists.
 
@@ -538,6 +571,7 @@ Activity is optional if scope pressure exists.
 - dynamic OG
 - richer System Status
 - external caching
+- anonymous presence
 
 V1.0 must already stand alone as a complete professional portfolio.
 
@@ -621,3 +655,9 @@ A public route additionally needs metadata, canonical URL, Open Graph, locale al
 - SCR-035 — Unreleased major-space Coming Soon routes are noindex/sitemap-excluded until feature launch; unreleased subroutes normally remain unavailable.
 - SCR-036 — Arcade navigation, session states and session actions are separate taxonomies.
 - SCR-037 — UGC reporting is a separate report lifecycle and not a mutually exclusive content moderation state.
+
+- SCR-038 — The music prompt is a non-modal transient experience shown once after Boot; it has no route (ADR-005).
+- SCR-039 — The blog uses `/blog` and `/blog/[slug]` from V1.1 (ADR-007).
+- SCR-040 — Legal pages use `/privacy` (V1.0) and `/terms` (V1.2) (ADR-008).
+- SCR-041 — Project Detail is one route that renders as a floating surface over the persisted Home when opened from Home and full-page on direct entry (ADR-004).
+- SCR-042 — Anonymous presence is an ambient chrome/Status element in V1.4, not a screen (ADR-007).

@@ -1,7 +1,7 @@
 ---
 id: DOC-21
 title: "Screen Anatomy"
-document_status: APPROVED
+document_status: REVIEW
 canonical_format: markdown
 phase: "Interface Architecture"
 folder: 02-interface-architecture
@@ -35,7 +35,7 @@ Communicates Alejandro/system identity and concise current status. It is not an 
 
 ## System Controls
 
-Global controls include ES/EN, Theme, Sound, time where space permits and Settings. They are global rather than selection-specific.
+Global controls include ES/EN, Theme, Sound/Music, time where space permits and Settings. They are global rather than selection-specific. The Sound/Music control is always visible in every responsive mode and toggles music in one action (ADR-005, WCAG 2.2 SC 1.4.2); it is also the anchor for the first-visit music prompt (DOC-26).
 
 ## Context Selector
 
@@ -81,7 +81,7 @@ Selector + project hero remain primary. The Personal Widget Field compresses to 
 
 Projects become a centered horizontal carousel. Prioritize title, pitch, essential technologies/status, primary action and one priority widget. Additional eligible widgets remain reachable through a dedicated Widgets sheet/shelf rather than a squeezed desktop grid. The six-item Dock stays directly reachable where practical.
 
-System chrome simplifies; Theme/Sound/Transparency/Motion/Language can move into Settings. Clock may disappear.
+System chrome simplifies; Theme/Transparency/Motion/Language can move into Settings. The Sound/Music control stays in the chrome (ADR-005). Clock may disappear.
 
 ## Widget Field budgets
 
@@ -191,7 +191,7 @@ Potential sections:
 
 - Appearance
 - Language
-- Sound
+- Sound (Music, UI sounds, Volume)
 - Motion
 - Transparency
 - Privacy
@@ -261,6 +261,7 @@ Responsive behavior belongs to components/containers. The shell provides availab
 - SA-013 — Semantic z-layers replace arbitrary z-index values.
 - SA-014 — Every screen defines Compact/Medium/Expanded/Wide behavior before implementation.
 - SA-015 — Every screen has one primary focus; competing primary regions are rejected.
+- SA-016 — The Sound/Music control remains visible in the system chrome in every responsive mode (ADR-005).
 
 ## Coming Soon workspace state
 
