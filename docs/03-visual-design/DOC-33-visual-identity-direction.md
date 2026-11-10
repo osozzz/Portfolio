@@ -1,7 +1,7 @@
 ---
 id: DOC-33
 title: "Visual Identity & Design Direction"
-document_status: APPROVED
+document_status: REVIEW
 canonical_format: markdown
 phase: "Visual Design Foundation"
 folder: 03-visual-design
@@ -220,7 +220,7 @@ Reject by default:
 - neon cyberpunk;
 - glass cards everywhere;
 - random gradient blobs;
-- unnecessary 3D;
+- unnecessary 3D (3D is limited to the signature moments in ADR-006: Boot/first impression, project objects in the Home selector, optional Project Detail architecture viewer);
 - oversized typography as the only idea;
 - giant “Hi, I'm Alejandro” hero/CTA template;
 - trendy uniform bento grid;
@@ -295,3 +295,6 @@ Selected work is the hero. Personal identity lives in System Chrome/content rath
 - VID-038 — Widget personalization persists locally without visitor accounts.
 - VID-039 — V1.0 excludes unrestricted freeform desktop/pixel positioning/window management.
 - VID-040 — System Widgets and Context Widgets may coexist in the same field.
+- VID-041 — Real-time 3D (three.js) appears only in ADR-006 signature moments; chrome, Dock, text and Liquid Glass stay 2D DOM.
+- VID-042 — Project "objects" in the 3D selector are original authored forms (cartridge/disc/card-like covers are grammar, not copied assets) and always have a 2D cover equivalent.
+- VID-043 — The optional 3D architecture viewer reads as a technical drawing (annotation/trace lines) and never replaces the static architecture explanation.

@@ -1,7 +1,7 @@
 ---
 id: DOC-34
 title: "Color, Theme & Environmental Palette"
-document_status: APPROVED
+document_status: REVIEW
 canonical_format: markdown
 phase: "Visual Design Foundation"
 folder: 03-visual-design
@@ -78,6 +78,16 @@ The public product supports:
 The Theme control never resets current space, selection, widget layout or route.
 
 Theme preference is local and may be persisted independently from other personalization.
+
+### 3.1 Curated themes (V1.1, ADR-007)
+
+From V1.1 Settings offers a small set of **curated themes** authored by the owner. A curated theme bundles:
+
+- an environment palette variant built from the same token roles (never new semantic/focus colors);
+- an environment backdrop;
+- an optional music track (governed by the visitor's Music setting; DOC-30).
+
+Rules: every curated theme exists in Light and Dark lighting states and passes §25 contrast requirements in both; focus color stays independent (§9); project context still applies (§12); curated themes change environment and palette only, never layout or widget placement (ADR-001). There is no marketplace, no upload and no user-authored theme.
 
 ## 4. Light and Dark are lighting states
 
@@ -733,3 +743,4 @@ Accessible semantic text inks are intentionally distinct from decorative/accent 
 
 - CLR-039 — Baseline muted text tokens are `#5F6A70` (Light) and `#828D93` (Dark) to satisfy normal-text contrast on baseline opaque reading surfaces.
 - CLR-040 — Semantic/material accent colors are not automatically text colors; accessible `ink` tokens are used for normal-sized semantic text.
+- CLR-041 — Curated themes (V1.1) are owner-authored palette/backdrop/optional-track bundles that reuse token roles, pass contrast in Light and Dark, keep focus color independent and never alter layout (ADR-001, ADR-007).

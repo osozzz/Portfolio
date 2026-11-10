@@ -1,7 +1,7 @@
 ---
 id: DOC-36
 title: "Content Architecture & Canonical Professional Data"
-document_status: APPROVED
+document_status: REVIEW
 canonical_format: markdown
 phase: "Visual Design Foundation"
 folder: 03-visual-design
@@ -1033,8 +1033,14 @@ content/
 │
 ├── achievements/
 ├── dev-log/
+├── blog/
+│   └── <slug>/
+│       ├── en.md
+│       └── es.md
 └── managed-status/
 ```
+
+Implementation mapping (ADR-004): these sources are loaded through **Astro Content Collections** with schema validation. The blog (V1.1, ADR-007) is one more collection with frontmatter for title, summary, publication date, tags, related project/Dev Log IDs and per-locale availability.
 
 This is a content architecture contract, not a final filesystem mandate. Technical Architecture may refine exact paths without collapsing source-of-truth boundaries.
 
@@ -1046,7 +1052,7 @@ Recommendation:
 
 - YAML for human-authored structured canonical records;
 - Markdown/MDX-like files for long localized narrative;
-- TypeScript schemas generated/validated at build time;
+- TypeScript schemas validated at build time through Astro Content Collections (ADR-004);
 - database only for runtime/UGC/admin-managed data that needs runtime persistence.
 
 Why not put all professional content in Supabase?
@@ -1452,6 +1458,8 @@ The future implementation should prove at least:
 | CNT-038 | Long project narrative lives only in locale Markdown; project YAML owns facts/relations and explicitly modelled short localized metadata |
 | CNT-039 | V1.x Admin changes runtime-managed data only; canonical professional/project facts require repository write-back or an approved source-of-truth migration ADR |
 | CNT-040 | `Currently Building` is repository-authored managed status in the approved V1.x baseline; no runtime table/Admin editor becomes authoritative without a future source-of-truth migration ADR. |
+| CNT-041 | Canonical content, project narrative, Dev Log manual entries and the blog are Astro Content Collections validated at build (ADR-004). |
+| CNT-042 | Blog posts (V1.1) are repository-authored Markdown with localized files and stable slugs; there is no CMS (ADR-007). |
 
 ---
 
