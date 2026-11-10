@@ -2461,7 +2461,7 @@ The prototype gates from DOC-42/DOC-43/DOC-44/etc. should become V0/V1 implement
 Examples:
 
 - Dock at 320px + 200% zoom;
-- intercepted Project Detail route;
+- Project Detail route (in-app and direct entry);
 - Widget Field Wide→Compact;
 - Guestbook pending→approved;
 - Sketch safe renderer;

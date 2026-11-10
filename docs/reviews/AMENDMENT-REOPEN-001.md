@@ -152,6 +152,10 @@ The owner approved the proposal on 2026-11-09. On 2026-11-10 the owner delegated
 48. **DOC-52:** new SRS index following the ISO/IEC/IEEE 29148 outline (SRS-001 to SRS-003).
 49. **Gate:** after `REVIEW-CROSS-DOCUMENT-CONSISTENCY-003` passed, the V0 gate returns to `CLEARED_FOR_REPOSITORY_BOOTSTRAP` in DOC-00, docs/README and MANIFEST.json.
 
+### Post-closure correction
+
+50. While the GitHub issues were being updated, wording left over from the old Project Detail mechanism ("intercepted route/detail") was found in DOC-42, DOC-47, DOC-48, DOC-49, DOC-50 and DOC-51, and was rewritten for the one-route presentation (ADR-004). DOC-42 §107 and FEA-080 gain prototype gates 8 (persistent shell with music/3D across navigation) and 9 (3D stage within the DOC-49 budget). These gates were already required by ADR-004/ADR-006 and FEA-084, so this correction only makes the list complete.
+
 ## Owner follow-ups (not documentation defects)
 
 - Confirm or tighten the initial DOC-49 §16A/§16B numeric budgets.

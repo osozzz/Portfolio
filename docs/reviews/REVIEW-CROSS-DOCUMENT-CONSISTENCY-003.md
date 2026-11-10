@@ -60,6 +60,7 @@ The review combined scripted assertions over every numbered document with direct
 | R3-02 | P2 | VIS-005 was defined twice in DOC-01 (the new first-impression decision collided with an existing ID) | Renumbered the new decision to VIS-009 | FIXED |
 | R3-03 | P2 | The proposal used tool-attributed decision labels, which conflicts with DOC-19 TLG-008 | Relabelled as **[Proposed]** before the proposal was committed | FIXED |
 | R3-04 | P3 | Framework-neutral wording ("Client Components") remained in DOC-44, DOC-46, DOC-47, DOC-48 and DOC-50 after the stack change | Replaced with "client islands" | FIXED |
+| R3-06 | P2 | Post-closure: "intercepted" Project Detail wording, which the residue patterns had missed, remained in DOC-42/47/48/49/50/51. DOC-42 §107 listed 7 prototype gates without the ADR-004/ADR-006 gates | Wording rewritten; §107 and FEA-080 list 9 gates; residue patterns extended to "intercepted" | FIXED |
 | R3-05 | P3 | DOC-21 allowed the Sound control to move into Settings on Compact, which conflicts with ADR-005's always-visible control | DOC-21 now keeps the Sound/Music control in the chrome in every mode (SA-016) | FIXED |
 
 No P0 findings were raised.

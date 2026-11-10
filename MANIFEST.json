@@ -22,7 +22,7 @@
     "approved_adrs": 8,
     "review_records": 9,
     "files_hashed": 87,
-    "total_hashed_bytes": 1609111
+    "total_hashed_bytes": 1610590
   },
   "files": [
     {
@@ -1080,8 +1080,8 @@
     },
     {
       "path": "docs/04-technical-architecture/DOC-42-frontend-architecture-rendering-state-boundaries.md",
-      "bytes": 87854,
-      "sha256": "4f7c11e7e163e8f89778b1b9413c3109c5feaeb958b623881692319e5c02b037",
+      "bytes": 88378,
+      "sha256": "4e84805cb7ac21d5c776559de3885dea67e215f7d10adc372d879a6302d63894",
       "record_id": "DOC-42",
       "record_type": "document",
       "title": "Frontend Architecture, Rendering & State Boundaries",
@@ -1297,8 +1297,8 @@
     },
     {
       "path": "docs/04-technical-architecture/DOC-47-security-architecture-threat-model.md",
-      "bytes": 87141,
-      "sha256": "888b995868cc86a366f311756153fb72b708fd7b0b34ff2573564d2f96be9c3a",
+      "bytes": 87155,
+      "sha256": "c2895b6c40aaf1cef0e4f3e51ecef41584bf32f53fb30aed4bbc2c4c1a605b3f",
       "record_id": "DOC-47",
       "record_type": "document",
       "title": "Security Architecture & Threat Model",
@@ -1351,8 +1351,8 @@
     },
     {
       "path": "docs/04-technical-architecture/DOC-48-infrastructure-environments-dns-deployment-architecture.md",
-      "bytes": 82463,
-      "sha256": "008edfe631736ccb5021769c4d2e6a39d4e89276276e74ee2a8139e0e5abeaee",
+      "bytes": 82486,
+      "sha256": "6e21bf683d0f89c53e9707c43bcbbe714893a92c9877bdd22869bc9a51613f04",
       "record_id": "DOC-48",
       "record_type": "document",
       "title": "Infrastructure, Environments, DNS & Deployment Architecture",
@@ -1394,8 +1394,8 @@
     },
     {
       "path": "docs/04-technical-architecture/DOC-49-performance-observability-reliability-architecture.md",
-      "bytes": 69192,
-      "sha256": "391c8a76bc367065be9558c17841b801776f0090b2de6928d3eafd141fde1223",
+      "bytes": 69187,
+      "sha256": "380241045f80ad39bfb6e35c4ae7ac80307098cb9eacc88f23e94da11fb46f14",
       "record_id": "DOC-49",
       "record_type": "document",
       "title": "Performance, Observability & Reliability Architecture",
@@ -1452,8 +1452,8 @@
     },
     {
       "path": "docs/04-technical-architecture/DOC-50-testing-quality-engineering-strategy.md",
-      "bytes": 77282,
-      "sha256": "046662a7319732fc86db99352c7f8b3694917fe239dd9ddd6d642bfbb0e05feb",
+      "bytes": 77328,
+      "sha256": "4111d08ef5ad0d8144a3387ae82e635bd6b02751a8ed4baf3980663f957818b1",
       "record_id": "DOC-50",
       "record_type": "document",
       "title": "Testing & Quality Engineering Strategy",
@@ -1518,8 +1518,8 @@
     },
     {
       "path": "docs/04-technical-architecture/DOC-51-repository-cicd-developer-experience-implementation.md",
-      "bytes": 85360,
-      "sha256": "06186e0614c5925b29d903b19bdc6beb0793f663fa9ea27c97837acdaf682154",
+      "bytes": 85374,
+      "sha256": "e70801f864e545b016d3305e9eb0774c95a31166c455ba77f11d97d8666991c0",
       "record_id": "DOC-51",
       "record_type": "document",
       "title": "Repository, CI/CD & Developer Experience Implementation",
@@ -1860,8 +1860,8 @@
     },
     {
       "path": "docs/reviews/AMENDMENT-REOPEN-001.md",
-      "bytes": 7800,
-      "sha256": "9270ee6055147d87e5c3533d0e7a107aa8c2250ebdf8ce27f4b59b364974a238",
+      "bytes": 8344,
+      "sha256": "ab09c90bad3baa767dcdb93d0c16a5290f6ea9ffb99010b801b53faaa0a935aa",
       "record_id": "AMENDMENT-REOPEN-001",
       "record_type": "amendment",
       "decision_status": "APPROVED",
@@ -1918,8 +1918,8 @@
     },
     {
       "path": "docs/reviews/REVIEW-CROSS-DOCUMENT-CONSISTENCY-003.md",
-      "bytes": 5336,
-      "sha256": "69c1d9815418cc9e0bcbb15eb9c063820e8d276ab6d8cefe04cf52dc7ff8ee35",
+      "bytes": 5655,
+      "sha256": "2bcdd38b977b012315a0ba081eaae8c8562f6a0a7a82ab226fca76a19582032b",
       "record_id": "REVIEW-CROSS-DOCUMENT-CONSISTENCY-003",
       "record_type": "review",
       "review_status": "COMPLETE",
