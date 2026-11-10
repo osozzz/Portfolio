@@ -1792,7 +1792,7 @@ Back follows DOC-22 sacred semantics:
 
 Do not globally call `preventDefault` on browser navigation.
 
-Focus restoration metadata may be tracked for transient surfaces and intercepted route detail, but it cannot rewrite user history.
+Focus restoration metadata may be tracked for transient surfaces and the in-app Project Detail presentation, but it cannot rewrite user history.
 
 ---
 
@@ -1811,7 +1811,7 @@ They must not store a second “visual focus” that diverges from the DOM.
 For route transitions:
 
 - meaningful route headings/content receive appropriate focus/announcement behavior;
-- intercepted detail traps/contains focus when behaving as a modal surface;
+- the in-app floating Project Detail contains focus while it behaves as a modal surface;
 - closing restores focus to the triggering project when still present;
 - direct detail navigation does not pretend there is an underlying trigger to restore to.
 
@@ -2395,12 +2395,14 @@ Detailed test matrix/tooling belongs to DOC-50.
 Before broad implementation, V0 should prototype the highest-risk frontend ideas:
 
 1. six-item Dock at 320 CSS px and 200% zoom;
-2. Project Detail intercepted route with Back/refresh/focus restoration;
+2. Project Detail as one route (in-app floating over the persisted Home, full-page on direct entry) with Back/refresh/focus restoration (ADR-004);
 3. Personal Widget Field recomposition Wide → Compact with persisted logical preferences;
 4. selected-project → DynamicBackdrop → widget retarget choreography without broad rerenders;
 5. reduced-motion/transparency fallback;
 6. gamepad semantic navigation through the Dock/project selector;
-7. client hydration with local theme/preferences without destructive flash.
+7. client hydration with local theme/preferences without destructive flash;
+8. persistent shell across ClientRouter navigation: chrome, Dock, music (uninterrupted playback) and the single 3D WebGL context survive navigation, with correct focus/announcements (ADR-004, ADR-005);
+9. 3D stage within the DOC-49 §16A budget on representative desktop and mid-range mobile, including the static/2D fallback paths (ADR-006).
 
 A failed prototype changes implementation detail through an ADR; it does not silently drop the approved capability.
 
@@ -2561,7 +2563,7 @@ Storybook is development/CI tooling, not a Production route or public dependency
 | `FEA-077` | Import/runtime boundaries are enforceable through structure/lint/build rules and client modules may not import server-only modules. |
 | `FEA-078` | Types are owned by the narrowest stable domain; a global application-wide `types.ts` is prohibited. |
 | `FEA-079` | Generated types/content artifacts are reproducible, clearly marked and never manually edited. |
-| `FEA-080` | V0 must prototype Dock narrow-width behavior, intercepted Project Detail, Widget recomposition, selection/backdrop coordination, accessibility tiers, gamepad navigation and preference hydration before scaling implementation. |
+| `FEA-080` | V0 must prototype Dock narrow-width behavior, the Project Detail presentation, Widget recomposition, selection/backdrop coordination, accessibility tiers, gamepad navigation, preference hydration, the persistent shell with music/3D across navigation and the 3D stage budget before scaling implementation. |
 | `FEA-081` | `Save Local` Drawing drafts use a versioned IndexedDB-backed `DrawingDraftRepository`, separate from high-frequency canvas state. |
 | `FEA-082` | Accountless content deletion capabilities are stored only in a typed local `PrivacyReceiptRepository`; they do not create visitor identity. |
 | `FEA-083` | Storybook is the approved V0 isolated-component environment. |

@@ -2139,7 +2139,7 @@ Verify:
 Before moving CSP from Report-Only to enforced:
 
 - all six public spaces;
-- Project Detail intercept/direct routes;
+- Project Detail in-app and direct-entry presentations;
 - Turnstile;
 - Supabase Auth Admin flows;
 - Drawing;

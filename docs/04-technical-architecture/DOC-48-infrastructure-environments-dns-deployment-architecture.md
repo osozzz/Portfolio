@@ -239,7 +239,7 @@ Every pull request should produce a Vercel Preview deployment after required CI 
 Preview deployments exist to validate:
 
 - responsive UI on real HTTPS;
-- routing and intercepted routes;
+- routing, on-demand routes and ClientRouter navigation;
 - server rendering;
 - provider integration against non-production credentials;
 - database migrations against isolated/non-production schema;

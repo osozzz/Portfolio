@@ -836,7 +836,7 @@ Playwright must verify:
 
 - Dock navigation;
 - direct deep links;
-- intercepted Project Detail from Home;
+- in-app Project Detail from Home (floating over the persisted shell);
 - direct Project Detail full-page load;
 - browser Back behavior;
 - temporary overlay dismissal;
@@ -2443,7 +2443,7 @@ CI retries/quarantine behavior does not hide persistent critical-suite instabili
 | TQE-034 | Six-destination Dock behavior has separate 320 CSS-px, 200% browser-zoom, independent text-scaling and short-landscape release gates. |
 | TQE-035 | Widget Field personalization/recomposition has dedicated automated coverage. |
 | TQE-036 | Focus, selection, hover and active state distinctions are explicitly tested. |
-| TQE-037 | Route history, deep links, intercepted Project Detail and Back behavior are browser-tested. |
+| TQE-037 | Route history, deep links, in-app versus direct-entry Project Detail and Back behavior are browser-tested. |
 | TQE-038 | Physical gamepad/stylus checks remain manual where automation cannot represent real hardware confidently. |
 | TQE-039 | Audio tests verify policy/state; subjective audio quality receives manual QA. |
 | TQE-040 | Motion correctness includes interruption/retargeting and Reduced Motion capability preservation. |

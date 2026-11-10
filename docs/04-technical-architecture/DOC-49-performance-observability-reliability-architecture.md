@@ -496,7 +496,7 @@ Public navigation should preserve Astro routing with the ClientRouter without cr
 Performance rules:
 
 - route prefetch is used intentionally, not indiscriminately for every media-heavy page;
-- Project Detail intercepted navigation must not duplicate large page payloads unnecessarily;
+- in-app Project Detail navigation must not duplicate large page payloads unnecessarily;
 - direct deep links render correctly without first loading Home interaction state;
 - route transitions remain cancellable by browser navigation;
 - loading states preserve stable geometry.
