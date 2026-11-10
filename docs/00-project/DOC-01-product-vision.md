@@ -1,7 +1,7 @@
 ---
 id: DOC-01
 title: "Product Vision, Positioning & Success Criteria"
-document_status: REVIEW
+document_status: APPROVED
 reconstructed: true
 canonical_format: markdown
 phase: Product Foundation
@@ -10,8 +10,8 @@ depends_on:
   - DOC-00
 decision_families:
   - VIS
-last_updated: 2026-09-15
-approved_at: 2026-09-15
+last_updated: 2026-11-10
+approved_at: 2026-11-10
 ---
 
 # DOC-01 — Product Vision, Positioning & Success Criteria
