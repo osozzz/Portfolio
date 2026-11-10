@@ -1,7 +1,7 @@
 ---
 id: DOC-46
 title: "Integrations, Caching, Jobs & Provider Resilience"
-document_status: REVIEW
+document_status: APPROVED
 canonical_format: markdown
 phase: "Technical Architecture"
 folder: 04-technical-architecture
@@ -37,8 +37,8 @@ depends_on:
 
 decision_families:
   - ICJ
-last_updated: 2026-09-15
-approved_at: 2026-09-15
+last_updated: 2026-11-10
+approved_at: 2026-11-10
 ---
 
 # DOC-46 — Integrations, Caching, Jobs & Provider Resilience

@@ -1,7 +1,7 @@
 ---
 id: DOC-50
 title: "Testing & Quality Engineering Strategy"
-document_status: REVIEW
+document_status: APPROVED
 canonical_format: markdown
 phase: "Technical Architecture"
 folder: 04-technical-architecture
@@ -60,8 +60,8 @@ depends_on:
 
 decision_families:
   - TQE
-approved_at: 2026-09-15
-last_updated: 2026-09-15
+approved_at: 2026-11-10
+last_updated: 2026-11-10
 ---
 
 # DOC-50 — Testing & Quality Engineering Strategy

@@ -1,7 +1,7 @@
 ---
 id: DOC-44
 title: "Data Architecture, PostgreSQL, RLS & Storage"
-document_status: REVIEW
+document_status: APPROVED
 canonical_format: markdown
 phase: "Technical Architecture"
 folder: 04-technical-architecture
@@ -34,7 +34,7 @@ depends_on:
   - ADR-002
 decision_families:
   - DTA
-last_updated: 2026-09-15
+last_updated: 2026-11-10
 ---
 
 # DOC-44 — Data Architecture, PostgreSQL, RLS & Storage

@@ -1,7 +1,7 @@
 ---
 id: DOC-43
 title: "Backend, API & Application Service Architecture"
-document_status: REVIEW
+document_status: APPROVED
 canonical_format: markdown
 phase: "Technical Architecture"
 folder: 04-technical-architecture
@@ -35,8 +35,8 @@ depends_on:
   - ADR-002
 decision_families:
   - BEA
-last_updated: 2026-09-15
-approved_at: 2026-09-15
+last_updated: 2026-11-10
+approved_at: 2026-11-10
 ---
 
 # DOC-43 — Backend, API & Application Service Architecture

@@ -1,7 +1,7 @@
 ---
 id: DOC-47
 title: "Security Architecture & Threat Model"
-document_status: REVIEW
+document_status: APPROVED
 canonical_format: markdown
 phase: "Technical Architecture"
 folder: 04-technical-architecture
@@ -48,8 +48,8 @@ depends_on:
 
 decision_families:
   - SECARC
-last_updated: 2026-09-15
-approved_at: 2026-09-15
+last_updated: 2026-11-10
+approved_at: 2026-11-10
 ---
 
 # DOC-47 — Security Architecture & Threat Model
