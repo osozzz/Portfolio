@@ -1,7 +1,7 @@
 ---
 id: DOC-16
 title: "Contact, Email & Communication Requirements"
-document_status: REVIEW
+document_status: APPROVED
 reconstructed: true
 canonical_format: markdown
 phase: Product Foundation
@@ -12,8 +12,8 @@ depends_on:
   - DOC-15
 decision_families:
   - MSG
-last_updated: 2026-09-15
-approved_at: 2026-09-15
+last_updated: 2026-11-10
+approved_at: 2026-11-10
 ---
 
 # DOC-16 — Contact, Email & Communication Requirements

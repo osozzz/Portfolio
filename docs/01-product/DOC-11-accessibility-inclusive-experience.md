@@ -1,7 +1,7 @@
 ---
 id: DOC-11
 title: "Accessibility & Inclusive Experience Requirements"
-document_status: REVIEW
+document_status: APPROVED
 reconstructed: true
 canonical_format: markdown
 phase: Product Foundation
@@ -13,8 +13,8 @@ depends_on:
   - DOC-28
 decision_families:
   - A11Y
-last_updated: 2026-09-15
-approved_at: 2026-09-15
+last_updated: 2026-11-10
+approved_at: 2026-11-10
 ---
 
 # DOC-11 — Accessibility & Inclusive Experience Requirements

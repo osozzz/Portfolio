@@ -1,7 +1,7 @@
 ---
 id: DOC-12
 title: "Security, Privacy & Abuse-Prevention Requirements"
-document_status: REVIEW
+document_status: APPROVED
 reconstructed: true
 canonical_format: markdown
 phase: Product Foundation

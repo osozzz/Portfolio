@@ -1,7 +1,7 @@
 ---
 id: DOC-10
 title: "Localization, Language & Bilingual Behavior"
-document_status: REVIEW
+document_status: APPROVED
 reconstructed: true
 canonical_format: markdown
 phase: Product Foundation
@@ -11,8 +11,8 @@ depends_on:
   - DOC-09
 decision_families:
   - L10N
-last_updated: 2026-09-15
-approved_at: 2026-09-15
+last_updated: 2026-11-10
+approved_at: 2026-11-10
 ---
 
 # DOC-10 — Localization, Language & Bilingual Behavior
