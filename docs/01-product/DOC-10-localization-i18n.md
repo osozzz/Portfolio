@@ -57,7 +57,6 @@ Baseline copy for the new surfaces (final wording may be refined in review):
 | sound.control.on / off | Turn music off / Turn music on | Apagar música / Encender música |
 | contact.authorization | I authorize the processing of my data to reply to this message, under the Privacy Policy. | Autorizo el tratamiento de mis datos para responder este mensaje, según la Política de Tratamiento de Datos Personales. |
 | ugc.ageDeclaration | I am 18 or older, or I have my legal representative's authorization. | Soy mayor de 18 años o cuento con la autorización de mi representante legal. |
-| legal.pendingReview | (internal marker, never shown publicly once reviewed) | — |
 ## 3A. Root `/` locale negotiation
 
 Canonical content always lives under locale-prefixed routes. Root `/` is a redirect-only negotiation endpoint with this deterministic order:
