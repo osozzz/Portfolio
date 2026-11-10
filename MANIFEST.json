@@ -11,9 +11,9 @@
     "unresolved_p1": 0,
     "unresolved_p2": 0,
     "unresolved_p3": 0,
-    "v0_implementation_gate": "CLEARED_FOR_REPOSITORY_BOOTSTRAP",
+    "v0_implementation_gate": "SUSPENDED_PENDING_REVISION",
     "technical_architecture_phase": "SPECIFICATION_COMPLETE_AUDITED",
-    "current_draft": null
+    "current_draft": "PROPOSAL-REOPEN-001"
   },
   "summary": {
     "numbered_documents": 52,
