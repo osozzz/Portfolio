@@ -45,7 +45,7 @@ depends_on:
 decision_families:
   - RDX
 approved_at: 2026-11-10
-last_updated: 2026-11-10
+last_updated: 2026-11-19
 ---
 
 # DOC-51 — Repository, CI/CD & Developer Experience Implementation
@@ -110,10 +110,7 @@ alejandro-portfolio/
 │   ├── dependabot.yml
 │   └── PULL_REQUEST_TEMPLATE.md
 │
-├── app/
-├── features/
-├── components/
-├── lib/
+├── src/                # pages, layouts, actions, components, features, runtime, lib (DOC-42 §101)
 ├── content/
 ├── cv/
 ├── public/
