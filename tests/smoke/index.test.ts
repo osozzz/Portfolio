@@ -10,7 +10,8 @@ describe("home page", () => {
     expect(html).toContain("<h1");
     expect(html).toContain("Alejandro Osorno");
     expect(html).toMatch(/<html[^>]*lang="es"/);
-    // Cero hidratación: el arranque no envía islas al navegador.
+    // Cero JavaScript en el navegador: ni islas ni scripts en el arranque.
     expect(html).not.toContain("astro-island");
+    expect(html).not.toContain("<script");
   });
 });

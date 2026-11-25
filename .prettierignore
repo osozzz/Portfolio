@@ -1,2 +1,6 @@
-# Los hashes de MANIFEST.json dependen de los bytes de cada archivo registrado.
+# Línea base aprobada: los hashes de MANIFEST.json dependen de los bytes de estos archivos.
 MANIFEST.json
+docs/
+README.md
+CONTRIBUTING.md
+SECURITY.md
