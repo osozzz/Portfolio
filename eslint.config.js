@@ -4,19 +4,6 @@ import astro from "eslint-plugin-astro";
 import tseslint from "typescript-eslint";
 
 export default tseslint.config(
-  // Generado, línea base de docs y carpetas locales que no se suben.
-  {
-    ignores: [
-      "dist/",
-      ".astro/",
-      ".vercel/",
-      "docs/",
-      "plans/",
-      "references/",
-      ".remember/",
-      ".superpowers/",
-    ],
-  },
   js.configs.recommended,
   tseslint.configs.recommended,
   astro.configs.recommended,

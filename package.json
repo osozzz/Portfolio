@@ -12,9 +12,9 @@
     "preview": "astro preview",
     "typecheck": "astro check",
     "test": "vitest run",
-    "lint": "eslint .",
-    "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "lint": "eslint src tests \"*.{js,mjs,ts}\"",
+    "format": "prettier --write src tests \"*.{js,mjs,ts,json}\" .prettierrc.json",
+    "format:check": "prettier --check src tests \"*.{js,mjs,ts,json}\" .prettierrc.json"
   },
   "dependencies": {
     "@astrojs/react": "7.1.9",
