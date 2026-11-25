@@ -1,0 +1,28 @@
+{
+  "name": "alejosorno-dev",
+  "type": "module",
+  "private": true,
+  "packageManager": "pnpm@12.23.0",
+  "engines": {
+    "node": "26.x"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "typecheck": "astro check"
+  },
+  "dependencies": {
+    "@astrojs/react": "7.1.9",
+    "@astrojs/vercel": "11.0.22",
+    "astro": "7.4.13",
+    "react": "19.3.1",
+    "react-dom": "19.3.1"
+  },
+  "devDependencies": {
+    "@astrojs/check": "0.9.12",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "typescript": "6.0.3"
+  }
+}
