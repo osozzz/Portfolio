@@ -1,0 +1,17 @@
+# Línea base aprobada: los hashes de MANIFEST.json dependen de estos bytes.
+docs/
+MANIFEST.json
+README.md
+CONTRIBUTING.md
+SECURITY.md
+
+# Generado o local
+pnpm-lock.yaml
+dist/
+.astro/
+.vercel/
+plans/
+references/
+.superpowers/
+.remember/
+CLAUDE.md
