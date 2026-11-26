@@ -11,7 +11,7 @@ depends_on:
   - DOC-07
 decision_families:
   - ENG
-last_updated: 2026-11-25
+last_updated: 2026-11-26
 approved_at: 2026-11-25
 ---
 
@@ -259,7 +259,7 @@ This matrix mirrors the project's explicit engineering checklist so a concern ca
 | Branch strategy | Short-lived branches/mainline direction | DOC-18 |
 | Unit tests | Required where logic merits | DOC-50 |
 | Component tests | Required for stateful UI primitives | DOC-27 / DOC-50 |
-| Integration tests | Required for DB/auth/email/integrations | DOC-50 |
+| Integration tests | Required for DB/auth/integrations, and for the admin Auth recovery email from V1.2 (ADR-009) | DOC-50 |
 | E2E tests | Required for critical journeys | DOC-50 |
 | Load tests | Conditional before/after high-traffic public write endpoints | DOC-49 / DOC-50 |
 | Accessibility tests | Required automated + manual | DOC-11 / quality plan |
@@ -298,7 +298,7 @@ This matrix mirrors the project's explicit engineering checklist so a concern ca
 | Hard delete/anonymization | Applicable to data lifecycle decisions | DOC-13 / DOC-44 / DOC-47 |
 | Data retention | Applicable | DOC-44 / DOC-49 |
 | Data export/access requests | Applicable from V1.0 through the Ley 1581 data-subject rights channel (consult, update, rectify, delete) with legal response times (ADR-008) | DOC-12 / DOC-44 + pre-launch legal readiness |
-| Marketing email unsubscribe / postal address | **N/A**: no newsletter or marketing email; Contact replies are transactional | Reassess if a newsletter enters scope |
+| Marketing email unsubscribe / postal address | **N/A**: no newsletter or marketing email, and the site never emails visitors (ADR-009) | Reassess if a newsletter enters scope |
 | Subscription renewal terms | **N/A**: no payments or subscriptions | §10 |
 | Performance budgets | Required | DOC-07 / DOC-49 / DOC-50 |
 | Device/browser compatibility | Required | DOC-28 / DOC-50 |
