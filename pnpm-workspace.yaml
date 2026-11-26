@@ -1,0 +1,4 @@
+# GHSA-9wv6-86v2-598j: @vercel/routing-utils fija path-to-regexp 6.1.0; 6.3.0 es el parche de la misma línea.
+# Quitar cuando @astrojs/vercel traiga una versión corregida.
+overrides:
+  path-to-regexp@6.1.0: 6.3.0

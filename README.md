@@ -52,6 +52,38 @@ The GitHub Wiki is intentionally a lighter navigation/help layer with summaries,
 - **V1.3** — Arcade
 - **V1.4** — Live integrations
 
+## Local development
+
+Requirements:
+
+- Node 26, as pinned in `.nvmrc`. We use [fnm](https://github.com/Schniz/fnm) with `--use-on-cd`, which switches to that version when you enter the folder.
+- pnpm 12.23.0, as pinned in `packageManager` in `package.json`.
+
+Getting started:
+
+```bash
+pnpm install --frozen-lockfile
+cp .env.example .env.local
+pnpm dev
+```
+
+The site runs at `http://localhost:4321`. The bootstrap needs no environment variables; `.env.example` lists the ones each integration adds.
+
+| Script | What it does |
+|---|---|
+| `pnpm dev` | Development server with hot reload |
+| `pnpm build` | Builds the static site and the Vercel output |
+| `pnpm start` | Serves the output of `build` locally |
+| `pnpm typecheck` | Type-checks TypeScript and Astro (`astro check`) |
+| `pnpm lint` | ESLint, including the server/client boundary |
+| `pnpm format` | Formats with Prettier |
+| `pnpm format:check` | Checks formatting without changing files |
+| `pnpm test:unit` | Unit and architecture tests with Vitest |
+
+`lint` and `format` cover `src/`, `tests/` and the root config files. When a new code folder appears (for example `scripts/` or `supabase/`), add it to both scripts in `package.json`.
+
+The server/client boundary (DOC-42 §13) is enforced twice. ESLint rejects client imports of `src/lib/server` and `src/lib/*/server`, and the build fails if any of that code reaches the browser bundle.
+
 ## Development workflow
 
 The repository follows trunk-based development:
