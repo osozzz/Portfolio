@@ -19,10 +19,10 @@
     "numbered_documents": 53,
     "approved_numbered_documents": 53,
     "draft_numbered_documents": 0,
-    "approved_adrs": 8,
+    "approved_adrs": 9,
     "review_records": 9,
-    "files_hashed": 88,
-    "total_hashed_bytes": 1614863
+    "files_hashed": 89,
+    "total_hashed_bytes": 1621818
   },
   "files": [
     {
@@ -1791,8 +1791,8 @@
     },
     {
       "path": "docs/decisions/ADR-008-colombian-legal-baseline.md",
-      "bytes": 4230,
-      "sha256": "69482275e11f5e8d4a144599212b880977329035f162ca5f5ccc51e37f36877f",
+      "bytes": 4511,
+      "sha256": "ef503fa5e4ed296ef481e5654affda81e5ea39177639d548a17c74a35455382c",
       "record_id": "ADR-008",
       "record_type": "adr",
       "title": "Colombian Legal Baseline and Minors Handling",
@@ -1832,8 +1832,8 @@
     },
     {
       "path": "docs/decisions/README.md",
-      "bytes": 1879,
-      "sha256": "7e3fff9889e9d937b81dd031771d977bf72aeeb5ab08b77ded480072093a1262"
+      "bytes": 2236,
+      "sha256": "8540db2145084e9519839c31d9bb1abfe1f6cf423a844e8994e4452d4c6ac0bf"
     },
     {
       "path": "docs/reviews/AMENDMENT-PRE-REPO-GOVERNANCE-002.md",
@@ -2018,6 +2018,34 @@
       "document_status": "APPROVED",
       "phase": "Baseline Revision",
       "folder": "reviews"
+    },
+    {
+      "path": "docs/decisions/ADR-009-contact-without-form.md",
+      "bytes": 6317,
+      "sha256": "349aa98cdf18256ffc3f3350622c5acd91a317814b1e06cff42a5bde19ff63bf",
+      "record_id": "ADR-009",
+      "record_type": "adr",
+      "title": "Contact Without a Form",
+      "decision_status": "APPROVED",
+      "date": "2026-11-25",
+      "affects": [
+        "DOC-06",
+        "DOC-08",
+        "DOC-10",
+        "DOC-12",
+        "DOC-16",
+        "DOC-27",
+        "DOC-31",
+        "DOC-36",
+        "DOC-41",
+        "DOC-43",
+        "DOC-44",
+        "DOC-46",
+        "DOC-47",
+        "DOC-48",
+        "DOC-49",
+        "DOC-50"
+      ]
     }
   ]
 }

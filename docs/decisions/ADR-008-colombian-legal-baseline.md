@@ -19,9 +19,13 @@ affects:
 supersedes:
   - "DOC-08 timing 'Privacy policy: required before public UGC/data collection' (now required from V1.0)"
   - "DOC-08 'Terms & conditions: evaluate before Community launch' (now required before V1.2)"
+superseded_in_part_by:
+  - ADR-009
 ---
 
 # ADR-008 — Colombian Legal Baseline and Minors Handling
+
+> Superseded in part by ADR-009 (2026-11-25). Contact no longer collects data, so §2, §7 and §9 now apply before V1.2, and §3 no longer covers Contact. V1.0 publishes a short privacy notice instead. §1, §4, §5, §6 and §8 are unchanged.
 
 ## Context
 
