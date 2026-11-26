@@ -1,6 +1,8 @@
 # Registro de licencias de audio (ADR-005, DOC-30 AFD-042).
 # Toda pista que el sitio use debe tener una entrada aquí. El esquema vive en src/content.config.ts.
 # status: candidate = evaluada, todavía no está en el repositorio; shipped = el archivo está en el sitio.
+# assets: archivos servidos desde public/, convertidos desde el original a Opus/WebM + AAC a 112 kbps (DOC-49).
+# Créditos: Making Of nombra a todos los autores de esta lista, aunque CC0 no lo exija.
 # retrieved: fecha en que se leyó la licencia en la página de origen.
 
 - id: mainmenu-music
@@ -10,7 +12,10 @@
   license: CC0-1.0
   file: jkjkke - dream.mp3
   retrieved: "2026-11-26"
-  status: candidate
+  status: shipped
+  assets:
+    - audio/music/mainmenu-music.webm
+    - audio/music/mainmenu-music.m4a
 
 - id: heavenly-loop
   title: Heavenly Loop
@@ -19,7 +24,10 @@
   license: CC0-1.0
   file: Heavenly Loop.ogg
   retrieved: "2026-11-26"
-  status: candidate
+  status: shipped
+  assets:
+    - audio/music/heavenly-loop.webm
+    - audio/music/heavenly-loop.m4a
   notes: The author says credit is not needed but appreciated; credited in Making Of.
 
 - id: menu-chill-music
@@ -29,7 +37,10 @@
   license: CC0-1.0
   file: menu_chill.wav
   retrieved: "2026-11-26"
-  status: candidate
+  status: shipped
+  assets:
+    - audio/music/menu-chill-music.webm
+    - audio/music/menu-chill-music.m4a
 
 - id: simple-menu-background-loop
   title: Simple menu/background music loop
@@ -38,4 +49,7 @@
   license: CC0-1.0
   file: simple_loop.ogg
   retrieved: "2026-11-26"
-  status: candidate
+  status: shipped
+  assets:
+    - audio/music/simple-menu-background-loop.webm
+    - audio/music/simple-menu-background-loop.m4a
