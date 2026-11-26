@@ -1,7 +1,7 @@
 ---
 id: DOC-01
 title: "Product Vision, Positioning & Success Criteria"
-document_status: APPROVED
+document_status: REVIEW
 reconstructed: true
 canonical_format: markdown
 phase: Product Foundation
@@ -10,7 +10,7 @@ depends_on:
   - DOC-00
 decision_families:
   - VIS
-last_updated: 2026-11-10
+last_updated: 2026-11-25
 approved_at: 2026-11-10
 ---
 
@@ -50,7 +50,7 @@ A visitor should be able to:
 - understand role, architecture, stack, challenges, decisions and results without invented claims;
 - review Experience, Education and Certifications;
 - preview/download a bilingual CV generated from structured source;
-- contact Alejandro through a real, reliable form;
+- contact Alejandro by email through a visible address they can copy or open (ADR-009);
 - use the portfolio comfortably on phone, tablet, keyboard, mouse/touch and supported gamepad;
 - discover optional achievements, Arcade, Drawing Pad, Terminal, Making Of and live development context without those features blocking professional use.
 

@@ -22,7 +22,7 @@
     "approved_adrs": 9,
     "review_records": 9,
     "files_hashed": 89,
-    "total_hashed_bytes": 1621818
+    "total_hashed_bytes": 1625269
   },
   "files": [
     {
@@ -32,12 +32,12 @@
     },
     {
       "path": "docs/00-project/DOC-00-master-guide.md",
-      "bytes": 14179,
-      "sha256": "d8b6aba980557ad610c412b315865f6b0fbc5e65266233bcc965eaa14fb04632",
+      "bytes": 14229,
+      "sha256": "33c4df4d1e6bb011f4375ffe7ca944e0a5c358072ba1721468a9020c335050e1",
       "record_id": "DOC-00",
       "record_type": "document",
       "title": "Master Guide, Governance & Documentation Map",
-      "document_status": "APPROVED",
+      "document_status": "REVIEW",
       "reconstructed": true,
       "phase": "Product Foundation",
       "folder": "00-project",
@@ -48,17 +48,17 @@
         "PRJ",
         "GOV"
       ],
-      "last_updated": "2026-11-10",
+      "last_updated": "2026-11-25",
       "approved_at": "2026-11-10"
     },
     {
       "path": "docs/00-project/DOC-01-product-vision.md",
-      "bytes": 7550,
-      "sha256": "27b1008a87d0462c874ff53dc77fb72f21ae6ee0f556f081638227d2a2afdf18",
+      "bytes": 7585,
+      "sha256": "3fca7555594926d00b9665a545300113dc11710ba088230449bad49bfedbe7d1",
       "record_id": "DOC-01",
       "record_type": "document",
       "title": "Product Vision, Positioning & Success Criteria",
-      "document_status": "APPROVED",
+      "document_status": "REVIEW",
       "reconstructed": true,
       "phase": "Product Foundation",
       "folder": "00-project",
@@ -68,17 +68,17 @@
       "decision_families": [
         "VIS"
       ],
-      "last_updated": "2026-11-10",
+      "last_updated": "2026-11-25",
       "approved_at": "2026-11-10"
     },
     {
       "path": "docs/00-project/DOC-02-scope-release-boundaries.md",
-      "bytes": 10232,
-      "sha256": "3651d452ee970351b8cb081df728c51f679c9faadd8ff8f75038fb2ac5e95f51",
+      "bytes": 10345,
+      "sha256": "a1887ee097c97ac6d8c5d2be3ed16322ddb8f0aadc6b50dd4b02198850bac0a1",
       "record_id": "DOC-02",
       "record_type": "document",
       "title": "Scope, Release Boundaries & Non-Goals",
-      "document_status": "APPROVED",
+      "document_status": "REVIEW",
       "reconstructed": true,
       "phase": "Product Foundation",
       "folder": "00-project",
@@ -89,17 +89,17 @@
       "decision_families": [
         "SCP"
       ],
-      "last_updated": "2026-11-10",
+      "last_updated": "2026-11-25",
       "approved_at": "2026-11-10"
     },
     {
       "path": "docs/00-project/DOC-03-audiences-personas-stakeholders.md",
-      "bytes": 5429,
-      "sha256": "346e4e2d78e8761d0450c19e7177dc88633f0b6561fe18179a45daa927b7c5d4",
+      "bytes": 5490,
+      "sha256": "295069168d65b4a6a1404aa6b3038370d1ae9a4cda2eb69b3310e9ed09df0517",
       "record_id": "DOC-03",
       "record_type": "document",
       "title": "Audiences, Personas & Stakeholder Needs",
-      "document_status": "APPROVED",
+      "document_status": "REVIEW",
       "reconstructed": true,
       "phase": "Product Foundation",
       "folder": "00-project",
@@ -110,17 +110,17 @@
       "decision_families": [
         "AUD"
       ],
-      "last_updated": "2026-09-15",
+      "last_updated": "2026-11-25",
       "approved_at": "2026-09-15"
     },
     {
       "path": "docs/00-project/DOC-04-user-journeys.md",
-      "bytes": 6966,
-      "sha256": "0ca076f794b834d57084e5562851cfd2048f5f5021af4b51a38ef64a3376a901",
+      "bytes": 7061,
+      "sha256": "64c910a0bd48f34f92d040d27485ee7984c1f1a784cdd163733d8a9283f8afb2",
       "record_id": "DOC-04",
       "record_type": "document",
       "title": "User Journeys & Experience Outcomes",
-      "document_status": "APPROVED",
+      "document_status": "REVIEW",
       "reconstructed": true,
       "phase": "Product Foundation",
       "folder": "00-project",
@@ -130,7 +130,7 @@
       "decision_families": [
         "JRN"
       ],
-      "last_updated": "2026-11-10",
+      "last_updated": "2026-11-25",
       "approved_at": "2026-11-10"
     },
     {
@@ -140,12 +140,12 @@
     },
     {
       "path": "docs/01-product/DOC-05-user-stories-acceptance.md",
-      "bytes": 8242,
-      "sha256": "7c07f931f677bb487ca486f2d803727b47c43f69c58d3d9d73f029ee96cf0a7d",
+      "bytes": 8339,
+      "sha256": "fcb9dbc5220a98fe80ee63f1b1152cebe0b7fbc82fc049b1d239f68f87f09147",
       "record_id": "DOC-05",
       "record_type": "document",
       "title": "User Stories, Epics & Acceptance Framework",
-      "document_status": "APPROVED",
+      "document_status": "REVIEW",
       "reconstructed": true,
       "phase": "Product Foundation",
       "folder": "01-product",
@@ -157,17 +157,17 @@
       "decision_families": [
         "USR"
       ],
-      "last_updated": "2026-11-10",
+      "last_updated": "2026-11-25",
       "approved_at": "2026-11-10"
     },
     {
       "path": "docs/01-product/DOC-06-functional-requirements.md",
-      "bytes": 11934,
-      "sha256": "7f036b642200d45f496b8c97a0160eefa33affce77718401ff451ad2f0e6dfdd",
+      "bytes": 12259,
+      "sha256": "b9ca920757f77f3aed060aed0e4864bb83496afae521245ff0147254edbe98dc",
       "record_id": "DOC-06",
       "record_type": "document",
       "title": "Functional Requirements",
-      "document_status": "APPROVED",
+      "document_status": "REVIEW",
       "reconstructed": true,
       "phase": "Product Foundation",
       "folder": "01-product",
@@ -179,7 +179,7 @@
       "decision_families": [
         "FR"
       ],
-      "last_updated": "2026-11-10",
+      "last_updated": "2026-11-25",
       "approved_at": "2026-11-10"
     },
     {
@@ -204,12 +204,12 @@
     },
     {
       "path": "docs/01-product/DOC-08-engineering-coverage-constraints.md",
-      "bytes": 22963,
-      "sha256": "b8f775d878c61870780449a92bdd60fe9bfe7cef8f06248d0853b95bdfde8737",
+      "bytes": 23446,
+      "sha256": "a99ac0ac56a905b2b7662662385821acede73e9f6e6816aa39b07ddd83fdd16c",
       "record_id": "DOC-08",
       "record_type": "document",
       "title": "Engineering Coverage Register & Technical Constraints",
-      "document_status": "APPROVED",
+      "document_status": "REVIEW",
       "reconstructed": true,
       "phase": "Product Foundation",
       "folder": "01-product",
@@ -220,7 +220,7 @@
       "decision_families": [
         "ENG"
       ],
-      "last_updated": "2026-11-10",
+      "last_updated": "2026-11-25",
       "approved_at": "2026-11-10"
     },
     {
@@ -246,12 +246,12 @@
     },
     {
       "path": "docs/01-product/DOC-10-localization-i18n.md",
-      "bytes": 5577,
-      "sha256": "96b33fe2d3f050ede1a749bcc688f67f9677694e58cbdd04bd3f9ad8d1a6aa7f",
+      "bytes": 5788,
+      "sha256": "86852e028679295c8b2b8d58f5ae2eb2f42aca3445fc651a7b53e426180bb8a4",
       "record_id": "DOC-10",
       "record_type": "document",
       "title": "Localization, Language & Bilingual Behavior",
-      "document_status": "APPROVED",
+      "document_status": "REVIEW",
       "reconstructed": true,
       "phase": "Product Foundation",
       "folder": "01-product",
@@ -262,7 +262,7 @@
       "decision_families": [
         "L10N"
       ],
-      "last_updated": "2026-11-10",
+      "last_updated": "2026-11-25",
       "approved_at": "2026-11-10"
     },
     {
@@ -290,12 +290,12 @@
     },
     {
       "path": "docs/01-product/DOC-12-security-privacy-abuse.md",
-      "bytes": 9168,
-      "sha256": "15361ed61a4c83490c2ea8d61bfb2952cffa3c77d64ab9573c8e6628a0c1c500",
+      "bytes": 10096,
+      "sha256": "263c20d0b63e6d0ec922f94ef86444d971390b7d5ade7e87dcbcca493c6a8976",
       "record_id": "DOC-12",
       "record_type": "document",
       "title": "Security, Privacy & Abuse-Prevention Requirements",
-      "document_status": "APPROVED",
+      "document_status": "REVIEW",
       "reconstructed": true,
       "phase": "Product Foundation",
       "folder": "01-product",
@@ -306,17 +306,17 @@
       "decision_families": [
         "SEC"
       ],
-      "last_updated": "2026-11-10",
+      "last_updated": "2026-11-25",
       "approved_at": "2026-11-10"
     },
     {
       "path": "docs/01-product/DOC-13-community-moderation.md",
-      "bytes": 6455,
-      "sha256": "d9ac7effa7cc1ef71ee6eafbca9309711db9213ac7c999823351537bbe232034",
+      "bytes": 6458,
+      "sha256": "4eed4c05de364bb1027f29e3b671c0062e60d991f40eb5c7141291da6e5325cc",
       "record_id": "DOC-13",
       "record_type": "document",
       "title": "Community, UGC & Moderation Product Requirements",
-      "document_status": "APPROVED",
+      "document_status": "REVIEW",
       "reconstructed": true,
       "phase": "Product Foundation",
       "folder": "01-product",
@@ -328,7 +328,7 @@
       "decision_families": [
         "COM"
       ],
-      "last_updated": "2026-11-10",
+      "last_updated": "2026-11-25",
       "approved_at": "2026-11-10"
     },
     {
@@ -356,12 +356,12 @@
     },
     {
       "path": "docs/01-product/DOC-15-integrations-live-data.md",
-      "bytes": 5093,
-      "sha256": "77036372be3775b0524c84cbced95506fefd5ca1f194f1a28529b9693b36a16c",
+      "bytes": 5044,
+      "sha256": "e2c08db85aa91f42f675e2e08da7e3e2ad9e1635049891090a637f03a16d98e2",
       "record_id": "DOC-15",
       "record_type": "document",
       "title": "External Integrations & Live-Data Requirements",
-      "document_status": "APPROVED",
+      "document_status": "REVIEW",
       "reconstructed": true,
       "phase": "Product Foundation",
       "folder": "01-product",
@@ -372,17 +372,17 @@
       "decision_families": [
         "INT"
       ],
-      "last_updated": "2026-11-10",
+      "last_updated": "2026-11-25",
       "approved_at": "2026-11-10"
     },
     {
       "path": "docs/01-product/DOC-16-contact-email.md",
-      "bytes": 3859,
-      "sha256": "94cec6577f480d180440226466de4135f443e13cd0f4ba7a700758b36f3d577f",
+      "bytes": 4851,
+      "sha256": "df95ed3cc0fa42bc871746fc42c62af7fd818015a5e77437e891e6f188925e59",
       "record_id": "DOC-16",
       "record_type": "document",
       "title": "Contact, Email & Communication Requirements",
-      "document_status": "APPROVED",
+      "document_status": "REVIEW",
       "reconstructed": true,
       "phase": "Product Foundation",
       "folder": "01-product",
@@ -394,17 +394,17 @@
       "decision_families": [
         "MSG"
       ],
-      "last_updated": "2026-11-10",
+      "last_updated": "2026-11-25",
       "approved_at": "2026-11-10"
     },
     {
       "path": "docs/01-product/DOC-17-seo-analytics-discoverability.md",
-      "bytes": 5465,
-      "sha256": "ce490084626500b9168db21daf4f8a538849bee326675e9bc29fdadee46d5ffe",
+      "bytes": 5474,
+      "sha256": "8bcf54c9e235f05315903f596a42477b76dcd01d884138a9447b2e3b0d3a4dcd",
       "record_id": "DOC-17",
       "record_type": "document",
       "title": "SEO, Metadata, Analytics & Discoverability Requirements",
-      "document_status": "APPROVED",
+      "document_status": "REVIEW",
       "reconstructed": true,
       "phase": "Product Foundation",
       "folder": "01-product",
@@ -416,7 +416,7 @@
       "decision_families": [
         "SEO"
       ],
-      "last_updated": "2026-11-10",
+      "last_updated": "2026-11-25",
       "approved_at": "2026-11-10"
     },
     {
@@ -467,12 +467,12 @@
     },
     {
       "path": "docs/01-product/DOC-52-software-requirements-specification-index.md",
-      "bytes": 5256,
-      "sha256": "415a335ce6f2bf235d5205af1c9cbfad36d72244a2c49b1e5d2b0e53e7d04cdb",
+      "bytes": 5354,
+      "sha256": "9962e8a3aad58019bb50201a412c79044fc72630832db25269d4f94592642377",
       "record_id": "DOC-52",
       "record_type": "document",
       "title": "Software Requirements Specification (SRS) Index",
-      "document_status": "APPROVED",
+      "document_status": "REVIEW",
       "phase": "Product Foundation",
       "folder": "01-product",
       "depends_on": [
@@ -486,7 +486,7 @@
       "decision_families": [
         "SRS"
       ],
-      "last_updated": "2026-11-10",
+      "last_updated": "2026-11-25",
       "approved_at": "2026-11-10"
     },
     {
@@ -2009,17 +2009,6 @@
       "sha256": "daf7179da3fc73e7fc560d740110802904bfab5008de378ed85c3e79c6041303"
     },
     {
-      "path": "docs/reviews/PROPOSAL-CONTACT-001-contact-without-form.md",
-      "bytes": 2835,
-      "sha256": "c508ec6336093c7b50caa6bb1f6ae651d6860a9a1f554de61cd3ecdcbe0934b8",
-      "record_id": "PROPOSAL-CONTACT-001",
-      "record_type": "document",
-      "title": "Contact Without a Form",
-      "document_status": "APPROVED",
-      "phase": "Baseline Revision",
-      "folder": "reviews"
-    },
-    {
       "path": "docs/decisions/ADR-009-contact-without-form.md",
       "bytes": 6317,
       "sha256": "349aa98cdf18256ffc3f3350622c5acd91a317814b1e06cff42a5bde19ff63bf",
@@ -2028,6 +2017,10 @@
       "title": "Contact Without a Form",
       "decision_status": "APPROVED",
       "date": "2026-11-25",
+      "owners": [
+        "Alejandro Osorno"
+      ],
+      "scope": "How visitors reach the owner in V1.x, and the privacy, legal-review and RNBD timing that follows from it",
       "affects": [
         "DOC-06",
         "DOC-08",
@@ -2045,7 +2038,25 @@
         "DOC-48",
         "DOC-49",
         "DOC-50"
+      ],
+      "supersedes": [
+        "ADR-008 §2 timing: the full Personal Data Processing Policy moves from V1.0 to before V1.2; V1.0 publishes a short privacy notice",
+        "ADR-008 §3 for Contact: Contact collects no data, so it has no authorization checkbox",
+        "ADR-008 §7 timing: the RNBD check moves to before V1.2",
+        "ADR-008 §9 timing: the lawyer reviews the policy before V1.2 instead of before V1.0",
+        "DOC-16 Contact form, FR-015, FR-016, FR-070, MSG-002, MSG-003 and MSG-007"
       ]
+    },
+    {
+      "path": "docs/reviews/PROPOSAL-CONTACT-001-contact-without-form.md",
+      "bytes": 2835,
+      "sha256": "c508ec6336093c7b50caa6bb1f6ae651d6860a9a1f554de61cd3ecdcbe0934b8",
+      "record_id": "PROPOSAL-CONTACT-001",
+      "record_type": "document",
+      "title": "Contact Without a Form",
+      "document_status": "APPROVED",
+      "phase": "Baseline Revision",
+      "folder": "reviews"
     }
   ]
 }

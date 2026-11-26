@@ -1,7 +1,7 @@
 ---
 id: DOC-00
 title: "Master Guide, Governance & Documentation Map"
-document_status: APPROVED
+document_status: REVIEW
 reconstructed: true
 canonical_format: markdown
 phase: Product Foundation
@@ -11,7 +11,7 @@ depends_on:
 decision_families:
   - PRJ
   - GOV
-last_updated: 2026-11-10
+last_updated: 2026-11-25
 approved_at: 2026-11-10
 ---
 
@@ -124,7 +124,7 @@ The Technical Architecture package is specification-complete after DOC-51 approv
 DOC-02 is the normative release/scope owner. The summary below is convenience only and must remain synchronized:
 
 - **V0 — Foundation:** repository, documentation, design-system foundations, routing, i18n, content/data foundations, security baseline, CI/CD, testing, RenderCV pipeline and local implementation-tooling configuration.
-- **V1.0 — Professional Portfolio:** cinematic Boot, three.js signature stage with fallbacks, music prompt and sound control, shell, fixed six-space Dock with Coming Soon route surfaces for later spaces, Home/Projects, Experience, Education, Certifications, Project Detail, Media, controlled Widget Field personalization, Contact, CV, Settings, EN/ES, themes, sound controls, responsive experience, SEO, 404 and the Personal Data Processing Policy. Published only after passing its exit criteria.
+- **V1.0 — Professional Portfolio:** cinematic Boot, three.js signature stage with fallbacks, music prompt and sound control, shell, fixed six-space Dock with Coming Soon route surfaces for later spaces, Home/Projects, Experience, Education, Certifications, Project Detail, Media, controlled Widget Field personalization, Contact by email (visible address, Copy, `mailto:`; ADR-009), CV, Settings, EN/ES, themes, sound controls, responsive experience, SEO, 404 and the short privacy notice (ADR-009). Published only after passing its exit criteria.
 - **V1.1 — Personality:** Achievements, Command Palette, Terminal, Making Of, Changelog, basic Status, custom-cursor polish, Easter eggs, returning personalization, Markdown blog and curated themes.
 - **V1.2 — Community:** Social, Guestbook, Sketch Wall, Drawing Pad, reports, moderation, Admin, Terms of Use and the UGC age declaration.
 - **V1.3 — Arcade:** Arcade Library, Glitch Runner, Reflex Deploy, server-validated sessions, leaderboards and Arcade achievements.

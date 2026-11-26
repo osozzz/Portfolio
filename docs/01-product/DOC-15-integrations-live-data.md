@@ -1,7 +1,7 @@
 ---
 id: DOC-15
 title: "External Integrations & Live-Data Requirements"
-document_status: APPROVED
+document_status: REVIEW
 reconstructed: true
 canonical_format: markdown
 phase: Product Foundation
@@ -11,7 +11,7 @@ depends_on:
   - DOC-12
 decision_families:
   - INT
-last_updated: 2026-11-10
+last_updated: 2026-11-25
 approved_at: 2026-11-10
 ---
 
@@ -44,7 +44,7 @@ Exact provider/source list is deferred and should be selected for reliability, t
 
 ## 4. Contact email
 
-Contact submission calls server-side delivery provider (candidate Resend). Credentials remain server-side. Delivery success should be based on provider/server acceptance; retries/idempotency and bounce/error handling are considered in detailed architecture.
+No email provider is integrated in V1.x (ADR-009). Contact publishes a domain address that forwards to the owner through the DNS/email-forwarding provider; the site holds no email credentials and sends nothing.
 
 ## 5. Anti-bot
 

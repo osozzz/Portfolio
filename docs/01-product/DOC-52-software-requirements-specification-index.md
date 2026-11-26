@@ -1,7 +1,7 @@
 ---
 id: DOC-52
 title: "Software Requirements Specification (SRS) Index"
-document_status: APPROVED
+document_status: REVIEW
 canonical_format: markdown
 phase: Product Foundation
 folder: 01-product
@@ -14,7 +14,7 @@ depends_on:
   - DOC-07
 decision_families:
   - SRS
-last_updated: 2026-11-10
+last_updated: 2026-11-25
 approved_at: 2026-11-10
 ---
 
@@ -43,7 +43,7 @@ Use it to:
 | 1.4 Definitions | Governance vocabulary, status values, decision families | DOC-00 |
 | 2 References | ADRs, reviews, external standards | `docs/decisions/`, `docs/reviews/`, DOC-41 §55, DOC-42 §111 |
 | 3.1 External interfaces: user interfaces | Screen anatomy, navigation, input, focus, widgets, surfaces, components, responsive, motion, audio | DOC-21–DOC-31, DOC-33–DOC-40 |
-| 3.1 External interfaces: software/communication | Supabase, Vercel, Resend, GitHub, Tech Pulse sources, Turnstile, Sentry | DOC-15, DOC-41, DOC-46 |
+| 3.1 External interfaces: software/communication | Supabase, Vercel, GitHub, Tech Pulse sources, Turnstile, Sentry; inbound email forwarding for the Contact address (ADR-009) | DOC-15, DOC-41, DOC-46 |
 | 3.2 Functions (functional requirements) | User stories and acceptance; functional requirements | DOC-05 (USR), DOC-06 (FR) |
 | 3.2 Functions by domain | Professional content; i18n; community/moderation; Arcade/achievements; integrations; Contact | DOC-09, DOC-10, DOC-13, DOC-14, DOC-15, DOC-16 |
 | 3.3 Usability / accessibility | WCAG 2.2 AA direction, audio control, reduced motion | DOC-11 (A11Y), DOC-07 NFR-006–NFR-011 |
@@ -53,7 +53,7 @@ Use it to:
 | 3.7 Software system attributes: security | Trust boundaries, auth, threat model | DOC-12 (SEC), DOC-45 (IAM), DOC-47 (SECARC/THR) |
 | 3.7 Software system attributes: reliability/availability | SLOs, error budgets, failure isolation | DOC-49 |
 | 3.7 Software system attributes: maintainability/portability | Repository, CI/CD, dependency policy, provider exit | DOC-48, DOC-51, DOC-19 |
-| 3.8 Supporting information: legal/regulatory | Colombian Ley 1581 baseline, privacy policy, terms, minors | DOC-12 §10A, ADR-008, DOC-08 §13/§17 |
+| 3.8 Supporting information: legal/regulatory | Colombian Ley 1581 baseline, V1.0 short privacy notice, full policy and terms before V1.2, minors | DOC-12 §10A, ADR-008, ADR-009, DOC-08 §13/§17 |
 | 3.8 Supporting information: SEO/analytics | Discoverability and analytics policy | DOC-17 (SEO) |
 | 4 Verification | Test strategy, quality gates, release exit criteria | DOC-50 (TQE), DOC-50 §86 |
 | 5 Delivery / change control | Roadmap, workflow, releases, ADR process | DOC-18, DOC-00, `docs/decisions/` |
