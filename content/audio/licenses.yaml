@@ -1,0 +1,41 @@
+# Registro de licencias de audio (ADR-005, DOC-30 AFD-042).
+# Toda pista que el sitio use debe tener una entrada aquí. El esquema vive en src/content.config.ts.
+# status: candidate = evaluada, todavía no está en el repositorio; shipped = el archivo está en el sitio.
+# retrieved: fecha en que se leyó la licencia en la página de origen.
+
+- id: mainmenu-music
+  title: MainMenu Music
+  author: jkjkke
+  source_url: https://opengameart.org/content/mainmenu-music
+  license: CC0-1.0
+  file: jkjkke - dream.mp3
+  retrieved: "2026-11-26"
+  status: candidate
+
+- id: heavenly-loop
+  title: Heavenly Loop
+  author: isaiah658
+  source_url: https://opengameart.org/content/heavenly-loop
+  license: CC0-1.0
+  file: Heavenly Loop.ogg
+  retrieved: "2026-11-26"
+  status: candidate
+  notes: The author says credit is not needed but appreciated; credited in Making Of.
+
+- id: menu-chill-music
+  title: Menu Chill Music
+  author: etrock
+  source_url: https://opengameart.org/content/menu-chill-music
+  license: CC0-1.0
+  file: menu_chill.wav
+  retrieved: "2026-11-26"
+  status: candidate
+
+- id: simple-menu-background-loop
+  title: Simple menu/background music loop
+  author: polosik
+  source_url: https://opengameart.org/content/simple-menubackground-music-loop
+  license: CC0-1.0
+  file: simple_loop.ogg
+  retrieved: "2026-11-26"
+  status: candidate
