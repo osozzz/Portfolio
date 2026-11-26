@@ -38,7 +38,7 @@ The approved V1.x technical baseline is:
 - **Motion:** CSS for simple local transitions; Astro View Transitions for the persistent shell; Motion as primary animation system inside React islands; GSAP only if a documented prototype demonstrates a need.
 - **Database/Auth/Storage:** Supabase/PostgreSQL with admin auth only, server-first runtime data access, RLS/grants/least privilege and controlled Storage only where a feature actually requires it.
 - **Hosting:** Vercel managed deployment/runtime, with Cloudflare DNS-only authoritative DNS preferred and Vercel DNS acceptable as the simpler alternative.
-- **Email:** no sending provider in V1.x. Contact publishes a domain address that forwards to the owner (ADR-009); the domain only receives mail.
+- **Email:** no email to visitors in V1.x. Contact publishes a domain address that forwards to the owner (ADR-009); the root domain only receives mail. From V1.2, admin Auth recovery uses production SMTP on a dedicated sending subdomain (DOC-45 §57).
 - **Product analytics:** disabled/no-op in V0/V1.0. Enabling a provider/event set later requires an explicit privacy/provider decision; feature code keeps a provider-neutral wrapper.
 - **Error monitoring:** Sentry is the V0/V1.0 baseline behind centralized wrappers and strict scrubbing.
 - **Testing:** Vitest + React Testing Library, Storybook isolated components, Playwright E2E/accessibility/visual testing, PostgreSQL/pgTAP, plus release-specific security/performance/resilience gates.
@@ -160,7 +160,7 @@ Use structured logs/metrics/errors without storing message bodies, unpublished s
 
 ## 11. Email/deliverability assessment
 
-The site sends no email in V1.x (ADR-009). Contact is a published domain address that forwards to the owner, so transactional sending, bounce handling and provider credentials are **NOT APPLICABLE**. There is no newsletter or marketing email, so marketing-email unsubscribe and postal-address requirements (CAN-SPAM-style) are **NOT APPLICABLE**; both must be reassessed if sending or a newsletter is ever proposed. Before production, configure inbound forwarding (MX) and anti-spoofing records for a domain that does not send: SPF `v=spf1 -all` and DMARC `p=reject` (DOC-48).
+The site sends no email in V1.0 and never emails visitors in V1.x (ADR-009). Contact is a published domain address that forwards to the owner, so transactional sending to visitors, bounce handling and provider credentials are **NOT APPLICABLE**. From V1.2 the only sending path is the admin's Auth recovery email over production SMTP on a dedicated sending subdomain (DOC-45 §57, DOC-48). There is no newsletter or marketing email, so marketing-email unsubscribe and postal-address requirements (CAN-SPAM-style) are **NOT APPLICABLE**; both must be reassessed if sending or a newsletter is ever proposed. Before production, configure inbound forwarding (MX) and anti-spoofing records for a domain that does not send: SPF `v=spf1 -all` and DMARC `p=reject` (DOC-48).
 
 ## 12. Mobile-store assessment
 
@@ -194,7 +194,7 @@ Use lockfiles, automated dependency update proposals where useful, CVE/SCA scann
 - **ENG-001** The architecture/provider baseline is approved in DOC-41–DOC-51; V0 bootstrap pins exact compatible versions and validates prototype gates without reopening the product architecture by default.
 - **ENG-002** Managed/simple infrastructure is preferred until evidence requires additional moving parts.
 - **ENG-003** Payments and native-store delivery are explicitly N/A for V1.x.
-- **ENG-004** Inbound mail forwarding and anti-spoofing records for the domain are release concerns; outbound deliverability is N/A while the site sends no email (ADR-009).
+- **ENG-004** Inbound mail forwarding and anti-spoofing records for the root domain are release concerns; outbound deliverability applies only to the V1.2 admin Auth recovery subdomain (ADR-009, DOC-45 §57).
 - **ENG-005** Preview environments must not casually share production write credentials/data.
 - **ENG-006** Heavy observability/queue/cache infrastructure is introduced from concrete need, not checklist theater.
 - **ENG-007** Security/testing/backup concerns become stronger as community persistence launches.
@@ -280,9 +280,9 @@ This matrix mirrors the project's explicit engineering checklist so a concern ca
 | Failed payment states | **N/A current scope** | Same |
 | Non-payment webhook validation | Conditional if provider webhooks are added | DOC-43 / DOC-46 / DOC-47 |
 | General idempotency | Applicable to retryable side effects/submissions where needed | DOC-43 / DOC-44 / DOC-46 |
-| Email provider | **N/A in V1.x**: the site sends no email (ADR-009) | DOC-16 / DOC-48 |
-| SPF | Applicable as anti-spoofing for a non-sending domain (`v=spf1 -all`, ADR-009) | DOC-16 / DOC-48 |
-| DKIM | **N/A while the domain does not send** (ADR-009) | DOC-16 / DOC-48 |
+| Email provider | **N/A for visitors in V1.x** (ADR-009); production SMTP for admin Auth recovery from V1.2 | DOC-16 / DOC-45 / DOC-48 |
+| SPF | Applicable: `v=spf1 -all` on the non-sending root domain (ADR-009); the V1.2 Auth SMTP subdomain publishes its own | DOC-16 / DOC-48 |
+| DKIM | N/A on the root domain (ADR-009); applicable to the V1.2 Auth SMTP subdomain | DOC-16 / DOC-45 / DOC-48 |
 | DMARC | Applicable as anti-spoofing (`p=reject`, ADR-009) | DOC-16 / DOC-48 |
 | Native mobile certificates | **N/A web portfolio** | Reassess only if native app enters scope |
 | Provisioning profiles | **N/A web portfolio** | Same |

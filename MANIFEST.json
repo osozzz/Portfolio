@@ -22,7 +22,7 @@
     "approved_adrs": 9,
     "review_records": 9,
     "files_hashed": 89,
-    "total_hashed_bytes": 1626064
+    "total_hashed_bytes": 1621327
   },
   "files": [
     {
@@ -204,8 +204,8 @@
     },
     {
       "path": "docs/01-product/DOC-08-engineering-coverage-constraints.md",
-      "bytes": 23446,
-      "sha256": "a99ac0ac56a905b2b7662662385821acede73e9f6e6816aa39b07ddd83fdd16c",
+      "bytes": 23900,
+      "sha256": "e819bbe42d31d46581eb44fac7e8c440604bbe4e9eff39b6554a9e8a15e3daf0",
       "record_id": "DOC-08",
       "record_type": "document",
       "title": "Engineering Coverage Register & Technical Constraints",
@@ -377,8 +377,8 @@
     },
     {
       "path": "docs/01-product/DOC-16-contact-email.md",
-      "bytes": 4851,
-      "sha256": "df95ed3cc0fa42bc871746fc42c62af7fd818015a5e77437e891e6f188925e59",
+      "bytes": 4967,
+      "sha256": "3c159db78aa5072b4648b303afe602ed77636011b8f0541fede5c49253b6ee4e",
       "record_id": "DOC-16",
       "record_type": "document",
       "title": "Contact, Email & Communication Requirements",
@@ -1130,12 +1130,12 @@
     },
     {
       "path": "docs/04-technical-architecture/DOC-43-backend-api-application-service-architecture.md",
-      "bytes": 68009,
-      "sha256": "e64ab07e6095b38dfa5afb1684139c1e948e0784a4b60cd4ecc785511038155d",
+      "bytes": 65351,
+      "sha256": "eafeb663253033bd7c223e4aeff50e4e439ba33e9eef6529a6d23262ac6bde49",
       "record_id": "DOC-43",
       "record_type": "document",
       "title": "Backend, API & Application Service Architecture",
-      "document_status": "APPROVED",
+      "document_status": "REVIEW",
       "phase": "Technical Architecture",
       "folder": "04-technical-architecture",
       "depends_on": [
@@ -1168,7 +1168,7 @@
       "decision_families": [
         "BEA"
       ],
-      "last_updated": "2026-11-10",
+      "last_updated": "2026-11-25",
       "approved_at": "2026-11-10"
     },
     {
@@ -1254,12 +1254,12 @@
     },
     {
       "path": "docs/04-technical-architecture/DOC-46-integrations-caching-jobs-provider-resilience.md",
-      "bytes": 74314,
-      "sha256": "877d0bc178899ec75f97de92ad5d9a50c691161790deb0de2ea5470cdb435f03",
+      "bytes": 71237,
+      "sha256": "7c41ae40005d483b42d025786ad585d8a30858255d9d8668635a1727d4c3bc86",
       "record_id": "DOC-46",
       "record_type": "document",
       "title": "Integrations, Caching, Jobs & Provider Resilience",
-      "document_status": "APPROVED",
+      "document_status": "REVIEW",
       "phase": "Technical Architecture",
       "folder": "04-technical-architecture",
       "depends_on": [
@@ -1292,7 +1292,7 @@
       "decision_families": [
         "ICJ"
       ],
-      "last_updated": "2026-11-10",
+      "last_updated": "2026-11-25",
       "approved_at": "2026-11-10"
     },
     {
@@ -2010,8 +2010,8 @@
     },
     {
       "path": "docs/decisions/ADR-009-contact-without-form.md",
-      "bytes": 6317,
-      "sha256": "349aa98cdf18256ffc3f3350622c5acd91a317814b1e06cff42a5bde19ff63bf",
+      "bytes": 6745,
+      "sha256": "70efd2ad85f0713562b3ae8ae82b91b653036f125a516b23f83858ca93298f19",
       "record_id": "ADR-009",
       "record_type": "adr",
       "title": "Contact Without a Form",

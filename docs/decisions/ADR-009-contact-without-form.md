@@ -44,7 +44,8 @@ The owner asked whether the lawyer would still be needed if Contact collected no
 
 1. **Contact surface.** The Contact space shows the published address as visible text, a Copy button and a `mailto:` link. There is no form, no server endpoint and no stored message.
 2. **Address.** The published address belongs to the `alejosorno.dev` domain (for example `hello@alejosorno.dev`). The final local part is content, not a baseline value. It forwards to the owner's mailbox, so it can be rotated or redirected without changing the site. It is canonical content with a single source (DOC-36).
-3. **No sending in V1.x.** The domain only receives mail. There is no Resend or other transactional email provider in V1.x. A sending provider comes back only through a new ADR.
+3. **No email to visitors.** The site sends no email in V1.0 and never emails visitors in V1.x. There is no Resend or other transactional email provider for Contact; one comes back only through a new ADR. The root domain only receives mail.
+   - The one sending path in V1.x is the admin's Supabase Auth recovery email from V1.2 (DOC-45 §57), which goes only to the owner. It uses a production SMTP provider on a dedicated sending subdomain with its own SPF and DKIM, chosen before V1.2 (DOC-48). The root domain keeps its non-sending records.
 4. **Short privacy notice in V1.0.** `/[locale]/privacy` publishes a short notice in ES and EN. It states:
    - that the site collects no personal data through forms in V1.0;
    - that an email a visitor chooses to send is ordinary correspondence, answered and kept only as long as needed;
@@ -108,7 +109,7 @@ A form can be reintroduced through a new ADR. That ADR must bring back the autho
 
 ## Security / privacy / accessibility / performance impact
 
-- **Security:** removes the Contact write path and its threats (DOC-47). The domain publishes anti-spoofing records, because it does not send (DOC-48).
+- **Security:** removes the Contact write path and its threats (DOC-47). The root domain publishes anti-spoofing records because it does not send; the V1.2 Auth SMTP subdomain authenticates its own mail (DOC-48).
 - **Privacy:** no stored contact data and no authorization ledger (DOC-44).
 - **Accessibility:** the address is plain text and the Copy button is a real button with a polite announcement (DOC-16).
 - **Performance:** Contact needs no island beyond the Copy enhancement.

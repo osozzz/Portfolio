@@ -54,7 +54,7 @@ The site stores nothing about Contact. Mail arrives in the owner's mailbox as or
 
 ## 6. Domain mail records
 
-The domain receives mail and does not send it in V1.x (ADR-009). Production needs the inbound records for forwarding (MX) and anti-spoofing records for a domain that does not send: SPF `v=spf1 -all` (unless the forwarder requires its own include) and DMARC `p=reject` (DOC-48).
+The root domain receives mail and does not send it (ADR-009). Production needs the inbound records for forwarding (MX) and anti-spoofing records for a domain that does not send: SPF `v=spf1 -all` (unless the forwarder requires its own include) and DMARC `p=reject` (DOC-48). The admin's Auth recovery email from V1.2 uses its own sending subdomain and never touches Contact (DOC-45 §57).
 
 ## 7. UX states
 
@@ -79,7 +79,7 @@ A Toast alone is not sufficient for the copy failed state; the message stays nex
 - **MSG-002** Retired (ADR-009): there is no form to validate on the server.
 - **MSG-003** Retired (ADR-009): there is no message to preserve on failure; the visitor writes in their own mail client.
 - **MSG-004** Contact identity is not reused for personalization/community identity.
-- **MSG-005** The domain only receives mail; inbound (MX) and anti-spoofing records (SPF `-all`, DMARC `p=reject`) are part of production (ADR-009, DOC-48).
+- **MSG-005** The root domain only receives mail; inbound (MX) and anti-spoofing records (SPF `-all`, DMARC `p=reject`) are part of production (ADR-009, DOC-48).
 - **MSG-006** Contact remains professionally restrained—no confetti/achievement gamification.
 - **MSG-007** Retired (ADR-009): Contact collects no data, so it has no authorization checkbox.
 - **MSG-008** Contact works without JavaScript: the address and the `mailto:` link need no script; Copy is an enhancement.
