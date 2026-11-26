@@ -1,7 +1,7 @@
 ---
 id: DOC-44
 title: "Data Architecture, PostgreSQL, RLS & Storage"
-document_status: APPROVED
+document_status: REVIEW
 canonical_format: markdown
 phase: "Technical Architecture"
 folder: 04-technical-architecture
@@ -34,7 +34,7 @@ depends_on:
   - ADR-002
 decision_families:
   - DTA
-last_updated: 2026-11-10
+last_updated: 2026-11-25
 ---
 
 # DOC-44 — Data Architecture, PostgreSQL, RLS & Storage
@@ -57,7 +57,6 @@ This document defines:
 - Arcade sessions, evidence and leaderboard scores;
 - Admin profile/audit data;
 - abuse-ban persistence without creating a hidden visitor profile;
-- Contact idempotency metadata without storing Contact message bodies;
 - atomic persistence procedures needed by DOC-43 transactions;
 - grants and RLS posture for `anon`, `authenticated` and privileged server access;
 - migration and generated-type conventions;
@@ -123,7 +122,7 @@ The following remain outside PostgreSQL in the baseline:
 - static/localized core copy;
 - visitor Widget Field preferences;
 - local playful achievement unlocks;
-- Contact message body/email/name after successful delivery;
+- any Contact data (Contact has no form, ADR-009);
 - arbitrary uploaded visitor images.
 
 If implementation proposes tables such as `projects`, `experience`, `skills` or `certifications` as a second source of truth, it requires an approved source-of-truth ADR rather than a migration shortcut.
@@ -546,7 +545,6 @@ guestbook
 sketch
 reports
 arcade
-contact
 ```
 
 For example, a Guestbook-scoped key and Sketch-scoped key for the same visitor context should be cryptographically unlinkable without access to the server's keying scheme.
@@ -871,7 +869,7 @@ Baseline columns:
 | `request_id` | `text` | correlation ID from backend |
 | `occurred_at` | `timestamptz` | authoritative DB time |
 
-Audit does not copy full Guestbook messages, drawing models, anti-cheat evidence or Contact content.
+Audit does not copy full Guestbook messages, drawing models or anti-cheat evidence.
 ## 36A. Canonical audit action constraint
 
 `admin_audit_events.action` uses the approved dotted codes:
@@ -929,7 +927,7 @@ Baseline columns:
 | `id` | `uuid` | PK |
 | `subject_hash` | `bytea` | HMAC-derived opaque subject |
 | `subject_key_version` | `smallint` | rotation metadata |
-| `subject_namespace` | `text` | contact/guestbook/sketch/reports/reactions/arcade; feature-scoped in V1.x |
+| `subject_namespace` | `text` | guestbook/sketch/reports/reactions/arcade; feature-scoped in V1.x |
 | `enforcement_scope` | `text` | same feature-scoped enforcement domain; no universal public-write subject in V1.x |
 | `reason_code` | `text` | private operational reason class |
 | `reason_note` | `text null` | bounded private note |
@@ -1018,25 +1016,11 @@ Correctness requirements:
 
 ## 41. No Contact inbox table
 
-DOC-43 is preserved:
-
-> V1.0 does not persist Contact name, email and message body as a general-purpose database inbox.
-
-There is no baseline table such as:
-
-```text
-contact_messages
-contact_leads
-contact_submissions_with_body
-```
-
-The Contact form is not a covert CRM.
-
----
+Contact has no form and stores nothing (ADR-009). There is no table for Contact messages, leads, submissions or delivery operations, and none may be added without a new ADR.
 
 ## 41A. Contact authorization proof (ADR-008)
 
-Ley 1581 / Decreto 1377 require keeping proof of the visitor's prior, express and informed authorization. Without creating an inbox, the Contact operation ledger (§42) stores only `privacy_policy_version` and `authorization_at` for each operation, and the delivered email includes the same stamp. No name, email or body is added to the ledger.
+Retired (ADR-009): Contact collects no data, so there is no authorization to prove. Authorization proof for community writes is DTA-101.
 
 ## 41B. Anonymous presence persists nothing (V1.4, ADR-007)
 
@@ -1044,66 +1028,15 @@ Presence counts/traces come from ephemeral realtime channel state (for example S
 
 ## 42. Contact operation ledger
 
-To make retry behavior more robust without retaining message content, use a narrow metadata ledger:
-
-```text
-contact_delivery_operations
-```
-
-Baseline columns:
-
-| Column | Type | Notes |
-|---|---|---|
-| `operation_id` | `uuid` | PK |
-| `request_fingerprint` | `bytea` | keyed fingerprint of normalized request |
-| `fingerprint_key_version` | `smallint` | rotation metadata |
-| `delivery_status` | `text` | claimed/accepted/retryable_failure/terminal_failure/unknown_outcome |
-| `provider_code` | `text` | e.g. resend; no provider SDK type leakage |
-| `provider_message_id` | `text null` | safe provider reference |
-| `attempt_count` | `integer` | bounded >= 0 |
-| `lease_until` | `timestamptz null` | crash/retry claim lease |
-| `last_error_code` | `text null` | safe normalized code only |
-| `created_at` | `timestamptz` | timestamp |
-| `updated_at` | `timestamptz` | timestamp |
-| `expires_at` | `timestamptz` | baseline seven-day local idempotency ledger horizon |
-
-No name/email/message body is stored in this ledger.
-
----
+Retired (ADR-009).
 
 ## 43. Contact claim/send/complete flow
 
-Conceptual persistence behavior:
+Retired (ADR-009).
 
-```text
-1. claim operation_id atomically
-2. compare request fingerprint
-3. if already accepted → return previous success
-4. if another live lease exists → return/retry safely
-5. send provider request outside DB transaction using stable provider idempotency key
-6. mark accepted or normalized failure
-7. keep the local ledger for seven days, then purge it through scheduled cleanup
-```
-
-If the server crashes after provider acceptance but before marking accepted, the next retry reuses the same provider idempotency identity.
-
-Provider timeout/retry budgets follow DOC-49; cleanup scheduling follows DOC-46.
 ## 43A. Contact operation age and provider deduplication boundary
 
-Contact operations carry `operationId` plus an `operationStartedAt` timestamp in the application command. The server accepts only a bounded clock skew and rejects operations older than the seven-day local ledger horizon as `OPERATION_EXPIRED`; a fresh user send intent receives a fresh operation ID.
-
-The provider's current idempotency window is shorter than the local ledger (Resend: 24 hours as validated for this baseline). Therefore:
-
-- an already `accepted` local operation returns previous success without another provider call;
-- an operation with a known retryable pre-acceptance failure may retry according to provider policy;
-- a `claimed`/ambiguous outcome is retried automatically only while the provider idempotency guarantee still covers the stable provider key;
-- after that provider window, ambiguous operations become `unknown_outcome`/terminal for automatic retry rather than risking a duplicate email;
-- the UI preserves the user's text and can offer a **new send intent** with a fresh operation ID if the user explicitly chooses to send again.
-
-The seven-day ledger stores metadata only, never Contact name/email/message body.
-
-
----
+Retired (ADR-009).
 
 ## Arcade persistence
 
@@ -1279,7 +1212,6 @@ Preferred model:
 - Reports: `community_reports.operation_id` unique;
 - Arcade finalization: session ID is the natural idempotency resource;
 - Admin: audit/mutation operation ID;
-- Contact: dedicated short-lived delivery operation ledger;
 - Reactions: deterministic actor/submission uniqueness if feature ships.
 
 This keeps retry state close to the invariant it protects.
@@ -1345,7 +1277,6 @@ Examples:
 - moderation locks/conditionally updates one submission version;
 - report resolution checks report version;
 - Arcade finalization locks one session row;
-- Contact operation claim uses atomic insert/update semantics.
 
 `SERIALIZABLE` is not the default for the whole application.
 
@@ -1355,11 +1286,11 @@ Retry serialization/deadlock errors only where the operation is safely idempoten
 
 ## 56. External side effects stay outside DB transactions
 
-No SQL function calls Resend, GitHub, Turnstile or another network provider.
+No SQL function calls GitHub, Turnstile or another network provider.
 
 Database transactions must remain short.
 
-Contact provider delivery therefore uses the operation-ledger pattern rather than holding a SQL transaction open while sending email.
+Any provider call therefore happens outside the SQL transaction.
 
 ---
 
@@ -1402,7 +1333,6 @@ Domain semantics are explicit:
 - public UGC visibility uses moderation status;
 - reports use report lifecycle;
 - bans use revoked/expiry fields;
-- Contact ledger expires and is physically purged;
 - expired/rejected Arcade session evidence can be physically purged;
 - audit is append-only under normal operation.
 
@@ -1531,7 +1461,6 @@ The V1.x baseline uses the following retention matrix. `retention_until` is set/
 | Arcade finalized/rejected session | 30 days | purge session/evidence linkage after public score requirements are satisfied |
 | Arcade evidence | 30 days | hard purge; no permanent raw trace store |
 | public Arcade score | while leaderboard version is published; then up to 365 days after board retirement | deletion-capability request may remove/anonymize earlier; old retired-board rows purge after horizon |
-| Contact delivery operation metadata | 7 days | hard purge; no message/name/email body exists in DB |
 | rate-limit buckets | window end + 48 hours | hard purge |
 | expired/revoked feature-scoped ban subject | 180 days after expiry/revocation | purge subject hash/private notes; minimal Admin audit action remains |
 | Admin audit event | 365 days | append-only during ordinary operation; privacy/security maintenance may remove payload summaries while preserving minimal action identity |
@@ -1625,9 +1554,6 @@ abuse_bans
 - (subject_hash, subject_key_version, enforcement_scope, expires_at)
   WHERE revoked_at IS NULL
 
-contact_delivery_operations
-- (expires_at)
-- (delivery_status, lease_until)
 ```
 
 Retention cleanup jobs should use indexed expiry fields.
@@ -1819,7 +1745,6 @@ Seeds may create deterministic non-sensitive fixtures for local/testing environm
 
 Do not seed:
 
-- real private Contact messages;
 - production abuse hashes;
 - production credentials;
 - private client/customer data.
@@ -1843,7 +1768,6 @@ Runtime tables fall into rough privacy classes:
 | abuse keys/bans | sensitive security metadata |
 | Arcade score nickname/score | public after validation |
 | Arcade session/evidence | private security/game data |
-| Contact operation ledger | private operational metadata, no message body |
 | audit events | admin-only operational/security history |
 | admin profiles | private auth-adjacent metadata |
 
@@ -1862,7 +1786,7 @@ visitor_profiles
 identity_graph
 ```
 
-that links Contact, Guestbook, Sketch, Arcade and Widget personalization.
+that links Guestbook, Sketch, Arcade and Widget personalization.
 
 Any abuse key in a domain is namespace-scoped.
 
@@ -1888,8 +1812,7 @@ They should not contain raw:
 - drawing model;
 - report private note;
 - abuse hash;
-- Arcade evidence;
-- Contact message/email.
+- Arcade evidence.
 
 ---
 
@@ -2026,7 +1949,6 @@ Run integration tests for:
 - retrying same Guestbook/Sketch operation;
 - same operation ID with different request fingerprint;
 - report resolution races;
-- Contact operation claim lease/retry;
 - admin mutation + audit rollback together on failure.
 
 The winner/loser semantics must match DOC-43 error contracts.
@@ -2131,7 +2053,7 @@ When implementing DOC-44, development tooling must:
 - preserve reports as independent rows;
 - preserve Guestbook/Sketch pending moderation;
 - preserve exactly-one-score-per-Arcade-session;
-- keep Contact body/email/name out of database persistence by default;
+- keep Contact out of the database entirely (ADR-009);
 - use narrow atomic SQL functions where DOC-43 requires multi-row transactions;
 - revoke function execution from unintended roles;
 - not store arbitrary visitor SVG/image uploads;
@@ -2181,10 +2103,7 @@ When implementing DOC-44, development tooling must:
 
 ### Gate D6 — Contact ledger
 
-- no message/email/name stored;
-- same operation/fingerprint deduplicates;
-- same operation/different fingerprint conflicts;
-- expired ledger can be purged safely.
+Retired (ADR-009): there is no Contact ledger.
 
 ### Gate D7 — Storage absence is valid
 
@@ -2258,7 +2177,7 @@ DOC-44 is successfully implemented when:
 - reports remain independent;
 - admin mutations cannot bypass atomic audit via normal app paths;
 - feature-scoped abuse identifiers do not create a visitor identity graph;
-- Contact message body/email/name are not persisted;
+- Contact persists nothing (ADR-009);
 - Arcade session finalization and score creation are atomic/idempotent;
 - leaderboard queries are deterministic and indexed;
 - schema changes are migration-controlled;
@@ -2334,9 +2253,9 @@ Provider documentation is informative. Approved product/application invariants r
 | `DTA-040` | Admin operation IDs prevent duplicate privileged audit/actions. |
 | `DTA-041` | Abuse bans store opaque HMAC-derived subjects, key versions, namespaces/scopes and expiry/revocation metadata. |
 | `DTA-042` | Ban persistence never claims real-person identity. |
-| `DTA-043` | Contact message/name/email are not persisted as a database inbox in V1.0. |
-| `DTA-044` | Contact uses a short-lived operation ledger containing idempotency/delivery metadata only. |
-| `DTA-045` | Contact provider calls occur outside database transactions and reuse stable provider idempotency identity. |
+| `DTA-043` | Contact persists nothing; there is no Contact table (ADR-009). |
+| `DTA-044` | Retired (ADR-009): there is no Contact operation ledger. |
+| `DTA-045` | Retired (ADR-009): Contact makes no provider calls. |
 | `DTA-046` | Arcade authoritative state is stored in `arcade_game_sessions`. |
 | `DTA-047` | Arcade protocol, rules and leaderboard comparability versions are explicit fields. |
 | `DTA-048` | Potentially sensitive Arcade evidence is separated from public scores and is retention-bounded. |
@@ -2388,12 +2307,12 @@ Provider documentation is informative. Approved product/application invariants r
 | `DTA-094` | `Currently Building` remains outside runtime PostgreSQL in the approved V1.x baseline. |
 | `DTA-095` | Public-write rate limits use PostgreSQL-backed atomic buckets/RPCs in the V1.x baseline; process memory is not authoritative. |
 | `DTA-096` | Abuse bans are feature-scoped only in V1.x; no universal cross-feature ban subject is persisted. |
-| `DTA-097` | Contact operation metadata is retained seven days and ambiguous provider outcomes are not blindly retried beyond the provider idempotency guarantee. |
+| `DTA-097` | Retired (ADR-009): there is no Contact operation metadata to retain. |
 | `DTA-098` | Community submissions and accepted Arcade scores store only a digest of a high-entropy one-resource deletion capability. |
 | `DTA-099` | Domain retention horizons follow the canonical DOC-44 retention matrix and are exercised by cleanup jobs/tests. |
 | `DTA-100` | Report/reaction/ban/audit machine-code allowlists are canonical and DB-enforced; hidden→approved restore is absent in V1.2. |
 | `DTA-101` | `community_submissions` records `age_declaration_at`, `terms_version` and `privacy_policy_version`; no age or birth date is stored (ADR-008). |
-| `DTA-102` | The Contact operation ledger keeps only `privacy_policy_version` and `authorization_at` as proof of authorization; it never stores message content (ADR-008). |
+| `DTA-102` | Retired (ADR-009): Contact collects no data, so it keeps no authorization proof. |
 | `DTA-103` | Anonymous presence is ephemeral realtime state and is never persisted (ADR-007). |
 
 ---

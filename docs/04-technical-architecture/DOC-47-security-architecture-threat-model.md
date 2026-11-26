@@ -1,7 +1,7 @@
 ---
 id: DOC-47
 title: "Security Architecture & Threat Model"
-document_status: APPROVED
+document_status: REVIEW
 canonical_format: markdown
 phase: "Technical Architecture"
 folder: 04-technical-architecture
@@ -48,7 +48,7 @@ depends_on:
 
 decision_families:
   - SECARC
-last_updated: 2026-11-10
+last_updated: 2026-11-25
 approved_at: 2026-11-10
 ---
 
@@ -83,7 +83,7 @@ This document defines:
 - pseudonymous abuse-key construction and rotation;
 - rate-limit architecture;
 - Cloudflare Turnstile enforcement/failure policy;
-- Contact, Guestbook, Sketch, Reports and Reaction abuse controls;
+- Guestbook, Sketch, Reports and Reaction abuse controls (Contact has no write path, ADR-009);
 - Arcade anti-cheat/security boundaries;
 - Admin/Auth attack controls;
 - webhook and cron security;
@@ -170,7 +170,7 @@ ASVS is a verification framework, not a substitute for the product threat model.
 Highest-value assets include:
 
 - Supabase secret/server credentials;
-- Resend/API provider secrets;
+- API provider secrets (Auth SMTP from V1.2);
 - Turnstile secret;
 - GitHub private server credential if one is introduced;
 - `CRON_SECRET`;
@@ -196,7 +196,6 @@ Sensitive-but-not-secret data includes:
 - admin audit events;
 - provider delivery IDs and safe error metadata;
 - admin profile identifiers;
-- contact operation metadata;
 - security incident evidence.
 
 ## 6.3 Public data
@@ -224,7 +223,7 @@ Uses standard scanners, common exploit payloads and publicly known framework vul
 
 ### T2 — spam/bot operator
 
-Automates Contact, Guestbook, Sketch, Report, Reaction or Arcade endpoints for spam, abuse, resource consumption or visibility.
+Automates Guestbook, Sketch, Report, Reaction or Arcade endpoints, or harvests the published Contact address (ADR-009), for spam, abuse, resource consumption or visibility.
 
 ### T3 — game cheater
 
@@ -284,7 +283,7 @@ UNTRUSTED INTERNET
     ▼                    ▼
 ┌─────────────────┐  ┌───────────────────────┐
 │ SUPABASE        │  │ EXTERNAL SERVICES     │
-│ Postgres/Auth   │  │ Resend/GitHub/etc.    │
+│ Postgres/Auth   │  │ GitHub/feeds/etc.     │
 └─────────────────┘  └───────────────────────┘
     │
     ▼
@@ -307,7 +306,7 @@ Theme, Widget Field layout, input mode, local achievements and other device-only
 
 ## Zone Z2 — public server writes
 
-Contact, Guestbook, Sketch, Reports, Reactions, Arcade session/finalization. Highest public abuse pressure.
+Guestbook, Sketch, Reports, Reactions, Arcade session/finalization. Highest public abuse pressure. Contact is not a server write (ADR-009).
 
 ## Zone Z3 — privileged Admin
 
@@ -472,7 +471,6 @@ Baseline:
 - Report details → plain text;
 - Sketch text objects → plain text;
 - Arcade nickname → plain text;
-- Contact fields → plain text/validated email;
 - external feed summaries → normalized text only unless a separately audited sanitizer is introduced.
 
 No UGC feature requires HTML in V1.x.
@@ -676,7 +674,7 @@ CORS is not configured as `*` for credentialed/private routes.
 
 Even accountless public writes can be abused through cross-site form/request triggering.
 
-Contact, Guestbook, Sketch, Reports and Arcade mutations therefore use defense in depth:
+Guestbook, Sketch, Reports and Arcade mutations therefore use defense in depth:
 
 - accepted HTTP method/content type;
 - Origin/Host validation where browser-originated;
@@ -799,7 +797,7 @@ Music tracks, GLB models and KTX2 textures are self-hosted static assets served 
 
 ## 45B. Presence and data-subject rights (ADR-007, ADR-008)
 
-Anonymous presence (V1.4) exposes only aggregate counts/traces: no visitor identifier, IP or fingerprint is returned to other visitors; presence endpoints are rate-limited like other public endpoints and fail closed to "presence unavailable". The Ley 1581 data-subject rights channel (consult/update/rectify/delete) authenticates requests through the existing accountless deletion capabilities or a verified contact channel and never discloses whether a given person submitted data.
+Anonymous presence (V1.4) exposes only aggregate counts/traces: no visitor identifier, IP or fingerprint is returned to other visitors; presence endpoints are rate-limited like other public endpoints and fail closed to "presence unavailable". The Ley 1581 data-subject rights channel (consult/update/rectify/delete) authenticates requests through the existing accountless deletion capabilities or a verified reply from the published Contact address (ADR-009) and never discloses whether a given person submitted data.
 
 ## Request/resource exhaustion controls
 
@@ -809,7 +807,7 @@ Every public write has a finite body limit appropriate to the feature.
 
 The exact byte/shape limits are implementation constants verified by DOC-50 and may be tuned within the approved security posture; categories remain separate:
 
-- Contact/Guestbook/Reports/Reactions → small;
+- Guestbook/Reports/Reactions → small;
 - Admin commands → small;
 - Arcade protocol → small/bounded;
 - Sketch logical model → larger but still strictly bounded.
@@ -904,7 +902,6 @@ Use a dedicated abuse-HMAC secret, not a database/provider/Auth secret.
 
 Separate namespace/domain keys are used for at least:
 
-- `contact`;
 - `guestbook`;
 - `sketch`;
 - `reports`;
@@ -973,7 +970,7 @@ Canonicalization rules:
 - normalize line endings to LF and text to Unicode NFC where semantically safe;
 - trim only fields whose product schema already defines trimming;
 - serialize a fixed field order/canonical JSON representation;
-- include an operation domain label such as `contact:v1`, `guestbook:v1`, `report:v1`;
+- include an operation domain label such as `guestbook:v1`, `report:v1`;
 - never include unrelated network-abuse subject material;
 - do not reuse `ABUSE_HMAC_KEY_V1` as the fingerprint key.
 
@@ -1010,7 +1007,7 @@ Risk order is roughly:
 ```text
 read-only public GET
 < reactions/report initiation
-< contact/community submission
+< community submission
 < sketch publication
 < arcade session/finalization
 < admin/security mutation
@@ -1041,7 +1038,6 @@ The initial V1.x server policy is deterministic and centrally configured. Values
 
 | Policy ID | Scoped subject | Burst/short window | Rolling/day window | Additional invariant |
 |---|---|---:|---:|---|
-| `contact_submit` | `contact` abuse key | 3 / 15 min | 10 / 24 h | human verification + provider/global safety cap |
 | `guestbook_submit` | `guestbook` abuse key | 3 / 15 min | 10 / 24 h | pending moderation |
 | `sketch_publish` | `sketch` abuse key | 2 / 15 min | 6 / 24 h | drawing complexity limits + moderation |
 | `report_submit` | `reports` abuse key | 5 / 15 min | 20 / 24 h | dedup/open-report constraints |
@@ -1086,7 +1082,6 @@ Every token is verified server-side through DOC-46's `HumanVerificationGateway` 
 
 Baseline public side-effect operations require successful human verification before durable/external effect at launch:
 
-- Contact send;
 - Guestbook submit;
 - Sketch publish;
 - Report submit.
@@ -1136,8 +1131,6 @@ allow retry when verification recovers
 
 The system must not silently send/publish because the anti-bot provider is unavailable.
 
-For Contact, the UI should expose existing alternative public professional contact links where appropriate so provider outage does not trap the visitor completely.
-
 ---
 
 ## 67. Turnstile reject/expiry behavior
@@ -1160,36 +1153,19 @@ Store only bounded verification outcome/diagnostic metadata if operationally nec
 
 ## 69. Contact threat model
 
-Primary threats:
+Contact has no form, endpoint or stored data (ADR-009). It renders the canonical published address, a Copy button and a `mailto:` link, so spam relay, header injection, retry amplification, cross-site submission and provider-outage threats do not exist.
 
-- automated spam/mail flooding;
-- email-header injection;
-- duplicate delivery/retry amplification;
-- PII leakage through logs/database;
-- cross-site submission;
-- provider outage misreported as success.
+Remaining threats and controls:
 
-Controls:
-
-- strict Name/Email/Message schemas and limits;
-- fixed destination address;
-- fixed/allowlisted subject model;
-- visitor email validated and passed only through structured provider fields;
-- Turnstile mandatory;
-- feature-scoped rate limit;
-- same-origin policy;
-- stable `operationId`/provider idempotency;
-- no message-body persistence baseline;
-- no body logging/analytics;
-- safe provider error mapping.
+- address harvesting by bots → accepted risk; the forwarded domain address can be rotated without a site change (DOC-16);
+- spoofed mail claiming to come from the domain → the root domain publishes SPF `-all` and DMARC `p=reject` (DOC-48);
+- a tampered address in content → the address is canonical content reviewed through the normal repository workflow (DOC-36).
 
 ---
 
 ## 70. Email header safety
 
-Untrusted values are never concatenated into raw email headers.
-
-The application uses provider SDK/API structured fields. `from` and recipient destinations are server-owned. Any visitor `replyTo` value is validated as an email address and handled through the provider's typed field.
+Retired (ADR-009) for Contact: the site builds no email. Admin Auth recovery email (V1.2) is built by Supabase Auth, not by application code.
 
 ---
 
@@ -1636,7 +1612,7 @@ Do not invent custom encryption/signature algorithms or store reversible “encr
 
 ## 104. Provider responses remain untrusted
 
-GitHub, RSS/Atom feeds, Turnstile responses, Resend responses and future providers are schema/size validated.
+GitHub, RSS/Atom feeds, Turnstile responses and future providers are schema/size validated.
 
 A reputable provider can be compromised or return unexpected data.
 
@@ -1772,7 +1748,7 @@ The locally remembered visitor display name:
 - is explicit opt-in/local only;
 - is treated as untrusted text;
 - is escaped when rendered;
-- is never sent automatically with Contact/Guestbook/analytics;
+- is never sent automatically with Guestbook/analytics or put into the Contact `mailto:` link;
 - can be cleared through `Forget me`/local-data reset.
 
 ---
@@ -1804,7 +1780,6 @@ This applies especially to:
 
 - raw IP;
 - browser fingerprints;
-- Contact message bodies;
 - full game input traces;
 - precise pointer trajectories;
 - unpublished sketches;
@@ -1841,7 +1816,6 @@ Never intentionally log:
 - Auth cookies;
 - provider secret keys;
 - Turnstile raw token;
-- raw Contact message/email unless a narrowly scoped incident process explicitly requires it;
 - unpublished raw Sketch body in general logs;
 - full abuse input/raw IP by default;
 - SQL/database secret connection strings.
@@ -1958,7 +1932,6 @@ If necessary, runtime writes can be temporarily disabled while the portfolio rem
 
 Production architecture should support quickly disabling categories such as:
 
-- Contact writes;
 - Community submissions;
 - Reports/Reactions;
 - Arcade session issuance/score finalization;
@@ -2056,14 +2029,9 @@ Verify:
 
 Test:
 
-- schema/size bounds;
-- header injection attempts;
-- CSRF/cross-origin attempts;
-- Turnstile server verification + fail-closed outage path;
-- rate limiting;
-- duplicate/retry idempotency;
-- PII absent from DB/logging baseline;
-- provider outage preserves message/input and does not claim success.
+- the Contact page renders the canonical address and a working `mailto:` link without JavaScript;
+- no Contact endpoint, form handler or Contact table exists (ADR-009);
+- root-domain SPF `-all` and DMARC `p=reject` are published, and forwarding reaches the owner.
 
 ---
 
@@ -2189,7 +2157,7 @@ Before production deployment:
 | `THR-003` | CSRF privileged action | moderation/audit | HIGH | same-origin, Astro Action protections, authorization |
 | `THR-004` | Supabase secret exposed client-side | all runtime DB data | CRITICAL | server-only boundary, build scan, secret rotation |
 | `THR-005` | RLS/grant/RPC privilege error | private runtime data | HIGH | deny-by-default, migration tests, server data path |
-| `THR-006` | Contact spam/email amplification | provider quota/reputation | MEDIUM/HIGH | Turnstile, rate limits, idempotency |
+| `THR-006` | Contact address harvesting | owner inbox spam | LOW | forwarded address rotation (ADR-009) |
 | `THR-007` | Community submission flood | DB/mod queue | MEDIUM | Turnstile, bounds, rate/bans |
 | `THR-008` | Sketch JSON/renderer DoS | availability | MEDIUM/HIGH | structural/byte/render limits |
 | `THR-009` | Forged/replayed Arcade score | leaderboard integrity | HIGH | server session, expiry, atomic finalize, plausibility |
@@ -2237,13 +2205,13 @@ The following must remain true:
 20. Abuse HMACs are feature scoped and key-versioned.
 21. Abuse identity is not used to build a hidden visitor profile.
 22. Rate limiting is feature-specific and is not authorization.
-23. Contact, Guestbook, Sketch and Reports require server-verified human verification at baseline launch.
+23. Guestbook, Sketch and Reports require server-verified human verification at baseline launch.
 24. Mandatory verification fails closed while preserving user input.
 25. Arcade does not require Turnstile on every result; server session/plausibility is primary.
 26. Arcade scores can only arise from valid one-time server sessions.
 27. Anti-cheat does not claim cryptographic proof of fair play.
-28. Contact recipient/from headers are server-owned and structured.
-29. Contact message bodies are not persisted/logged in the baseline.
+28. Contact has no server path; the root domain does not send (ADR-009).
+29. The published Contact address is canonical content and rotatable (ADR-009).
 30. Guestbook nicknames are not verified identities.
 31. Pending/rejected/hidden community data never leaks via public projections/caches.
 32. Client-supplied SVG/files are not served as Sketch output.
@@ -2319,13 +2287,13 @@ The following must remain true:
 | `SECARC-043` | Rate limiting is layered/feature-specific and centrally configured; one universal threshold is rejected. |
 | `SECARC-044` | Rate-limit success is never treated as authorization or human verification. |
 | `SECARC-045` | Turnstile is an anti-automation signal and never identity/authorization. |
-| `SECARC-046` | Contact, Guestbook, Sketch publication and Reports require successful server-verified human verification at baseline launch. |
+| `SECARC-046` | Guestbook, Sketch publication and Reports require successful server-verified human verification at baseline launch. |
 | `SECARC-047` | Arcade relies primarily on server sessions/plausibility; Turnstile may protect issuance adaptively but is not required for every result. |
 | `SECARC-048` | Admin MFA is Supabase Auth AAL2; Turnstile never substitutes for MFA. |
 | `SECARC-049` | Mandatory human-verification provider `UNAVAILABLE/MISCONFIGURED` fails closed for the public side effect while preserving user input. |
 | `SECARC-050` | Raw Turnstile tokens are never persisted. |
-| `SECARC-051` | Contact uses fixed server-owned sender/destination structure and validated structured reply-to fields; raw header concatenation is prohibited. |
-| `SECARC-052` | Contact combines schema, Turnstile, rate, same-origin controls and stable idempotency without persisting/logging message bodies. |
+| `SECARC-051` | Retired (ADR-009): the site builds no Contact email. |
+| `SECARC-052` | Retired (ADR-009): Contact has no write path to protect. |
 | `SECARC-053` | Guestbook remains plain text, pending-by-default and does not imply verified identity from nickname. |
 | `SECARC-054` | Sketch accepts only the bounded logical drawing model; arbitrary file/image/SVG upload remains excluded. |
 | `SECARC-055` | Public Sketch previews prefer safe server-generated raster output; any SVG output is generated from a restricted no-script/no-external-resource grammar. |
@@ -2363,9 +2331,9 @@ The following must remain true:
 | `SECARC-087` | Future webhooks require raw-body signature/auth verification, freshness/replay/idempotency and bounded body handling. |
 | `SECARC-088` | Dynamic OG/media routes do not become arbitrary remote-fetch/HTML embed surfaces. |
 | `SECARC-089` | LocalStorage/preferences are schema-validated and never grant server privileges. |
-| `SECARC-090` | Remembered-name personalization is local/explicit/untrusted and never silently reused across Contact/UGC/analytics. |
+| `SECARC-090` | Remembered-name personalization is local/explicit/untrusted and never silently reused across UGC/analytics. |
 | `SECARC-091` | Terminal is predefined semantic commands only; eval, shell, file, SQL and arbitrary network execution are prohibited. |
-| `SECARC-092` | Security/privacy data collection follows minimization; raw IP/fingerprints/contact bodies/full game traces are not collected by default. |
+| `SECARC-092` | Security/privacy data collection follows minimization; raw IP/fingerprints/full game traces are not collected by default. |
 | `SECARC-093` | Security logging uses an allowlist of safe metadata and a denylist for credentials/tokens/secrets/private bodies. |
 | `SECARC-094` | Public errors expose stable safe codes, not stack traces/SQL/internal paths/security thresholds. |
 | `SECARC-095` | Production framework/runtime versions must remain supported and patched for known applicable critical security issues. |

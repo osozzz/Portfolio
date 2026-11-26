@@ -22,7 +22,7 @@
     "approved_adrs": 9,
     "review_records": 9,
     "files_hashed": 89,
-    "total_hashed_bytes": 1621327
+    "total_hashed_bytes": 1616732
   },
   "files": [
     {
@@ -290,8 +290,8 @@
     },
     {
       "path": "docs/01-product/DOC-12-security-privacy-abuse.md",
-      "bytes": 10096,
-      "sha256": "263c20d0b63e6d0ec922f94ef86444d971390b7d5ade7e87dcbcca493c6a8976",
+      "bytes": 10085,
+      "sha256": "7a77fc3e095a4317505348abd6361b86cdfed733c08f2dc0bc893024650a7a8e",
       "record_id": "DOC-12",
       "record_type": "document",
       "title": "Security, Privacy & Abuse-Prevention Requirements",
@@ -1023,12 +1023,12 @@
     },
     {
       "path": "docs/04-technical-architecture/DOC-41-technical-architecture-master-blueprint.md",
-      "bytes": 57736,
-      "sha256": "ca9c16c211bfcb9b1a25b9d6695809c908493c3188a97e6141b08145112b2556",
+      "bytes": 57400,
+      "sha256": "5e723f99da081ce204fc3bddc1e087b48fca071159d4094ddb733d6c49dfca3e",
       "record_id": "DOC-41",
       "record_type": "document",
       "title": "Technical Architecture Master Blueprint & System Context",
-      "document_status": "APPROVED",
+      "document_status": "REVIEW",
       "phase": "Technical Architecture",
       "folder": "04-technical-architecture",
       "depends_on": [
@@ -1076,7 +1076,7 @@
       "decision_families": [
         "TAM"
       ],
-      "last_updated": "2026-11-10"
+      "last_updated": "2026-11-25"
     },
     {
       "path": "docs/04-technical-architecture/DOC-42-frontend-architecture-rendering-state-boundaries.md",
@@ -1173,12 +1173,12 @@
     },
     {
       "path": "docs/04-technical-architecture/DOC-44-data-architecture-postgresql-rls-storage.md",
-      "bytes": 83389,
-      "sha256": "44418fed5e38f13302065b868dd34285cc2c2fdea774f1ea26f13162460a8509",
+      "bytes": 79179,
+      "sha256": "3c9075b2bf6d1677261b0926500436c074a594b08611ef1f5d86f3d01b56d04b",
       "record_id": "DOC-44",
       "record_type": "document",
       "title": "Data Architecture, PostgreSQL, RLS & Storage",
-      "document_status": "APPROVED",
+      "document_status": "REVIEW",
       "phase": "Technical Architecture",
       "folder": "04-technical-architecture",
       "depends_on": [
@@ -1210,7 +1210,7 @@
       "decision_families": [
         "DTA"
       ],
-      "last_updated": "2026-11-10"
+      "last_updated": "2026-11-25"
     },
     {
       "path": "docs/04-technical-architecture/DOC-45-authentication-authorization-admin-session-architecture.md",
@@ -1297,12 +1297,12 @@
     },
     {
       "path": "docs/04-technical-architecture/DOC-47-security-architecture-threat-model.md",
-      "bytes": 87155,
-      "sha256": "c2895b6c40aaf1cef0e4f3e51ecef41584bf32f53fb30aed4bbc2c4c1a605b3f",
+      "bytes": 86386,
+      "sha256": "10c675381f9f5f34c97ce7deb3ab020ff438041176fc5d8fa97ee10ef34123ba",
       "record_id": "DOC-47",
       "record_type": "document",
       "title": "Security Architecture & Threat Model",
-      "document_status": "APPROVED",
+      "document_status": "REVIEW",
       "phase": "Technical Architecture",
       "folder": "04-technical-architecture",
       "depends_on": [
@@ -1346,17 +1346,17 @@
       "decision_families": [
         "SECARC"
       ],
-      "last_updated": "2026-11-10",
+      "last_updated": "2026-11-25",
       "approved_at": "2026-11-10"
     },
     {
       "path": "docs/04-technical-architecture/DOC-48-infrastructure-environments-dns-deployment-architecture.md",
-      "bytes": 82486,
-      "sha256": "6e21bf683d0f89c53e9707c43bcbbe714893a92c9877bdd22869bc9a51613f04",
+      "bytes": 83217,
+      "sha256": "2b95fc20a296846a39a93ac1657f5dcbfa3cdf9405b9527055e697b1bff8dacd",
       "record_id": "DOC-48",
       "record_type": "document",
       "title": "Infrastructure, Environments, DNS & Deployment Architecture",
-      "document_status": "APPROVED",
+      "document_status": "REVIEW",
       "phase": "Technical Architecture",
       "folder": "04-technical-architecture",
       "depends_on": [
@@ -1389,7 +1389,7 @@
       "decision_families": [
         "INF"
       ],
-      "last_updated": "2026-11-10",
+      "last_updated": "2026-11-25",
       "approved_at": "2026-11-10"
     },
     {

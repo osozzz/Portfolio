@@ -1,7 +1,7 @@
 ---
 id: DOC-41
 title: "Technical Architecture Master Blueprint & System Context"
-document_status: APPROVED
+document_status: REVIEW
 canonical_format: markdown
 phase: "Technical Architecture"
 folder: 04-technical-architecture
@@ -50,7 +50,7 @@ depends_on:
   - ADR-002
 decision_families:
   - TAM
-last_updated: 2026-11-10
+last_updated: 2026-11-25
 ---
 
 # DOC-41 — Technical Architecture Master Blueprint & System Context
@@ -144,7 +144,6 @@ Astro Application on Vercel (static output + server functions via adapter)
    └── Integration adapters
         │
         ├── Supabase PostgreSQL / Auth / Storage
-        ├── Resend (email)
         ├── GitHub / Tech Pulse sources
         ├── Anti-bot provider when enabled
         ├── Product analytics adapter (no-op in V0/V1.0)
@@ -163,7 +162,7 @@ Unauthenticated. Can:
 
 - browse public professional content;
 - configure local UI preferences;
-- submit Contact;
+- reach the owner through the Contact address (no submission, ADR-009);
 - later submit Guestbook/Sketch/report content;
 - later play Arcade and submit eligible leaderboard results;
 - consume cached external/live information.
@@ -221,7 +220,7 @@ The stack is now promoted from “candidate” to **Technical Architecture basel
 | Managed auth | Supabase Auth | admin authentication/session foundation |
 | Object storage | Supabase Storage where runtime storage is needed | UGC/runtime media; exact bucket model later |
 | Deployment | Vercel + Astro Vercel adapter | static hosting, functions, CDN/preview deployments |
-| Email | Resend behind adapter | Contact delivery |
+| Email | none for visitors (ADR-009); production SMTP for admin Auth recovery from V1.2 | Contact is a forwarded address |
 | Anti-bot | Turnstile or equivalent, risk-based | public-write abuse resistance |
 | Analytics | **disabled by default in V0/V1.0** behind a no-op wrapper until a separate privacy/provider decision enables it | avoid accidental tracking while preserving a stable instrumentation seam |
 | Error monitoring | **Sentry** behind centralized wrapper | runtime error/performance observability baseline |
@@ -252,7 +251,6 @@ The architecture aligns with current official platform direction at the time of 
 - Supabase's server-side auth guidance uses cookie-based sessions and separate browser/server clients (`@supabase/ssr`), which is framework-agnostic and works with Astro's server context; we isolate it behind our own module because provider APIs can evolve.
 - Supabase recommends RLS for exposed relational data.
 - Vercel's current guidance for new applications favors Vercel Functions with the Node.js runtime by default rather than designing around legacy Edge Functions.
-- Resend supports sending-domain verification with SPF/DKIM and recommends intentional DMARC configuration.
 
 These external facts are implementation references, not product authority.
 
@@ -304,7 +302,6 @@ Properties:
 
 Examples:
 
-- Contact submission;
 - Guestbook submission;
 - Sketch publish;
 - report submission;
@@ -420,7 +417,7 @@ Baseline route behavior:
 | `/[locale]/arcade/[game]` | server route shell + isolated client game runtime + server result protocol |
 | `/[locale]/channel` | V1.0 Coming Soon; V1.4 cacheable normalized external/runtime data |
 | `/[locale]/social` | V1.0 Coming Soon; V1.2 server reads + server-authoritative writes |
-| `/[locale]/contact` | server-rendered form + progressive client UX + server mutation |
+| `/[locale]/contact` | static address + Copy enhancement + `mailto:`; no mutation (ADR-009) |
 | `/[locale]/cv` | server-rendered route over build-generated static artifacts |
 | `/[locale]/making-of` | canonical/static content |
 | `/[locale]/changelog` | curated/static or managed cacheable data |
@@ -518,7 +515,6 @@ Examples:
 - moderation actions;
 - risk/ban records;
 - runtime operational status only where explicitly designated by an approved source-of-truth decision;
-- contact audit/retention state if persistence is chosen.
 
 ### Local-device data
 
@@ -574,7 +570,7 @@ Prefer Astro Actions for:
 
 Likely examples:
 
-- Contact submit;
+- Guestbook submit;
 - simple admin form mutations where an explicit protocol is unnecessary.
 
 ### 14.3 API endpoints
@@ -749,27 +745,7 @@ Public reads expose only approved public fields. Admin reads require authenticat
 
 ## 21. Contact/email architecture boundary
 
-Contact remains an R2 server-authoritative mutation.
-
-Baseline flow:
-
-```text
-Form
-→ client UX validation
-→ server schema validation
-→ abuse/rate policy
-→ optional minimal persistence/idempotency record
-→ Resend adapter
-→ accepted/error result
-```
-
-Architecture rules:
-
-- provider API key server-only;
-- form message is never sent to analytics/error tools as raw payload;
-- provider failure returns a useful recoverable state;
-- exact “DB + email” versus “email only” retention choice is finalized in Backend/Data Architecture;
-- production domain authentication is a release gate.
+Contact has no server path (ADR-009). `/[locale]/contact` renders the canonical published address (DOC-36) as text, a Copy button (small client enhancement) and a `mailto:` link. There is no form, mutation, provider call or stored message. The root domain receives mail through forwarding and never sends; the only outbound email in V1.x is the admin's Auth recovery from V1.2 (DOC-45 §57, DOC-48).
 
 ---
 
@@ -1036,7 +1012,7 @@ Examples:
 
 - GitHub widget fails → widget degraded state;
 - Tech Pulse fails → Channel shows stale/empty explanation;
-- email fails → Contact keeps input and offers retry;
+- Copy fails → Contact says so and selects the address (ADR-009);
 - leaderboard fails → game result can still finish locally, but score publication reports failure;
 - admin provider failure → moderation operation reports explicit failure and does not falsely show success.
 
@@ -1066,7 +1042,6 @@ Potential categories:
 
 - application errors;
 - provider failures/timeouts;
-- contact delivery outcomes without raw message bodies;
 - public-write abuse/rate-limit events at aggregated/safe level;
 - moderation mutation failures;
 - integration refresh failures;
@@ -1075,7 +1050,6 @@ Potential categories:
 
 Never send:
 
-- raw Contact messages;
 - unpublished drawings;
 - secrets/tokens;
 - full terminal input history where it may reveal user text;
@@ -1295,7 +1269,6 @@ Should not know:
 
 Own use-case orchestration such as:
 
-- submit contact;
 - publish sketch;
 - create game session;
 - submit score;
@@ -1523,7 +1496,7 @@ Architecture should support setting sensible quotas/rate limits before upgrading
 | Supabase runtime outage | canonical portfolio, Project Detail, CV | Social/leaderboard/admin unavailable |
 | GitHub outage | portfolio/Channel shell | stale/empty GitHub activity |
 | Tech Pulse source outage | portfolio/Channel shell | stale/partial feed |
-| Resend outage | all browsing | Contact shows delivery failure/retry |
+| Mail forwarding outage | all browsing, the Contact page | owner receives Contact mail late (ADR-009) |
 | Analytics outage | full product | analytics silently/noisily disabled without user impact |
 | Error-monitoring outage | full product | logs/alerts reduced |
 | Turnstile outage | browsing | protected write may use defined fallback or temporary unavailable state, never infinite challenge |
@@ -1582,7 +1555,6 @@ The following are intentionally not guessed here:
 - exact PostgreSQL tables/columns/indexes;
 - exact RLS policies;
 - exact admin credential factor/MFA setup;
-- Contact DB retention choice;
 - exact Supabase project/branch mapping for Preview;
 - future product-analytics provider/event set (analytics is disabled/no-op in V0/V1.0);
 - exact Turnstile challenge thresholds;
@@ -1604,7 +1576,7 @@ These are deferred to named downstream documents, not left as implementer discre
 DOC-41 is approved with the following accepted baseline:
 
 - the product remains a modular full-stack Astro web app, not a microservice system;
-- TypeScript/Astro/Supabase/Vercel/Resend remain the intended baseline (ADR-004);
+- TypeScript/Astro/Supabase/Vercel remain the intended baseline (ADR-004); there is no email provider for visitors (ADR-009);
 - server-first rendering with targeted client islands is the default;
 - canonical professional content stays outside runtime DB authority;
 - runtime DB access is server/service-oriented rather than arbitrary component-level Supabase access;
@@ -1638,7 +1610,7 @@ DOC-41 was explicitly approved on **2026-09-15**. Its `TAM-*` decisions are ther
 | `TAM-007` | Motion remains the primary React motion library; GSAP requires documented need. |
 | `TAM-008` | Supabase PostgreSQL/Auth/Storage is the managed data/auth/storage baseline. |
 | `TAM-009` | Vercel with the Astro adapter is the managed deployment baseline. |
-| `TAM-010` | Resend behind an adapter is the Contact email baseline. |
+| `TAM-010` | Retired (ADR-009): Contact has no email provider; it is a forwarded domain address. |
 | `TAM-011` | Node.js is the default server runtime; Edge requires a measured use case. |
 | `TAM-012` | Canonical professional content remains repository/build-owned, separate from runtime DB state. |
 | `TAM-013` | Runtime DB access is server/service-oriented; arbitrary component-level Supabase querying is not the default pattern. |
@@ -1686,6 +1658,5 @@ These sources are **informative implementation references**, not normative produ
 - Astro Vercel adapter: <https://docs.astro.build/en/guides/integrations-guide/vercel/>
 - Supabase Auth / RLS context: <https://supabase.com/docs/guides/auth>
 - Vercel + Astro: <https://vercel.com/docs/frameworks/frontend/astro>
-- Resend: <https://resend.com/>
 
 If a provider's current implementation guidance changes, update the relevant downstream implementation document; do not reinterpret product behavior from a provider change.
