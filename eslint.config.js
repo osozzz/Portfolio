@@ -1,12 +1,13 @@
 // @ts-check
 import js from "@eslint/js";
+import { defineConfig } from "eslint/config";
 import astro from "eslint-plugin-astro";
 import tseslint from "typescript-eslint";
 
 const BOUNDARY_MESSAGE =
   "El código de servidor no se importa desde islas ni componentes de cliente (DOC-42 §13, DOC-51 §89).";
 
-export default tseslint.config(
+export default defineConfig(
   js.configs.recommended,
   tseslint.configs.recommended,
   astro.configs.recommended,

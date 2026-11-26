@@ -9,9 +9,9 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview",
+    "start": "astro preview",
     "typecheck": "astro check",
-    "test": "vitest run",
+    "test:unit": "vitest run",
     "lint": "eslint src tests \"*.{js,mjs,ts}\"",
     "format": "prettier --write src tests \"*.{js,mjs,ts,json}\" .prettierrc.json",
     "format:check": "prettier --check src tests \"*.{js,mjs,ts,json}\" .prettierrc.json"
@@ -26,6 +26,7 @@
   "devDependencies": {
     "@astrojs/check": "0.9.12",
     "@eslint/js": "10.0.1",
+    "@types/node": "26.6.6",
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
     "eslint": "10.15.0",
@@ -34,6 +35,7 @@
     "prettier-plugin-astro": "1.1.2",
     "typescript": "6.0.3",
     "typescript-eslint": "8.74.0",
+    "vite": "8.3.8",
     "vitest": "5.1.1"
   }
 }

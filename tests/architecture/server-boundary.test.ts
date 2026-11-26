@@ -1,10 +1,13 @@
+import { fileURLToPath } from "node:url";
 import { ESLint } from "eslint";
 import { describe, expect, it } from "vitest";
+
+// Una sola instancia, anclada a la raíz del repo, sin importar desde dónde corra Vitest.
+const eslint = new ESLint({ cwd: fileURLToPath(new URL("../..", import.meta.url)) });
 
 const BOUNDARY_RULES = new Set(["no-restricted-imports", "no-restricted-syntax"]);
 
 async function boundaryErrors(filePath: string, code: string): Promise<number> {
-  const eslint = new ESLint();
   const [result] = await eslint.lintText(code, { filePath });
   return (result?.messages ?? []).filter((m) => m.ruleId && BOUNDARY_RULES.has(m.ruleId)).length;
 }
