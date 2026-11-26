@@ -1,7 +1,7 @@
 ---
 id: DOC-31
 title: "Screen & Workspace Inventory"
-document_status: APPROVED
+document_status: REVIEW
 canonical_format: markdown
 phase: "Interface Architecture"
 folder: 02-interface-architecture
@@ -9,7 +9,7 @@ depends_on:
   - none
 decision_families:
   - SCR
-last_updated: 2026-11-10
+last_updated: 2026-11-25
 approved_at: 2026-11-10
 ---
 
@@ -341,20 +341,11 @@ Route: `/[locale]/contact`
 Primary content:
 
 - ContactProfile
-- ContactForm
+- ContactCard: the published address as visible text, a Copy button and an Email me `mailto:` link with a localized subject (ADR-009)
 
-Recommended fields:
+States: ready, copied, copy failed (inline message; the address is selected). Without JavaScript the address and the link still work; Copy appears only when it can work.
 
-- Name
-- Email
-- Message
-- Subject optional or omitted V1.0
-
-Submission flow:
-
-`client validation → server validation → anti-spam/rate limit → minimal persistence if needed → email delivery → success state`
-
-Preserve typed content if sending fails.
+There is no form, submission or server call (ADR-009). The visitor writes from their own mail client.
 
 ## CV
 
@@ -395,7 +386,7 @@ Route: `/[locale]/blog` and `/[locale]/blog/[slug]` (V1.1). Markdown posts autho
 - `/[locale]/privacy` — Personal Data Processing Policy (V1.0, Ley 1581; ADR-008).
 - `/[locale]/terms` — Terms of Use (V1.2).
 
-Plain, readable Route Content in ES and EN, linked from the footer, Contact and community composers. Both are marked "pending lawyer review" until reviewed.
+Plain, readable Route Content in ES and EN, linked from the footer and, from V1.2, the community composers. V1.0 publishes the short privacy notice (ADR-009). Both are marked "pending lawyer review" until reviewed.
 
 ## Command Palette
 
@@ -448,7 +439,6 @@ Potential systems:
 - Guestbook
 - Sketch Wall
 - Arcade Scores
-- Contact Delivery
 
 Early versions can expose build/deployment/integration state without pretending to run enterprise monitoring. No fake CPU/RAM telemetry.
 

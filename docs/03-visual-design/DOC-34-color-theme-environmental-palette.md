@@ -1,7 +1,7 @@
 ---
 id: DOC-34
 title: "Color, Theme & Environmental Palette"
-document_status: APPROVED
+document_status: REVIEW
 canonical_format: markdown
 phase: "Visual Design Foundation"
 folder: 03-visual-design
@@ -23,7 +23,7 @@ depends_on:
   - ADR-001
 decision_families:
   - CLR
-last_updated: 2026-11-10
+last_updated: 2026-11-25
 approved_at: 2026-11-10
 ---
 
@@ -502,7 +502,7 @@ The surrounding UI must not tint drawings so strongly that their artwork is misr
 
 ## 36. Contact
 
-Contact is deliberately low-chroma. Project context does not dominate the form. Semantic form states use stable system semantic colors.
+Contact is deliberately low-chroma. Project context does not dominate the address card. Copied and copy failed states use stable system semantic colors (ADR-009).
 
 ## 37. CV
 

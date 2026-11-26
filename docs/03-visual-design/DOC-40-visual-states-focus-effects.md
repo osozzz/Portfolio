@@ -1,7 +1,7 @@
 ---
 id: DOC-40
 title: "Visual States, Focus & Effects"
-document_status: APPROVED
+document_status: REVIEW
 canonical_format: markdown
 phase: "Visual Design Foundation"
 folder: 03-visual-design
@@ -23,7 +23,7 @@ depends_on:
   - DOC-39
 decision_families:
   - STA
-last_updated: 2026-09-15
+last_updated: 2026-11-25
 approved_at: 2026-09-15
 ---
 
@@ -576,7 +576,6 @@ Major success:
 
 ```text
 published drawing accepted
-contact message sent
 achievement unlock
 ```
 

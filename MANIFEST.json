@@ -22,7 +22,7 @@
     "approved_adrs": 9,
     "review_records": 9,
     "files_hashed": 89,
-    "total_hashed_bytes": 1625269
+    "total_hashed_bytes": 1626064
   },
   "files": [
     {
@@ -496,12 +496,12 @@
     },
     {
       "path": "docs/02-interface-architecture/DOC-20-interface-philosophy.md",
-      "bytes": 11163,
-      "sha256": "57407733ea29b04efef0b0998df434317c2f9c54e7540df6f07814c5e01e9ce5",
+      "bytes": 11214,
+      "sha256": "2d911f682da4c20fa5e9e52d2b204b74521a293294defd36d1a98a6bc4d8002d",
       "record_id": "DOC-20",
       "record_type": "document",
       "title": "Interface Philosophy & Interaction Model",
-      "document_status": "APPROVED",
+      "document_status": "REVIEW",
       "phase": "Interface Architecture",
       "folder": "02-interface-architecture",
       "depends_on": [
@@ -510,7 +510,7 @@
       "decision_families": [
         "UI"
       ],
-      "last_updated": "2026-09-15",
+      "last_updated": "2026-11-25",
       "approved_at": "2026-09-15"
     },
     {
@@ -629,12 +629,12 @@
     },
     {
       "path": "docs/02-interface-architecture/DOC-27-component-inventory.md",
-      "bytes": 15726,
-      "sha256": "e5b2ce6c87335cf8d2a290d62af7c60038de905b5c0e4cc7f94891a6d98efd74",
+      "bytes": 15856,
+      "sha256": "d2036202d9821c2f2c50e4fce23efa25810f966b693b77eb15c410c27fc11cf2",
       "record_id": "DOC-27",
       "record_type": "document",
       "title": "Component Inventory & UI Primitives",
-      "document_status": "APPROVED",
+      "document_status": "REVIEW",
       "phase": "Interface Architecture",
       "folder": "02-interface-architecture",
       "depends_on": [
@@ -643,7 +643,7 @@
       "decision_families": [
         "CMP"
       ],
-      "last_updated": "2026-11-10",
+      "last_updated": "2026-11-25",
       "approved_at": "2026-11-10"
     },
     {
@@ -686,12 +686,12 @@
     },
     {
       "path": "docs/02-interface-architecture/DOC-30-audio-feedback-delight.md",
-      "bytes": 14639,
-      "sha256": "8a8a326089aed068948dcff6636ca0ecd127f46dc171197974a2af7d8b3169b0",
+      "bytes": 14769,
+      "sha256": "e2dbd2d07153fe8d80ba6f0d761407a1e1dbea583a4bd24da04af0e55c99691f",
       "record_id": "DOC-30",
       "record_type": "document",
       "title": "Audio, Feedback & Delight System",
-      "document_status": "APPROVED",
+      "document_status": "REVIEW",
       "phase": "Interface Architecture",
       "folder": "02-interface-architecture",
       "depends_on": [
@@ -700,17 +700,17 @@
       "decision_families": [
         "AFD"
       ],
-      "last_updated": "2026-11-10",
+      "last_updated": "2026-11-25",
       "approved_at": "2026-11-10"
     },
     {
       "path": "docs/02-interface-architecture/DOC-31-screen-inventory.md",
-      "bytes": 22359,
-      "sha256": "06f6678827c5f6a385452e05cd34bee0f32d0c054ca3fcc3cd50153ff1e74154",
+      "bytes": 22509,
+      "sha256": "41d83c79cef27f9de7f41e1ac9b03a850c80cd960ac26ac117571b8e65788a7d",
       "record_id": "DOC-31",
       "record_type": "document",
       "title": "Screen & Workspace Inventory",
-      "document_status": "APPROVED",
+      "document_status": "REVIEW",
       "phase": "Interface Architecture",
       "folder": "02-interface-architecture",
       "depends_on": [
@@ -719,7 +719,7 @@
       "decision_families": [
         "SCR"
       ],
-      "last_updated": "2026-11-10",
+      "last_updated": "2026-11-25",
       "approved_at": "2026-11-10"
     },
     {
@@ -781,12 +781,12 @@
     },
     {
       "path": "docs/03-visual-design/DOC-34-color-theme-environmental-palette.md",
-      "bytes": 28705,
-      "sha256": "3351c047a63f0738d40d42a6b8c91185420c24c1a3b36bd691eb2279514a1cac",
+      "bytes": 28730,
+      "sha256": "5881e46f1e8e6b3fa8aff826f920a73a4550f3e58221e60bcee5fa16ccfdea3e",
       "record_id": "DOC-34",
       "record_type": "document",
       "title": "Color, Theme & Environmental Palette",
-      "document_status": "APPROVED",
+      "document_status": "REVIEW",
       "phase": "Visual Design Foundation",
       "folder": "03-visual-design",
       "depends_on": [
@@ -809,7 +809,7 @@
       "decision_families": [
         "CLR"
       ],
-      "last_updated": "2026-11-10",
+      "last_updated": "2026-11-25",
       "approved_at": "2026-11-10"
     },
     {
@@ -850,12 +850,12 @@
     },
     {
       "path": "docs/03-visual-design/DOC-36-content-architecture-canonical-professional-data.md",
-      "bytes": 40334,
-      "sha256": "54ad8cc10266c5424893220d342d1d1517b5d90b84ad07897075a27e5bcd459e",
+      "bytes": 40601,
+      "sha256": "a72eb0a5f34e15f34b97b6ea51c666c93fd17b8e4fe32b861629dc64c38fd6c5",
       "record_id": "DOC-36",
       "record_type": "document",
       "title": "Content Architecture & Canonical Professional Data",
-      "document_status": "APPROVED",
+      "document_status": "REVIEW",
       "phase": "Visual Design Foundation",
       "folder": "03-visual-design",
       "depends_on": [
@@ -900,17 +900,17 @@
       "decision_families": [
         "CNT"
       ],
-      "last_updated": "2026-11-10",
+      "last_updated": "2026-11-25",
       "approved_at": "2026-11-10"
     },
     {
       "path": "docs/03-visual-design/DOC-37-rendercv-pipeline.md",
-      "bytes": 21035,
-      "sha256": "55ceb0c392c33ac51dfacc5f89f06f52e9bf8835dc304b1cff2df54623f3c3d0",
+      "bytes": 21056,
+      "sha256": "b10213e25fa69dc74dad50f3ff60cabedf86641b8fe8c37003d6184f0f8daa32",
       "record_id": "DOC-37",
       "record_type": "document",
       "title": "RenderCV Pipeline",
-      "document_status": "APPROVED",
+      "document_status": "REVIEW",
       "phase": "Visual Design Foundation",
       "folder": "03-visual-design",
       "depends_on": [
@@ -926,7 +926,7 @@
       "decision_families": [
         "CVP"
       ],
-      "last_updated": "2026-09-15",
+      "last_updated": "2026-11-25",
       "approved_at": "2026-09-15"
     },
     {
@@ -957,12 +957,12 @@
     },
     {
       "path": "docs/03-visual-design/DOC-39-liquid-glass-material-specification.md",
-      "bytes": 33648,
-      "sha256": "0334f22061d0077ea0d902860feb89c6b1a368da68563e7c81f905f8c462e230",
+      "bytes": 33692,
+      "sha256": "736081d89dffae06afd38de212a73937d3fecd96171bb4b53f1ba98e31bb6262",
       "record_id": "DOC-39",
       "record_type": "document",
       "title": "Liquid Glass Material Specification",
-      "document_status": "APPROVED",
+      "document_status": "REVIEW",
       "phase": "Visual Design Foundation",
       "folder": "03-visual-design",
       "depends_on": [
@@ -980,17 +980,17 @@
       "decision_families": [
         "MAT"
       ],
-      "last_updated": "2026-11-10",
+      "last_updated": "2026-11-25",
       "approved_at": "2026-11-10"
     },
     {
       "path": "docs/03-visual-design/DOC-40-visual-states-focus-effects.md",
-      "bytes": 32142,
-      "sha256": "e745c08ff696023d9d7a0f505fb7f38f4a10045d3f3cda74e8185b2c2ddbcad2",
+      "bytes": 32119,
+      "sha256": "37b3deef7cc59081870f97d984e24d3bfab8d2e727bba167777491a75dca53a7",
       "record_id": "DOC-40",
       "record_type": "document",
       "title": "Visual States, Focus & Effects",
-      "document_status": "APPROVED",
+      "document_status": "REVIEW",
       "phase": "Visual Design Foundation",
       "folder": "03-visual-design",
       "depends_on": [
@@ -1013,7 +1013,7 @@
       "decision_families": [
         "STA"
       ],
-      "last_updated": "2026-09-15",
+      "last_updated": "2026-11-25",
       "approved_at": "2026-09-15"
     },
     {
