@@ -22,7 +22,7 @@
     "approved_adrs": 9,
     "review_records": 9,
     "files_hashed": 89,
-    "total_hashed_bytes": 1616732
+    "total_hashed_bytes": 1616766
   },
   "files": [
     {
@@ -1080,12 +1080,12 @@
     },
     {
       "path": "docs/04-technical-architecture/DOC-42-frontend-architecture-rendering-state-boundaries.md",
-      "bytes": 88378,
-      "sha256": "4e84805cb7ac21d5c776559de3885dea67e215f7d10adc372d879a6302d63894",
+      "bytes": 88586,
+      "sha256": "94b2eca296ab998a7f2c630f9e1bb5800789c2822ea2115c4065890e4a911419",
       "record_id": "DOC-42",
       "record_type": "document",
       "title": "Frontend Architecture, Rendering & State Boundaries",
-      "document_status": "APPROVED",
+      "document_status": "REVIEW",
       "phase": "Technical Architecture",
       "folder": "04-technical-architecture",
       "depends_on": [
@@ -1125,7 +1125,7 @@
       "decision_families": [
         "FEA"
       ],
-      "last_updated": "2026-11-10",
+      "last_updated": "2026-11-25",
       "approved_at": "2026-11-10"
     },
     {
@@ -1394,12 +1394,12 @@
     },
     {
       "path": "docs/04-technical-architecture/DOC-49-performance-observability-reliability-architecture.md",
-      "bytes": 69187,
-      "sha256": "380241045f80ad39bfb6e35c4ae7ac80307098cb9eacc88f23e94da11fb46f14",
+      "bytes": 68778,
+      "sha256": "a6691ede295fae414d3f0f1660594e034e5a0efaa121de0090d14393c314e7ba",
       "record_id": "DOC-49",
       "record_type": "document",
       "title": "Performance, Observability & Reliability Architecture",
-      "document_status": "APPROVED",
+      "document_status": "REVIEW",
       "phase": "Technical Architecture",
       "folder": "04-technical-architecture",
       "depends_on": [
@@ -1447,17 +1447,17 @@
       "decision_families": [
         "POR"
       ],
-      "last_updated": "2026-11-10",
+      "last_updated": "2026-11-25",
       "approved_at": "2026-11-10"
     },
     {
       "path": "docs/04-technical-architecture/DOC-50-testing-quality-engineering-strategy.md",
-      "bytes": 77328,
-      "sha256": "4111d08ef5ad0d8144a3387ae82e635bd6b02751a8ed4baf3980663f957818b1",
+      "bytes": 77542,
+      "sha256": "53786b1711e4a3b09023e13940727e41c2408c78500dbc4812070d85909a933d",
       "record_id": "DOC-50",
       "record_type": "document",
       "title": "Testing & Quality Engineering Strategy",
-      "document_status": "APPROVED",
+      "document_status": "REVIEW",
       "phase": "Technical Architecture",
       "folder": "04-technical-architecture",
       "depends_on": [
@@ -1514,16 +1514,16 @@
         "TQE"
       ],
       "approved_at": "2026-11-10",
-      "last_updated": "2026-11-10"
+      "last_updated": "2026-11-25"
     },
     {
       "path": "docs/04-technical-architecture/DOC-51-repository-cicd-developer-experience-implementation.md",
-      "bytes": 85409,
-      "sha256": "729efa95d9df7804cb444582dfe87159b0827229f1938cbf402bc5d29ed6c331",
+      "bytes": 85430,
+      "sha256": "2729c23072059d8a0784eba9dde90874e14d3713cfd7b7c93219627f068559c9",
       "record_id": "DOC-51",
       "record_type": "document",
       "title": "Repository, CI/CD & Developer Experience Implementation",
-      "document_status": "APPROVED",
+      "document_status": "REVIEW",
       "phase": "Technical Architecture",
       "folder": "04-technical-architecture",
       "depends_on": [
@@ -1564,7 +1564,7 @@
         "RDX"
       ],
       "approved_at": "2026-11-10",
-      "last_updated": "2026-11-19"
+      "last_updated": "2026-11-25"
     },
     {
       "path": "docs/04-technical-architecture/README.md",
