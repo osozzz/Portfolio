@@ -18,7 +18,8 @@
     "docs:validate": "node scripts/docs/validate.ts",
     "docs:manifest": "node scripts/docs/manifest.ts",
     "test:unit": "vitest run",
-    "verify:fast": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm content:validate && pnpm docs:validate && pnpm test:unit"
+    "verify:fast": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm content:validate && pnpm docs:validate && pnpm test:unit",
+    "test:perf": "node scripts/budget.ts"
   },
   "dependencies": {
     "@astrojs/react": "7.1.9",
