@@ -22,7 +22,7 @@
     "approved_adrs": 9,
     "review_records": 12,
     "files_hashed": 91,
-    "total_hashed_bytes": 1628211
+    "total_hashed_bytes": 1628275
   },
   "files": [
     {
@@ -204,8 +204,8 @@
     },
     {
       "path": "docs/01-product/DOC-08-engineering-coverage-constraints.md",
-      "bytes": 23934,
-      "sha256": "a7b72653fe0ab8006da7301c22b9a5d213117a1f8012867127b3aca214891dff",
+      "bytes": 23998,
+      "sha256": "ce068c652ab955dbb59f8618146204e143f7bf99962c7f234df9396eacda489e",
       "record_id": "DOC-08",
       "record_type": "document",
       "title": "Engineering Coverage Register & Technical Constraints",
@@ -220,7 +220,7 @@
       "decision_families": [
         "ENG"
       ],
-      "last_updated": "2026-11-25",
+      "last_updated": "2026-11-26",
       "approved_at": "2026-11-25"
     },
     {
