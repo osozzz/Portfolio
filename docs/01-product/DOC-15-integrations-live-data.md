@@ -11,8 +11,8 @@ depends_on:
   - DOC-12
 decision_families:
   - INT
-last_updated: 2026-11-10
-approved_at: 2026-11-10
+last_updated: 2026-11-25
+approved_at: 2026-11-25
 ---
 
 # DOC-15 — External Integrations & Live-Data Requirements
@@ -44,7 +44,7 @@ Exact provider/source list is deferred and should be selected for reliability, t
 
 ## 4. Contact email
 
-Contact submission calls server-side delivery provider (candidate Resend). Credentials remain server-side. Delivery success should be based on provider/server acceptance; retries/idempotency and bounce/error handling are considered in detailed architecture.
+No email provider serves Contact or visitors in V1.x (ADR-009). Contact publishes a domain address that forwards to the owner through the DNS/email-forwarding provider. From V1.2, Supabase Auth sends the admin's recovery email over production SMTP on a dedicated sending subdomain (DOC-45 §57, DOC-48 §16).
 
 ## 5. Anti-bot
 

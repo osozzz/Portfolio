@@ -42,8 +42,8 @@ depends_on:
   - ADR-002
 decision_families:
   - FEA
-last_updated: 2026-11-10
-approved_at: 2026-11-10
+last_updated: 2026-11-25
+approved_at: 2026-11-25
 ---
 
 # DOC-42 — Frontend Architecture, Rendering & State Boundaries
@@ -228,7 +228,7 @@ src/
     └── sitemap (integration or endpoint)
 ```
 
-Public professional routes are prerendered per locale via `getStaticPaths`. Routes that need request-time data (Contact submission handling, community, Arcade sessions, Admin, presence) opt into on-demand rendering individually.
+Public professional routes are prerendered per locale via `getStaticPaths`. Routes that need request-time data (community, Arcade sessions, Admin, presence) opt into on-demand rendering individually; Contact is prerendered (ADR-009).
 
 ---
 
@@ -1521,18 +1521,16 @@ Avoid converting every input into controlled React state when native/uncontrolle
 
 ---
 
-## 65. Contact form rendering
+## 65. Contact rendering (ADR-009)
 
-The Contact route is intentionally calm and low-runtime.
+Contact has no form (ADR-009). `/[locale]/contact` is prerendered per locale like other public professional routes. It renders the canonical address (DOC-36) as text and an Email me `mailto:` link, both without JavaScript.
 
-It should not require:
+The only client code is a tiny Copy island (`client:visible` or smaller). It renders the button only when the Clipboard API is available, announces copied or copy failed through a polite live region, and selects the address text on failure. It must not require:
 
 - Widget Field runtime;
 - project media preload;
 - Arcade/Drawing code;
-- large client-side form framework.
-
-The form can be enhanced by a small island only for interaction affordances/pending feedback while preserving native semantics and server-authoritative submission.
+- any form framework.
 
 ---
 
@@ -2041,7 +2039,6 @@ Frontend modules must assume all browser-visible values are public.
 Never include:
 
 - Supabase service-role key;
-- Resend API key;
 - private provider tokens;
 - moderation secrets;
 - raw temporary IP HMAC keys;
@@ -2125,7 +2122,7 @@ Expose narrow internal adapters for:
 - significant interaction telemetry if approved;
 - non-sensitive feature failures.
 
-Drawing content, Contact message text, email addresses and unpublished UGC are not default telemetry payloads.
+Drawing content, email addresses and unpublished UGC are not default telemetry payloads.
 
 Runtime error monitoring uses the Sentry-backed wrapper approved in DOC-49. Product analytics remains disabled/no-op until a separate privacy/provider decision enables it.
 
@@ -2142,7 +2139,7 @@ space_viewed
 project_selected
 project_detail_opened
 cv_downloaded
-contact_submission_outcome
+contact_address_copied
 widget_customized
 arcade_session_started
 ```
@@ -2225,7 +2222,7 @@ At minimum, disabling/losing client JS should not intentionally hide:
 
 - project titles/details;
 - experience/education/certifications;
-- Contact information/form fallback where feasible;
+- the Contact address and its `mailto:` link (ADR-009);
 - CV links;
 - public route navigation.
 

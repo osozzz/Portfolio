@@ -60,8 +60,8 @@ depends_on:
 
 decision_families:
   - TQE
-approved_at: 2026-11-10
-last_updated: 2026-11-10
+approved_at: 2026-11-25
+last_updated: 2026-11-25
 ---
 
 # DOC-50 — Testing & Quality Engineering Strategy
@@ -521,7 +521,6 @@ Application services should be tested with real domain policies and deterministi
 Examples:
 
 - `SubmitGuestbookEntry` creates `pending`, not `approved`;
-- Contact retry preserves `operationId`;
 - `FinalizeArcadeSession` rejects expired/replayed sessions;
 - `ApproveSubmission` writes audit intent;
 - reports remain independent from moderation state;
@@ -571,7 +570,7 @@ selected integration smoke
 
 Routine test runs must not:
 
-- send real Contact emails;
+- send real email (Auth recovery included);
 - post real content;
 - mutate production GitHub data;
 - consume unnecessary provider quotas;
@@ -717,7 +716,7 @@ High-value E2E flows include:
 - customize Widget Field and reload;
 - switch theme/language/transparency/motion/sound preferences;
 - open CV and artifact link;
-- submit Contact through a controlled test provider/fake;
+- copy the Contact address and check the `mailto:` link (ADR-009);
 - publish Guestbook/Sketch into pending state;
 - moderate content as Admin;
 - report content;
@@ -1043,22 +1042,15 @@ Critical accessibility behavior receives stronger combination coverage than deco
 
 ## 47. Contact tests
 
-Contact must verify:
+Contact has no form or server path (ADR-009). Contact must verify:
 
-- valid submission;
-- invalid schema;
-- oversize payload;
-- human-verification rejection;
-- human-verification provider unavailable behavior;
-- operation-id reuse;
-- timeout then safe retry;
-- provider duplicate prevention/idempotency;
-- delivery failure preserves user text locally;
-- no message body in routine logs/telemetry;
-- no DB persistence of message/name/email under the approved baseline;
-- safe localized error copy.
-
-No routine automated suite sends real production emails.
+- the page renders the canonical address (DOC-36) as selectable text in ES and EN;
+- the Email me link is a `mailto:` to that address with the localized subject;
+- without JavaScript, the address and the link work and no Copy button is rendered;
+- Copy success writes the address to the clipboard and announces the copied state politely (component test with a stubbed Clipboard API);
+- Copy failure (the clipboard write is rejected) shows the inline copy failed message and selects the address text;
+- focus does not move when copying; reading order is address → Copy → Email me and tab order is Copy → Email me;
+- the built route contains no form, no Contact endpoint and no Contact island beyond Copy (ADR-009).
 
 ---
 
@@ -1290,7 +1282,7 @@ Integration tests exercise the real PostgreSQL rate-limit repository/RPC, includ
 
 ## Retention/privacy lifecycle tests
 
-Database/integration/E2E coverage verifies representative lifecycle horizons with a controllable clock: pending/rejected/hidden Community purge, resolved-report purge, Arcade evidence/session cleanup, Contact seven-day ledger cleanup, rate-limit bucket cleanup, ban-hash expiry, cache invalidation after deletion, and one-resource deletion capabilities.
+Database/integration/E2E coverage verifies representative lifecycle horizons with a controllable clock: pending/rejected/hidden Community purge, resolved-report purge, Arcade evidence/session cleanup, rate-limit bucket cleanup, ban-hash expiry, cache invalidation after deletion, and one-resource deletion capabilities.
 
 Privacy tests prove that a deletion token for resource A cannot delete resource B, token plaintext is absent from logs/analytics/URLs, and loss of a local receipt does not cause the application to invent a cross-feature identity lookup.
 
@@ -1504,7 +1496,7 @@ Targeted concurrency tests become mandatory for operations whose correctness dep
 
 - Arcade double finalize;
 - moderation optimistic concurrency;
-- idempotent Contact/UGC submission;
+- idempotent UGC submission;
 - job lease acquisition;
 - cache stampede prevention.
 
@@ -1521,7 +1513,6 @@ Failure injection should prove documented degraded behavior.
 Simulate:
 
 - Supabase unavailable;
-- Resend timeout/error;
 - Turnstile unavailable;
 - GitHub rate limit/outage;
 - Tech Pulse malformed/slow source;
@@ -1623,7 +1614,7 @@ This reduces duplicated brittle fixtures while keeping invalid-case tests explic
 
 Committed fixtures must never contain:
 
-- real Contact messages/emails;
+- real visitor emails;
 - real visitor IPs/identifiers;
 - real TOTP secrets;
 - access/refresh tokens;
@@ -1791,7 +1782,13 @@ Minimum applicable exit criteria:
 - the always-visible sound/music control stops music in one action in every responsive mode (WCAG 2.2 SC 1.4.2);
 - music and the 3D stage persist across navigation (ADR-004 prototype gate passed);
 - the audio license register lists every shipped track with its license;
-- the Personal Data Processing Policy page is published in ES/EN and has passed lawyer review (ADR-008).
+- the short privacy notice page is published in ES/EN (ADR-009).
+
+**V1.2 additional exit criteria (ADR-008, ADR-009).** V1.2 is published only when, in addition to the above:
+
+- the full Personal Data Processing Policy and the Terms of Use are published in ES/EN and have passed lawyer review;
+- RNBD applicability has been verified and, if it applies, the registration is done;
+- the admin Auth recovery email sends from its dedicated subdomain with SPF/DKIM/DMARC verified (DOC-48 §16).
 
 DOC-51 defines which checks are merge-blocking vs release-only.
 
@@ -1813,7 +1810,7 @@ V1.0 Professional Core prioritizes:
 - SEO/meta basics;
 - Coming Soon routes;
 - Boot, 3D stage and fallbacks, music prompt/control and persistence across navigation;
-- privacy policy page;
+- short privacy notice page (V1.0, ADR-009);
 - performance/security fundamentals.
 
 Community/Arcade tests should not be required for a feature that is not yet released, except foundation contracts that already exist.
@@ -1957,7 +1954,7 @@ Verify:
 
 - expected core-route failure produces signal;
 - recovery clears condition;
-- check does not submit Contact/UGC;
+- check does not submit UGC or email the Contact address;
 - false positive from optional provider outage does not mark full Professional Core down;
 - alert routing is actionable.
 
@@ -1971,7 +1968,6 @@ Examples:
 
 - a route-history bug → Playwright regression test;
 - an RLS exposure → pgTAP negative test;
-- duplicate email → idempotency service test;
 - provider parsing failure → contract fixture;
 - visual clipping → targeted screenshot/responsive test.
 
@@ -2186,7 +2182,7 @@ Security tests must not be isolated from normal flows.
 
 Examples:
 
-- Contact must be both usable and abuse-resistant;
+- Community writes must be both usable and abuse-resistant;
 - Admin must be both recoverable and AAL2-protected;
 - Drawing must be expressive and bounded;
 - Arcade must be responsive and server-authoritative at finalize;
@@ -2277,7 +2273,7 @@ Before V1.0 Production, demonstrate at minimum:
 8. 320px/200% Dock gate;
 9. Widget Field persistence/recomposition gate;
 10. Project Detail history/deep-link gate;
-11. Contact idempotency/failure-preservation gate;
+11. Contact address/Copy/no-JS gate (ADR-009);
 12. Admin AAL2 gate;
 13. CSP/security-header baseline;
 14. secret/client-boundary checks;
@@ -2391,7 +2387,7 @@ RLS negative tests, Auth/AAL2 journey, XSS corpus and client-secret-boundary che
 
 ## TQE-GATE-08 — Resilience
 
-At least Supabase, Resend/Contact, Turnstile and one external-content provider failure path are exercised without taking down Professional Core.
+At least Supabase, Turnstile and one external-content provider failure path are exercised without taking down Professional Core.
 
 ## TQE-GATE-09 — Traceability
 
@@ -2454,7 +2450,7 @@ CI retries/quarantine behavior does not hide persistent critical-suite instabili
 | TQE-045 | Playwright visual comparisons protect high-value stable visual contracts. |
 | TQE-046 | Visual baselines update only after human review of diffs. |
 | TQE-047 | Test combination strategy is curated/pairwise rather than full Cartesian explosion. |
-| TQE-048 | Contact tests verify idempotency, provider failure, input preservation and telemetry redaction. |
+| TQE-048 | Contact tests verify the address, `mailto:`, no-JS behavior and the Copy success/failure states (ADR-009). |
 | TQE-049 | Guestbook submit creates pending content and public projection remains approved-only. |
 | TQE-050 | Sketch/Drawing validators and renderers receive adversarial structural-limit tests. |
 | TQE-051 | Property/fuzz-oriented testing is recommended for Drawing logical validation/render boundaries. |
@@ -2524,7 +2520,7 @@ CI retries/quarantine behavior does not hide persistent critical-suite instabili
 | `TQE-115` | Real PostgreSQL rate-limit concurrency/expiry behavior is an integration/security test gate. |
 | `TQE-116` | Retention, capability-based deletion, Drawing IndexedDB persistence and privacy-receipt behavior receive explicit tests. |
 | `TQE-117` | Dock zoom QA separates 320 CSS-px, browser page zoom, independent text scaling and short-landscape cases. |
-| `TQE-118` | V1.0 exit criteria include the first-impression items: Boot, 3D stage budgets and fallbacks, music prompt/control, persistence across navigation, audio license register and the reviewed privacy policy. |
+| `TQE-118` | V1.0 exit criteria include the first-impression items: Boot, 3D stage budgets and fallbacks, music prompt/control, persistence across navigation, audio license register and the published short privacy notice (ADR-009). |
 | `TQE-119` | Visual regression covers Liquid Glass over both the live 3D stage and its static rendition. |
 | `TQE-120` | E2E verifies that music continues across ClientRouter navigation and that no second WebGL context is created. |
 

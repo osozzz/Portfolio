@@ -11,8 +11,8 @@ depends_on:
   - DOC-09
 decision_families:
   - L10N
-last_updated: 2026-11-10
-approved_at: 2026-11-10
+last_updated: 2026-11-25
+approved_at: 2026-11-25
 ---
 
 # DOC-10 — Localization, Language & Bilingual Behavior
@@ -43,7 +43,7 @@ Both locales cover:
 - metadata/SEO and OG text;
 - CV content/artifacts;
 - music prompt and sound/music control labels;
-- legal pages (privacy policy, terms), the Contact authorization notice and the UGC age declaration;
+- legal pages (V1.0 privacy notice, later policy and terms), the Contact copy and the UGC age declaration;
 - blog posts (a post may exist in one locale only; the index shows per-locale availability and never machine-translates).
 
 No essential flow ships as mixed-language UI.
@@ -55,7 +55,11 @@ Baseline copy for the new surfaces (final wording may be refined in review):
 | music.prompt | Play background music? | ¿Reproducir música de fondo? |
 | music.yes / music.no | Yes / No | Sí / No |
 | sound.control.on / off | Turn music off / Turn music on | Apagar música / Encender música |
-| contact.authorization | I authorize the processing of my data to reply to this message, under the Privacy Policy. | Autorizo el tratamiento de mis datos para responder este mensaje, según la Política de Tratamiento de Datos Personales. |
+| contact.intro | The best way to reach me is email. | La mejor forma de escribirme es por correo. |
+| contact.copy / contact.copied | Copy / Copied | Copiar / Copiado |
+| contact.copyFailed | Couldn't copy. The address is selected so you can copy it. | No pudimos copiar. La dirección quedó seleccionada para que la copies. |
+| contact.emailMe | Email me | Escríbeme |
+| contact.subject | Hello from alejosorno.dev | Hola desde alejosorno.dev |
 | ugc.ageDeclaration | I am 18 or older, or I have my legal representative's authorization. | Soy mayor de 18 años o cuento con la autorización de mi representante legal. |
 ## 3A. Root `/` locale negotiation
 

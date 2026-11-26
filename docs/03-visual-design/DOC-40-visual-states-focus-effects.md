@@ -23,8 +23,8 @@ depends_on:
   - DOC-39
 decision_families:
   - STA
-last_updated: 2026-09-15
-approved_at: 2026-09-15
+last_updated: 2026-11-25
+approved_at: 2026-11-25
 ---
 
 # DOC-40 — Visual States, Focus & Effects
@@ -576,7 +576,6 @@ Major success:
 
 ```text
 published drawing accepted
-contact message sent
 achievement unlock
 ```
 

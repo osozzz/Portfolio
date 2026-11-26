@@ -9,8 +9,8 @@ depends_on:
   - none
 decision_families:
   - AFD
-last_updated: 2026-11-10
-approved_at: 2026-11-10
+last_updated: 2026-11-25
+approved_at: 2026-11-25
 ---
 
 # DOC-30 — Audio, Feedback & Delight System
@@ -143,7 +143,7 @@ Boot never requests audio permission or waits for sound. Replay Boot may include
 
 Minor success such as Copied, preference changed or saved locally → Toast.
 
-Major completion such as Contact message sent, drawing submitted or accepted score → stronger in-context SuccessState when appropriate.
+Major completion such as drawing submitted or accepted score → stronger in-context SuccessState when appropriate. Contact has no sent state; copying the address is a minor success (ADR-009).
 
 Errors are specific, calm, contextual and actionable. A GitHub outage does not become a full application error.
 
@@ -251,7 +251,7 @@ Provide a “Forget me on this device” / local reset path.
 
 ## Privacy boundaries
 
-Contact identity belongs to Contact. Guestbook nickname belongs to that message. Score nickname belongs to that score. Sketch nickname belongs to that submission.
+An email sent to the Contact address stays in the owner's mailbox and is never linked to site identity (ADR-009). Guestbook nickname belongs to that message. Score nickname belongs to that score. Sketch nickname belongs to that submission.
 
 They do not form an implicit cross-feature visitor identity.
 

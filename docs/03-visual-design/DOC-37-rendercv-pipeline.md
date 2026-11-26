@@ -18,8 +18,8 @@ depends_on:
   - DOC-36
 decision_families:
   - CVP
-last_updated: 2026-09-15
-approved_at: 2026-09-15
+last_updated: 2026-11-25
+approved_at: 2026-11-25
 ---
 
 # DOC-37 — RenderCV Pipeline
@@ -140,7 +140,7 @@ Guestbook content
 Sketch Wall content
 Arcade scores
 visitor achievements
-private contact submissions
+private correspondence sent to the Contact address
 unreviewed GitHub activity
 raw external feeds
 private client information

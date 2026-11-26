@@ -52,8 +52,8 @@ depends_on:
 
 decision_families:
   - POR
-last_updated: 2026-11-10
-approved_at: 2026-11-10
+last_updated: 2026-11-25
+approved_at: 2026-11-25
 ---
 
 # DOC-49 — Performance, Observability & Reliability Architecture
@@ -160,7 +160,7 @@ The system is divided into operational tiers.
 |---|---|---|
 | **R0 — Tier-0 control plane** | domain, DNS, GitHub, Vercel, Supabase production, recovery email | compromise/outage is a high-priority incident |
 | **R1 — Professional Core** | Home canonical content, Project Detail, Experience, Education, Certifications, CV, Making Of static content, core navigation | must remain available during optional provider failure |
-| **R2 — Essential interaction** | Contact submission, Admin authentication/moderation, Community read/write | may depend on runtime services but must fail clearly and preserve user effort where possible |
+| **R2 — Essential interaction** | Admin authentication/moderation, Community read/write (Contact is static, ADR-009) | may depend on runtime services but must fail clearly and preserve user effort where possible |
 | **R3 — Enrichment** | GitHub activity, Tech Pulse, contextual live widgets and richer presentation around repository-authored Currently Building | stale/degraded external content is acceptable; managed-status authority remains repository-owned unless a future ADR migrates it |
 | **R4 — Playful runtime** | Arcade score publication, Drawing publication, optional delight systems | failure must not damage professional core |
 
@@ -173,7 +173,6 @@ The tier describes recovery/diagnostic priority, not visual prominence.
 A **Service-Level Indicator (SLI)** is a measured signal such as:
 
 - successful core-page requests;
-- Contact delivery success rate;
 - Arcade finalize success rate;
 - p75 LCP;
 - p95 server latency.
@@ -193,7 +192,6 @@ Initial rolling 30-day operational targets:
 | Capability | SLO | Measurement intent |
 |---|---:|---|
 | **Professional Core** | **99.9%** successful availability | canonical public routes respond successfully and remain usable |
-| **Contact delivery path** | **99.5%** successful eligible submissions | excludes invalid input/human-verification rejection |
 | **Community reads/writes** | **99.5%** | approved content read and eligible submission operations |
 | **Admin authenticated operations** | **99.5%** | login/MFA dependencies and privileged mutations |
 | **Arcade finalize/leaderboard publication** | **99.5%** | local gameplay completion is not counted as failed if publication is unavailable |
@@ -639,7 +637,7 @@ Initial guidance:
 | Class | Typical timeout budget |
 |---|---:|
 | user-blocking verification/provider check | ~3 s |
-| user-blocking email delivery | ~5 s |
+| admin Auth recovery email (V1.2) | ~5 s |
 | background GitHub/feed refresh | ~8–10 s |
 | webhook/provider callback processing | bounded by provider contract, preferably short |
 
@@ -818,7 +816,6 @@ cache_state
 
 Do **not** log:
 
-- Contact message bodies;
 - Guestbook message bodies unless a security-approved narrow diagnostic requires temporary redacted capture;
 - unpublished drawing models;
 - passwords/TOTP/tokens/cookies;
@@ -980,7 +977,7 @@ Baseline Production checks should cover:
 
 Synthetic monitoring must not:
 
-- submit real Contact emails repeatedly;
+- send real email to the Contact address repeatedly;
 - pollute Guestbook;
 - create real Arcade scores;
 - generate moderation noise.
@@ -1016,7 +1013,6 @@ The approved public System Status surface may present a user-safe state such as:
 
 ```text
 Portfolio Core        Operational
-Contact               Operational / Degraded
 Community             Operational / Degraded
 Arcade Scores         Operational / Degraded
 Live Integrations     Operational / Stale
@@ -1034,7 +1030,6 @@ Full distributed tracing is **not mandatory** in V1.x.
 
 Use tracing/spans selectively when they answer a real question, especially for:
 
-- Contact delivery;
 - Guestbook/Sketch submissions;
 - Admin moderation transaction;
 - Arcade finalization;
@@ -1093,7 +1088,7 @@ The goal is **signal**, not an imitation of a 24/7 enterprise NOC.
 | Severity | Meaning | Examples |
 |---|---|---|
 | **P0** | security/domain/core availability emergency | domain hijack, production secrets exposed, professional core unavailable |
-| **P1** | major user-facing capability materially broken | Contact broadly failing, Admin unavailable during moderation need, DB runtime outage |
+| **P1** | major user-facing capability materially broken | Admin unavailable during moderation need, DB runtime outage |
 | **P2** | degraded optional capability / sustained regression | GitHub stale beyond limit, cron repeatedly failing, performance budget regression |
 | **P3** | informational/trend | single integration transient failure, minor latency trend |
 
@@ -1120,7 +1115,6 @@ Candidate alerts include:
 
 - Professional Core synthetic failure across multiple checks;
 - sudden release-correlated server/client error spike;
-- Contact delivery failures sustained above threshold;
 - Supabase/database connectivity failure;
 - repeated Admin auth/provider failure;
 - scheduled integration job misses multiple expected runs;
@@ -1158,7 +1152,7 @@ After Production deployment, perform a short verification set before considering
 
 - Home loads;
 - project navigation works;
-- Contact readiness is intact without sending unnecessary real messages;
+- the Contact page renders the address and `mailto:` link (ADR-009);
 - Auth/Admin readiness where applicable;
 - no immediate error spike;
 - DB migration compatibility holds;
@@ -1246,7 +1240,6 @@ Examples:
 - `channel.tech-pulse`;
 - `social.guestbook`;
 - `arcade.glitch-runner`;
-- `contact.delivery`;
 - `admin.moderation`.
 
 The user sees a localized, calm degraded state.
@@ -1257,17 +1250,7 @@ Observability receives a safe diagnostic event.
 
 ## 59. Contact observability
 
-Track only safe operational metadata such as:
-
-- operation started;
-- validation rejected;
-- Turnstile verified/rejected/unavailable;
-- email provider accepted/failed/timed out;
-- retry count;
-- total latency;
-- safe provider error category.
-
-Never send Contact name/email/message body to error monitoring or logs by default.
+Contact has no server path (ADR-009), so there is nothing to trace or alert on in the application. Product events may record only `contact_address_copied` / Email me opened (DOC-17). Mail forwarding health is checked operationally: a periodic test message to the published address reaches the owner (DOC-48).
 
 ---
 
@@ -1385,7 +1368,7 @@ Initial V1.x recovery objectives:
 | Community submissions/reports/moderation/audit | **≤ 24 h** under managed daily-backup baseline |
 | Arcade scores/sessions requiring durable history | **≤ 24 h** under baseline |
 | Integration cache | no backup requirement; rebuild from provider/curated source |
-| Contact message content | N/A — not persisted server-side by baseline design |
+| Contact message content | N/A — Contact has no server path (ADR-009) |
 | local visitor preferences | N/A — device-local, not server-recovered |
 | Auth/admin account state | provider-managed; recovery follows IAM/runbook rather than application DB restore alone |
 
@@ -1401,7 +1384,7 @@ Operational recovery targets, not contractual guarantees:
 |---|---:|
 | Professional Core app regression | ≤ 1 h where rollback/provider control is available |
 | Runtime database/community/admin recovery | ≤ 4 h |
-| Contact provider outage workaround/recovery | ≤ 4 h if provider issue persists and workaround exists |
+| Contact mail forwarding recovery | ≤ 4 h; the Contact page itself never goes down (ADR-009) |
 | Optional live integrations | ≤ 24 h before escalation beyond stale/degraded mode |
 | domain/DNS/security control-plane incident | highest-priority restoration; target ≤ 4 h where account/provider access permits |
 
@@ -1429,7 +1412,7 @@ Therefore:
 | Failure | Professional Core | Runtime behavior |
 |---|---|---|
 | Supabase unavailable | stays available where build/static content allows | Community/Admin/leaderboard unavailable or degraded |
-| Resend unavailable | stays available | Contact preserves input and reports retryable failure |
+| Mail forwarding unavailable | stays available | the Contact page still renders; mail reaches the owner late (ADR-009) |
 | Turnstile unavailable | stays available | protected public writes fail closed while preserving user input |
 | GitHub unavailable | stays available | cached/stale activity or degraded widget |
 | Tech Pulse source unavailable | stays available | stale/partial feed |
@@ -1479,7 +1462,7 @@ The site is not required to be a full offline PWA in V1.x.
 However:
 
 - already-rendered professional content should not disappear because an optional fetch fails;
-- Contact/Guestbook/Sketch form input remains in the UI after recoverable network failure;
+- Guestbook/Sketch form input remains in the UI after recoverable network failure;
 - Arcade local result remains visible even if score publication fails;
 - external widgets show stale/degraded state;
 - retries are explicit rather than silently generating duplicate mutations.
@@ -1571,7 +1554,7 @@ Baseline retention:
 - de-identified/aggregated operational trends: **maximum 90 days** where useful for regression comparison;
 - no indefinite retention merely because the provider allows it;
 - security/audit/domain records are governed separately by DOC-44/DOC-47 and are not extended by this telemetry policy;
-- Contact/UGC bodies are never copied into telemetry storage.
+- UGC bodies are never copied into telemetry storage.
 
 Any proposal to retain detailed telemetry longer than 30 days or aggregates longer than 90 days requires an explicit privacy/operational approval and documented purpose.
 
@@ -1646,7 +1629,7 @@ It may be evaluated later only if:
 - privacy impact is reviewed;
 - input/content masking is demonstrably safe;
 - value exceeds cost/complexity;
-- community/contact/drawing surfaces are protected from capture.
+- community/drawing surfaces are protected from capture.
 
 The portfolio does not need surveillance-grade replay to diagnose normal bugs.
 
@@ -1658,7 +1641,6 @@ Provider usage/cost is monitored at a lightweight level:
 
 - Vercel bandwidth/function usage;
 - Supabase database/storage/auth usage;
-- Resend message volume;
 - monitoring event volume;
 - Turnstile/provider limits where relevant.
 
@@ -1712,7 +1694,6 @@ If analytics or monitoring providers are down:
 Before relying on degraded-mode claims, test them deliberately in non-production/controlled environments:
 
 - Supabase unavailable;
-- Resend timeout;
 - Turnstile unavailable;
 - GitHub/feed errors;
 - stale cache;
@@ -1837,7 +1818,7 @@ A small operational dashboard should answer:
 1. Is Professional Core up?
 2. Did the latest release increase errors?
 3. Are Core Web Vitals within budget?
-4. Is Contact delivering?
+4. Does mail to the Contact address reach the owner?
 5. Is Community healthy?
 6. Is Admin functioning?
 7. Are Arcade finalizations healthy?
@@ -1898,11 +1879,11 @@ FULL → REDUCED/SOLID and Reduced Motion/Transparency produce measurably lower 
 
 ## POR-GATE-04 — Observability redaction
 
-Synthetic sensitive payloads prove that Contact bodies, secrets, tokens, TOTP and unpublished drawing data do not reach logs/error monitoring.
+Synthetic sensitive payloads prove that secrets, tokens, TOTP and unpublished drawing data do not reach logs/error monitoring.
 
 ## POR-GATE-05 — Failure containment
 
-Simulated Supabase/Resend/Turnstile/GitHub/monitoring failure preserves Professional Core and yields documented degraded behavior.
+Simulated Supabase/Turnstile/GitHub/monitoring failure preserves Professional Core and yields documented degraded behavior.
 
 ## POR-GATE-06 — Release correlation
 
@@ -1937,7 +1918,7 @@ Drawing and Arcade demonstrate isolated high-frequency state without root-shell 
 | POR-005 | Reliability is tiered R0–R4. |
 | POR-006 | V1.x has internal SLOs but no customer-facing SLA. |
 | POR-007 | Professional Core initial availability objective is 99.9% over a rolling 30-day view. |
-| POR-008 | Contact, Community, Admin and Arcade runtime objectives begin at 99.5%. |
+| POR-008 | Community, Admin and Arcade runtime objectives begin at 99.5%; Contact is static and covered by Professional Core (ADR-009). |
 | POR-009 | Error budgets are prioritization tools, not enterprise ceremony. |
 | POR-010 | Core Web Vitals baseline remains LCP ≤2.5s, INP ≤200ms, CLS ≤0.10 at p75 where sample is sufficient. |
 | POR-011 | Stretch CWV targets are LCP ≤2.0s, INP ≤150ms and CLS ≤0.05. |
@@ -1974,7 +1955,7 @@ Drawing and Arcade demonstrate isolated high-frequency state without root-shell 
 | POR-042 | Production events carry environment and release metadata. |
 | POR-043 | Source maps are controlled build artifacts for diagnostics. |
 | POR-044 | Server logging is structured and redacted. |
-| POR-045 | Raw Contact bodies, credentials, tokens and unpublished creative content never enter routine telemetry. |
+| POR-045 | Credentials, tokens and unpublished creative content never enter routine telemetry. |
 | POR-046 | Stable error categories separate expected failures from unexpected exceptions. |
 | POR-047 | Safe request/operation/session/job identifiers enable correlation without embedding PII. |
 | POR-048 | Product analytics and operational telemetry remain separate systems/concerns. |
@@ -1991,7 +1972,7 @@ Drawing and Arcade demonstrate isolated high-frequency state without root-shell 
 | POR-059 | Build output includes machine-readable performance-budget information. |
 | POR-060 | Accessibility simplifications may improve performance but default mode must still be performant. |
 | POR-061 | Error boundaries report feature context while presenting local degraded UI. |
-| POR-062 | Contact telemetry records delivery mechanics, never message content. |
+| POR-062 | Retired (ADR-009): Contact has no delivery to record. |
 | POR-063 | Community telemetry avoids exporting unpublished UGC bodies. |
 | POR-064 | Arcade telemetry tracks session/finalize/plausibility health without treating every rejection as an incident. |
 | POR-065 | Admin telemetry never captures passwords, TOTP secrets/codes or session tokens. |
@@ -2050,7 +2031,7 @@ Development tooling or a contributor working on performance/observability/reliab
 1. read DOC-49 plus the relevant frontend/backend/infrastructure/security domain owner before changing performance/telemetry behavior;
 2. never weaken a budget simply to make CI pass without documenting an approved exception;
 3. not add a monitoring/analytics SDK directly throughout feature code when a wrapper exists;
-4. never send Contact bodies, credentials, TOTP, tokens, cookies or unpublished drawing data to monitoring/logging;
+4. never send credentials, TOTP, tokens, cookies or unpublished drawing data to monitoring/logging;
 5. keep observability delivery non-blocking for product behavior;
 6. preserve Professional Core when optional providers fail;
 7. keep Arcade and Drawing high-frequency paths isolated from root React state;

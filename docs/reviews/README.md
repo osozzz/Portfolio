@@ -18,3 +18,7 @@ Future accessibility, security, performance, release-readiness and architecture 
 - `PROPOSAL-REOPEN-001-baseline-revision.md` — **APPROVED** — owner-approved reopening: Astro stack, background music, three.js layer, non-goal revision, Colombian legal baseline and SRS.
 - `AMENDMENT-REOPEN-001.md` — **APPROVED** — every change made under the reopening, with its governing ADR.
 - `REVIEW-CROSS-DOCUMENT-CONSISTENCY-003.md` — **PASS** — post-reopening verification; P0/P1/P2/P3 = 0 and V0 re-cleared for repository bootstrap (Astro).
+
+- `PROPOSAL-CONTACT-001-contact-without-form.md` — **APPROVED** — owner-approved removal of the Contact form (visible domain address, Copy, `mailto:`).
+- `AMENDMENT-CONTACT-001.md` — **APPROVED** — every change made under the Contact revision, with ADR-009 as the governing decision.
+- `REVIEW-CROSS-DOCUMENT-CONSISTENCY-004.md` — **PASS** — post-Contact-revision verification; P0/P1/P2/P3 = 0; V0 gate unchanged.

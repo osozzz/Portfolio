@@ -10,8 +10,8 @@ depends_on:
   - DOC-00
 decision_families:
   - VIS
-last_updated: 2026-11-10
-approved_at: 2026-11-10
+last_updated: 2026-11-25
+approved_at: 2026-11-25
 ---
 
 # DOC-01 — Product Vision, Positioning & Success Criteria
@@ -50,7 +50,7 @@ A visitor should be able to:
 - understand role, architecture, stack, challenges, decisions and results without invented claims;
 - review Experience, Education and Certifications;
 - preview/download a bilingual CV generated from structured source;
-- contact Alejandro through a real, reliable form;
+- contact Alejandro by email through a visible address they can copy or open (ADR-009);
 - use the portfolio comfortably on phone, tablet, keyboard, mouse/touch and supported gamepad;
 - discover optional achievements, Arcade, Drawing Pad, Terminal, Making Of and live development context without those features blocking professional use.
 
@@ -89,7 +89,7 @@ Qualitative success:
 - The product remains coherent with sound off, reduced motion, reduced transparency and external integrations unavailable.
 - The visual identity feels inspired by iiSU but not like a clone.
 
-Quantitative targets are defined as requirements rather than vanity KPIs. Initial goals include Core Web Vitals within good thresholds, low layout shift, responsive input, strong accessibility coverage, reliable contact delivery and zero known critical security issues at release.
+Quantitative targets are defined as requirements rather than vanity KPIs. Initial goals include Core Web Vitals within good thresholds, low layout shift, responsive input, strong accessibility coverage, a reliable, always-visible Contact address and zero known critical security issues at release.
 
 ## 9. Long-term direction
 

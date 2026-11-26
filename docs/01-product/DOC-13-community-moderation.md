@@ -12,8 +12,8 @@ depends_on:
   - DOC-31
 decision_families:
   - COM
-last_updated: 2026-11-10
-approved_at: 2026-11-10
+last_updated: 2026-11-25
+approved_at: 2026-11-25
 ---
 
 # DOC-13 — Community, UGC & Moderation Product Requirements
@@ -28,7 +28,7 @@ Community adds lightweight human presence without turning the portfolio into a s
 
 ## 2. Identity model
 
-No visitor accounts. A submission may ask for a public nickname; nickname is presentation metadata, not authenticated identity. Contact email is not required for Guestbook/sketch/score merely to build a hidden user profile.
+No visitor accounts. A submission may ask for a public nickname; nickname is presentation metadata, not authenticated identity. An email address is never required for Guestbook/sketch/score merely to build a hidden user profile.
 
 ## 3. Guestbook
 

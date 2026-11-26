@@ -11,8 +11,8 @@ depends_on:
   - DOC-07
 decision_families:
   - ENG
-last_updated: 2026-11-10
-approved_at: 2026-11-10
+last_updated: 2026-11-25
+approved_at: 2026-11-25
 ---
 
 # DOC-08 — Engineering Coverage Register & Technical Constraints
@@ -38,7 +38,7 @@ The approved V1.x technical baseline is:
 - **Motion:** CSS for simple local transitions; Astro View Transitions for the persistent shell; Motion as primary animation system inside React islands; GSAP only if a documented prototype demonstrates a need.
 - **Database/Auth/Storage:** Supabase/PostgreSQL with admin auth only, server-first runtime data access, RLS/grants/least privilege and controlled Storage only where a feature actually requires it.
 - **Hosting:** Vercel managed deployment/runtime, with Cloudflare DNS-only authoritative DNS preferred and Vercel DNS acceptable as the simpler alternative.
-- **Email:** Resend behind a server-side provider adapter with domain authentication and idempotent Contact delivery.
+- **Email:** no email to visitors in V1.x. Contact publishes a domain address that forwards to the owner (ADR-009); the root domain only receives mail. From V1.2, admin Auth recovery uses production SMTP on a dedicated sending subdomain (DOC-45 §57).
 - **Product analytics:** disabled/no-op in V0/V1.0. Enabling a provider/event set later requires an explicit privacy/provider decision; feature code keeps a provider-neutral wrapper.
 - **Error monitoring:** Sentry is the V0/V1.0 baseline behind centralized wrappers and strict scrubbing.
 - **Testing:** Vitest + React Testing Library, Storybook isolated components, Playwright E2E/accessibility/visual testing, PostgreSQL/pgTAP, plus release-specific security/performance/resilience gates.
@@ -160,7 +160,7 @@ Use structured logs/metrics/errors without storing message bodies, unpublished s
 
 ## 11. Email/deliverability assessment
 
-Contact email is applicable and transactional. There is no newsletter or marketing email, so marketing-email unsubscribe and postal-address requirements (CAN-SPAM-style) are **NOT APPLICABLE**; they must be reassessed if a newsletter is ever proposed. Before public production delivery, configure/verify sending-domain SPF, DKIM and DMARC strategy, bounce/error handling and provider credentials. Do not expose provider API keys client-side.
+The site sends no email in V1.0 and never emails visitors in V1.x (ADR-009). Contact is a published domain address that forwards to the owner, so transactional sending to visitors, bounce handling and provider credentials are **NOT APPLICABLE**. From V1.2 the only sending path is the admin's Auth recovery email over production SMTP on a dedicated sending subdomain (DOC-45 §57, DOC-48). There is no newsletter or marketing email, so marketing-email unsubscribe and postal-address requirements (CAN-SPAM-style) are **NOT APPLICABLE**; both must be reassessed if sending or a newsletter is ever proposed. Before production, configure inbound forwarding (MX) and anti-spoofing records for a domain that does not send: an SPF ending in `-all` (DOC-48 §16) and DMARC `p=reject`.
 
 ## 12. Mobile-store assessment
 
@@ -170,14 +170,14 @@ Native mobile certificates, provisioning profiles, App Store/Play Store signing/
 
 Must explicitly define retention/deletion for:
 
-- contact submissions or delivery metadata;
+- Contact correspondence in the owner's mailbox (outside the site; kept only as long as needed to reply, ADR-009);
 - Guestbook/sketch submissions and moderation records;
 - reports/bans/pseudonymous abuse identifiers;
 - leaderboard nickname/score/session records;
 - admin audit logs;
 - local visitor preferences/achievements.
 
-**Legal baseline (ADR-008).** The applicable framework is Colombia's Ley 1581 de 2012 with Decreto 1377 de 2013 (compiled in Decreto 1074 de 2015), supervised by the SIC; GDPR is followed as good practice. A Personal Data Processing Policy is published from V1.0 because Contact collects personal data; prior, express and informed authorization is collected at every collection point; a data-subject rights channel is published. RNBD applicability must be verified before V1.0 production. Legal texts require lawyer review and this register is not legal advice.
+**Legal baseline (ADR-008).** The applicable framework is Colombia's Ley 1581 de 2012 with Decreto 1377 de 2013 (compiled in Decreto 1074 de 2015), supervised by the SIC; GDPR is followed as good practice. V1.0 collects no personal data through forms, so it publishes a short privacy notice; the full Personal Data Processing Policy, the lawyer review and the RNBD applicability check come before V1.2, the first release that collects personal data (ADR-009). Prior, express and informed authorization is collected at every collection point; a data-subject rights channel is published from V1.0. This register is not legal advice.
 
 Retention, accountless self-deletion capability, hard-delete/anonymization behavior and operational evidence windows are now defined in DOC-44/DOC-47. “Keep forever” is not a default.
 
@@ -194,12 +194,12 @@ Use lockfiles, automated dependency update proposals where useful, CVE/SCA scann
 - **ENG-001** The architecture/provider baseline is approved in DOC-41–DOC-51; V0 bootstrap pins exact compatible versions and validates prototype gates without reopening the product architecture by default.
 - **ENG-002** Managed/simple infrastructure is preferred until evidence requires additional moving parts.
 - **ENG-003** Payments and native-store delivery are explicitly N/A for V1.x.
-- **ENG-004** Contact email deliverability and domain authentication are applicable release concerns.
+- **ENG-004** Inbound mail forwarding and anti-spoofing records for the root domain are release concerns; outbound deliverability applies only to the V1.2 admin Auth recovery subdomain (ADR-009, DOC-45 §57).
 - **ENG-005** Preview environments must not casually share production write credentials/data.
 - **ENG-006** Heavy observability/queue/cache infrastructure is introduced from concrete need, not checklist theater.
 - **ENG-007** Security/testing/backup concerns become stronger as community persistence launches.
 - **ENG-008** Astro is the application framework; the earlier framework baseline is superseded by ADR-004.
-- **ENG-009** Privacy policy from V1.0, Terms of Use before V1.2 and the UGC age declaration follow the Colombian legal baseline (ADR-008).
+- **ENG-009** A short privacy notice from V1.0, the full policy and Terms of Use before V1.2, and the UGC age declaration follow the Colombian legal baseline (ADR-008, ADR-009).
 
 ## 17. Full engineering completeness register
 
@@ -280,17 +280,17 @@ This matrix mirrors the project's explicit engineering checklist so a concern ca
 | Failed payment states | **N/A current scope** | Same |
 | Non-payment webhook validation | Conditional if provider webhooks are added | DOC-43 / DOC-46 / DOC-47 |
 | General idempotency | Applicable to retryable side effects/submissions where needed | DOC-43 / DOC-44 / DOC-46 |
-| Email provider | Applicable; Resend baseline | DOC-16 / DOC-43 / DOC-46 |
-| SPF | Applicable before production email | DOC-16 / production readiness |
-| DKIM | Applicable before production email | DOC-16 / production readiness |
-| DMARC | Applicable before production email | DOC-16 / production readiness |
+| Email provider | **N/A for visitors in V1.x** (ADR-009); production SMTP for admin Auth recovery from V1.2 | DOC-16 / DOC-45 / DOC-48 |
+| SPF | Applicable: SPF ending in `-all` (DOC-48 §16) on the non-sending root domain (ADR-009); the V1.2 Auth SMTP subdomain publishes its own | DOC-16 / DOC-48 |
+| DKIM | N/A on the root domain (ADR-009); applicable to the V1.2 Auth SMTP subdomain | DOC-16 / DOC-45 / DOC-48 |
+| DMARC | Applicable as anti-spoofing (`p=reject`, ADR-009) | DOC-16 / DOC-48 |
 | Native mobile certificates | **N/A web portfolio** | Reassess only if native app enters scope |
 | Provisioning profiles | **N/A web portfolio** | Same |
 | Native app signing | **N/A web portfolio** | Same |
 | App Store / Play Store review | **N/A web portfolio** | Same |
 | Native build numbers | **N/A web portfolio** | Same |
 | Web builds/versioning | Applicable | DOC-51 |
-| Privacy policy | **Required from V1.0** (Contact collects personal data): Personal Data Processing Policy in ES/EN under Ley 1581, lawyer-reviewed before production (ADR-008) | DOC-12 / DOC-16 / DOC-44 + pre-launch legal readiness |
+| Privacy policy | **Short privacy notice from V1.0** (no form collects data, ADR-009); the full Personal Data Processing Policy in ES/EN under Ley 1581, lawyer-reviewed, **before V1.2** (ADR-008, ADR-009) | DOC-12 / DOC-16 / DOC-44 + pre-launch legal readiness |
 | Terms & conditions | **Required before V1.2** (UGC and nicknames), ES/EN, lawyer-reviewed (ADR-008) | DOC-12 / DOC-13 + pre-launch legal readiness |
 | Minimum age for UGC | Applicable from V1.2: no age collected; visitor declares 18+ or legal-representative authorization before posting; pre-moderation unchanged (ADR-008) | DOC-13 / DOC-44 |
 | UGC/community policy | Applicable before public community launch | DOC-13 + V1.2 readiness |

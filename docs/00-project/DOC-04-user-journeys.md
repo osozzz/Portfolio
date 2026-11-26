@@ -10,8 +10,8 @@ depends_on:
   - DOC-03
 decision_families:
   - JRN
-last_updated: 2026-11-10
-approved_at: 2026-11-10
+last_updated: 2026-11-25
+approved_at: 2026-11-25
 ---
 
 # DOC-04 — User Journeys & Experience Outcomes
@@ -41,7 +41,7 @@ Journeys describe goals and outcomes, not fixed page-by-page choreography. Inter
 
 ## 3. JRN-02 — Recruiter from direct CV/contact link
 
-A direct `/en/cv`, `/es/cv` or `/[locale]/contact` entry must construct correct shell/context without requiring entry through Home. CV supports preview/download and Contact supports real submission. Browser Back/Forward remain coherent.
+A direct `/en/cv`, `/es/cv` or `/[locale]/contact` entry must construct correct shell/context without requiring entry through Home. CV supports preview/download and Contact shows the address with Copy and `mailto:` (ADR-009). Browser Back/Forward remain coherent.
 
 ## 4. JRN-03 — Technical reviewer deep dive
 
@@ -61,9 +61,9 @@ Compact shell → horizontal centered project carousel → explicit Explore → 
 
 Keyboard/gamepad focus is obvious. Primary selector movement changes selection directly; Dock and major-space movement use semantic actions. Input hints update based on latest meaningful input. Essential functionality remains usable without controller.
 
-## 8. JRN-07 — Contact submission
+## 8. JRN-07 — Contact by email
 
-Contact → enter name/email/message → client hints + authoritative server validation → anti-spam → delivery → in-context success. On network/provider failure, text remains and a retry is offered. Contact data is not silently repurposed into personalization.
+Contact → read the address → Copy (copied state, announced) or Email me (opens the visitor's mail client with a localized subject). If copying fails, an inline message appears and the address is selected for manual copy. Without JavaScript the address and the `mailto:` link still work. The site collects and stores nothing (ADR-009).
 
 ## 9. JRN-08 — Guestbook contribution
 

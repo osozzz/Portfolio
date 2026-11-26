@@ -12,8 +12,8 @@ depends_on:
   - DOC-31
 decision_families:
   - FR
-last_updated: 2026-11-10
-approved_at: 2026-11-10
+last_updated: 2026-11-25
+approved_at: 2026-11-25
 ---
 
 # DOC-06 — Functional Requirements
@@ -44,8 +44,8 @@ Functional requirements define externally observable capability. Interface geome
 | FR-012 | Certifications | Display issuer/date/verification details when public-safe. |
 | FR-013 | CV route | Expose `/cv` in each locale with preview/download actions for EN and ES generated artifacts. |
 | FR-014 | RenderCV artifacts | Public CV PDFs are generated from structured source and never manually maintained as source. |
-| FR-015 | Contact form | Accept name, email and message; validate server-side; deliver real email; preserve text on failure. |
-| FR-016 | Contact success | Show an in-context success result after authoritative server acceptance. |
+| FR-015 | Contact form | Retired (ADR-009): Contact has no form; see FR-075. |
+| FR-016 | Contact success | Retired (ADR-009): there is no submission to confirm; see FR-076. |
 | FR-017 | Settings | Expose theme, language, sound, motion, transparency and applicable privacy/local-data controls. |
 | FR-018 | Theme | Support light, dark and system behavior with separately tuned visual states. |
 | FR-019 | Sound | UI sound defaults off first visit; user can enable/mute UI sounds and music separately and control volume (ADR-005). |
@@ -98,12 +98,14 @@ Functional requirements define externally observable capability. Interface geome
 | FR-066 | Music prompt | First-time visitors are offered background music once, after Boot, through a non-modal prompt with equal-weight Yes/No; ignoring it means no music; the answer persists locally and the prompt is not shown again (V1.0, ADR-005). |
 | FR-067 | Background music | After Yes, music fades in at low volume, persists across navigation, pauses when the tab is hidden, ducks for Project Media video, yields to Arcade audio, and can be stopped in one action from an always-visible control (V1.0, ADR-005). |
 | FR-068 | 3D signature stage | Boot, Home project objects and the optional Project Detail architecture viewer may use one persistent lazy-loaded 3D stage with a static/2D fallback under no-WebGL, reduced motion, Save-Data or low capability (V1.0, ADR-006). |
-| FR-069 | Privacy policy | A Personal Data Processing Policy is published at `/[locale]/privacy` in ES/EN and linked from the footer and every data-collection point (V1.0, ADR-008). |
-| FR-070 | Contact authorization | Contact requires an explicit, unchecked-by-default authorization checkbox linked to the privacy policy; proof is recorded as policy version + time (V1.0, ADR-008). |
+| FR-069 | Privacy policy | A short privacy notice is published at `/[locale]/privacy` in ES/EN and linked from the footer (V1.0, ADR-009); the full Personal Data Processing Policy replaces it before V1.2 and is linked from every data-collection point (ADR-008, ADR-009). |
+| FR-070 | Contact authorization | Retired (ADR-009): Contact collects no data, so it has no authorization checkbox. |
 | FR-071 | Blog | A Markdown blog with index and post routes, per-locale availability and RSS (V1.1, ADR-007). |
 | FR-072 | Curated themes | Settings offers owner-authored curated themes (palette, backdrop, optional track) without changing layout (V1.1, ADR-007). |
 | FR-073 | Terms and UGC declaration | Terms of Use are published at `/[locale]/terms` in ES/EN, and Guestbook/Sketch submissions require the 18+/legal-representative declaration (V1.2, ADR-008). |
 | FR-074 | Anonymous presence | An ambient indicator shows aggregate anonymous presence without identity, chat or messages, and disappears silently when unavailable (V1.4, ADR-007). |
+| FR-075 | Contact address | Contact shows the published domain address as visible text and an Email me `mailto:` link with a localized subject; both work without JavaScript (V1.0, ADR-009). |
+| FR-076 | Copy address | A Copy button copies the address, announces the copied state politely and, if copying fails, says so inline and selects the address text (V1.0, ADR-009). |
 
 ## 3. Traceability rule
 

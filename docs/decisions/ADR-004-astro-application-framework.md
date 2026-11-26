@@ -34,9 +34,13 @@ affects:
 supersedes:
   - "DOC-08 §2 'Web application: React with Next.js' and every Next.js App Router mechanism derived from it"
   - "DOC-42 §14–15 parallel/intercepting-route Project Detail design"
+superseded_in_part_by:
+  - ADR-009
 ---
 
 # ADR-004 — Astro Application Framework and Island Architecture
+
+> Superseded in part by ADR-009 (2026-11-25): Resend is no longer part of the baseline (§9). The rest is unchanged.
 
 ## Context
 

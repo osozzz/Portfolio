@@ -37,8 +37,8 @@ depends_on:
 
 decision_families:
   - ICJ
-last_updated: 2026-11-10
-approved_at: 2026-11-10
+last_updated: 2026-11-25
+approved_at: 2026-11-25
 ---
 
 # DOC-46 — Integrations, Caching, Jobs & Provider Resilience
@@ -71,8 +71,7 @@ This document defines:
 - the integration boundary and provider-adapter contract;
 - GitHub public activity synchronization;
 - curated Tech Pulse ingestion;
-- Contact delivery through Resend;
-- Supabase Auth recovery-email delivery boundary;
+- Supabase Auth recovery-email delivery boundary (V1.2; Contact sends nothing, ADR-009);
 - Cloudflare Turnstile verification integration;
 - cache ownership and cache layers;
 - public read caching and invalidation (prerendering, Vercel CDN response cache, cache tags);
@@ -120,10 +119,6 @@ The application does not allow provider response shapes, SDK errors, tokens or n
 Examples:
 
 ```text
-ContactService
-→ EmailDeliveryGateway
-→ ResendEmailAdapter
-
 DevLogService
 → GitHubActivityGateway
 → GitHubRestAdapter
@@ -170,9 +165,8 @@ The baseline provider/integration inventory is:
 |---|---|---:|---|
 | GitHub REST | Dev Log/public project activity enhancement | V1.4 | Non-critical |
 | Curated RSS/Atom/API sources | Tech Pulse | V1.4 | Non-critical |
-| Resend API | Contact delivery | V1.0 | Critical only to Contact submit |
-| Production SMTP for Supabase Auth | Password recovery/security mail | V0/V1.x Admin | Critical only to recovery flow |
-| Cloudflare Turnstile | Human-verification adapter for selected public writes | capability from V1.0; policy by feature | Critical only when policy requires verification |
+| Production SMTP for Supabase Auth | Password recovery/security mail on a dedicated sending subdomain | V1.2 Admin | Critical only to recovery flow |
+| Cloudflare Turnstile | Human-verification adapter for selected public writes | from V1.2 (first public write); policy by feature | Critical only when policy requires verification |
 | Supabase | runtime DB/Auth boundary | earlier canonical docs | Feature-scoped, not professional-core-wide |
 | RenderCV | build-time CV generation | V0 | Build-time only |
 | Product analytics wrapper | aggregate product analytics | disabled/no-op in V0/V1.0 until explicit privacy/provider decision | Non-critical |
@@ -191,8 +185,7 @@ Integrations fall into four operational classes.
 
 Examples:
 
-- Resend Contact email;
-- Auth SMTP.
+- Auth SMTP (V1.2 admin recovery only; ADR-009).
 
 A user operation causes an external side effect.
 
@@ -255,10 +248,6 @@ Provider contracts should expose portfolio concepts, not SDK objects.
 Example conceptual contracts:
 
 ```ts
-interface EmailDeliveryGateway {
-  sendContactMessage(input: ContactDeliveryRequest): Promise<DeliveryResult>
-}
-
 interface GitHubActivityGateway {
   fetchActivity(input: GitHubActivityRequest): Promise<ProviderFetchResult<GitHubActivitySnapshot>>
 }
@@ -295,7 +284,6 @@ Application code should not branch directly on:
 ```text
 403 from GitHub
 429 from feed source
-Resend SDK exception class
 Cloudflare JSON field names
 ```
 
@@ -332,7 +320,6 @@ Examples:
 
 ```text
 Server-only
-→ RESEND_API_KEY
 → TURNSTILE_SECRET_KEY
 → GITHUB_READ_TOKEN (if enabled)
 → CRON_SECRET
@@ -1092,123 +1079,52 @@ Detailed SSRF/XML parser hardening follows DOC-47.
 
 ## Email delivery
 
-## 52. Contact delivery provider
+## 52. Contact delivery provider (retired, ADR-009)
 
-Resend remains the baseline Contact email provider selected behind `EmailDeliveryGateway`.
-
-Flow:
-
-```text
-validated Contact operation
-        ↓
-ContactService
-        ↓
-ResendEmailAdapter
-        ↓
-Resend API
-```
-
-Provider SDK objects never cross into UI DTOs.
+Retired (ADR-009): Contact has no form and the site sends no email to visitors, so there is no Contact delivery provider. The Contact address forwards to the owner through the DNS/email-forwarding provider (DOC-48).
 
 ---
 
-## 53. Contact email idempotency
+## 53. Contact email idempotency (retired, ADR-009)
 
-DOC-43/44 already define an application `operation_id` and Contact delivery ledger.
-
-The Resend adapter reuses the same stable provider idempotency identity for retries of the same logical send.
-
-Conceptually:
-
-```text
-contact-delivery/<operation_id>
-```
-
-Never generate a new idempotency key merely because the first response timed out.
+Retired (ADR-009).
 
 ---
 
 ## 54. Provider acceptance versus inbox delivery
 
-A successful API response means the provider accepted the message for delivery.
-
-The Contact UI must not claim stronger knowledge such as:
-
-```text
-"Delivered to Alejandro's inbox"
-```
-
-unless the system actually tracks a verified delivery event.
-
-Baseline success language should correspond to:
-
-```text
-accepted / sent for delivery
-```
+Retired (ADR-009) for Contact. The admin Auth recovery email (§58) relies on Supabase Auth and its SMTP provider.
 
 ---
 
-## 55. Contact retry behavior
+## 55. Contact retry behavior (retired, ADR-009)
 
-Retries are allowed only when the operation is safe to retry.
-
-Because the send uses a stable idempotency key:
-
-- transient network/provider failures may receive a small bounded retry within the operation budget;
-- otherwise the client can retry the same logical operation safely;
-- permanent validation/rejection errors are not retried blindly;
-- `429` respects provider retry guidance;
-- provider idempotency conflicts are mapped to stable application semantics.
-
-Exact timeout/retry counts belong to DOC-49.
+Retired (ADR-009).
 
 ---
 
 ## 56. No email queue baseline
 
-V1.0 does not add a durable general email queue.
-
-Reasons:
-
-- Contact volume is expected to be low;
-- Resend supports provider-side idempotency;
-- the application ledger protects retries;
-- the visitor can retry a preserved draft;
-- a queue would create worker/dead-letter/monitoring obligations disproportionate to the use case.
-
-If evidence later shows a need for guaranteed delayed delivery, add a purpose-built durable workflow through ADR.
+V1.x has no email queue: the only outbound email is the admin Auth recovery message from V1.2 (§58).
 
 ---
 
-## 57. Contact outage behavior
+## 57. Contact outage behavior (retired, ADR-009)
 
-If Resend is unavailable:
-
-- Contact fields remain preserved in the browser;
-- the user receives a recoverable delivery-unavailable state;
-- the site does not falsely mark the message as sent;
-- browsing/Projects/CV remain unaffected;
-- retry uses the same logical operation where applicable.
+Retired (ADR-009). If the forwarding provider fails, the address still renders and the `mailto:` link still opens; mail delivery to the owner is an operational issue monitored outside the site (DOC-48).
 
 ---
 
 ## 58. Auth email channel
 
-Supabase Auth recovery/security email is a separate delivery path from the application's Contact API.
-
-Conceptually:
+From V1.2, Supabase Auth recovery/security email is the only outbound email in V1.x (ADR-009, DOC-45 §57):
 
 ```text
-Contact
-→ application Resend API adapter
-
 Auth recovery
 → Supabase Auth
 → configured production SMTP
-→ email provider
+→ dedicated sending subdomain
 ```
-
-The same vendor may serve both, but sender/configuration responsibilities remain separate.
 
 DOC-48 owns exact SMTP and DNS wiring.
 
@@ -1216,33 +1132,13 @@ DOC-48 owns exact SMTP and DNS wiring.
 
 ## 59. Sender separation
 
-Production should be able to distinguish operational sender identities, for example:
-
-```text
-contact / portfolio correspondence
-vs
-security / Auth recovery
-```
-
-Exact mailbox names are deferred to DOC-48/content decisions.
-
-Security email should not be indistinguishable from playful portfolio notifications.
+The root domain receives Contact mail and never sends. The Auth sending subdomain sends only security mail to the owner, so security email cannot be confused with portfolio correspondence (ADR-009).
 
 ---
 
 ## 60. Email webhooks are not baseline
 
-Contact correctness does not require an inbound Resend webhook in V1.0.
-
-Provider dashboard/monitoring can initially surface delivery/bounce issues.
-
-If inbound delivery events are added later:
-
-- verify provider signature;
-- deduplicate events;
-- store only operational metadata necessary for the use case;
-- do not create a hidden Contact-message archive;
-- process asynchronously/idempotently.
+No email-provider webhooks exist in V1.x (ADR-009). If any are added later, verify the provider signature, deduplicate events, store only necessary operational metadata and process them idempotently.
 
 ---
 
@@ -1353,7 +1249,7 @@ DOC-47 defines which protected writes fail closed, degrade to other controls or 
 
 If a challenge expires or the provider is unavailable:
 
-- preserve Contact/Guestbook/Sketch input where possible;
+- preserve Guestbook/Sketch input where possible;
 - provide textual recovery instructions;
 - allow obtaining a new challenge;
 - never trap keyboard/screen-reader users in an infinite retry loop;
@@ -1408,7 +1304,6 @@ Suitable examples:
 
 Not suitable as the sole mechanism for:
 
-- Contact delivery the user is awaiting;
 - moderation mutation/audit commit;
 - Arcade score finalization;
 - security-factor change;
@@ -1468,7 +1363,6 @@ Potential decomposition later:
 ```text
 refresh-github
 refresh-tech-pulse
-cleanup-contact-operations
 cleanup-expired-arcade-sessions
 cleanup-expired-idempotency/operational state
 ```
@@ -1495,7 +1389,6 @@ The job never blocks public route rendering while it runs.
 
 Daily cleanup may remove or transition records according to DOC-44 retention rules, for example:
 
-- expired Contact delivery-operation metadata after retention window;
 - old expired Arcade sessions/evidence according to retention policy;
 - expired operational leases;
 - obsolete integration-cache entries for removed source keys after a safety period.
@@ -1746,7 +1639,7 @@ No external call waits indefinitely.
 DOC-49 sets/tunes concrete budgets for:
 
 - user-facing verification;
-- user-facing email delivery;
+- admin Auth recovery email (V1.2);
 - background GitHub calls;
 - background feed source fetch;
 - webhook/provider calls if later added.
@@ -1836,8 +1729,7 @@ External integrations follow DOC-02 release ownership.
 
 ```text
 V1.0
-→ Contact/Resend
-→ anti-bot capability where required
+→ Contact address only (no provider, ADR-009)
 
 V1.1–V1.3
 → no GitHub/Tech Pulse dependency required
@@ -1882,7 +1774,7 @@ GitHub feature enabled
 → required config validated at startup/deploy
 ```
 
-Do not make V1.0 Contact fail to deploy because V1.4 Tech Pulse sources are not configured yet.
+Do not make a V1.0 deploy fail because V1.4 Tech Pulse sources are not configured yet.
 
 ---
 
@@ -1920,11 +1812,10 @@ If a persistent staging environment exists, it may use:
 
 - staging Turnstile configuration;
 - staging Supabase;
-- non-production email recipient routing/sandbox;
 - real public GitHub/read-only feeds if safe;
 - its own cache rows/jobs.
 
-Never send test Contact submissions to unintended real recipients.
+Never send test Auth recovery email to unintended real recipients.
 
 ---
 
@@ -2017,7 +1908,7 @@ cache state
 request/job id
 ```
 
-without recording raw Contact bodies, Auth tokens, Turnstile tokens or provider secrets.
+without recording Auth tokens, Turnstile tokens or provider secrets.
 
 ---
 
@@ -2029,7 +1920,7 @@ At minimum expose internal metrics/log events for:
 - age of last successful snapshot;
 - stale/expired cache reads;
 - provider rate-limit events;
-- email provider acceptance/failure;
+- Auth SMTP acceptance/failure (V1.2);
 - Turnstile verification outcomes by coarse category;
 - scheduled job acquisition/success/failure;
 - refresh lease contention;
@@ -2090,7 +1981,6 @@ The scheduled cleanup job also purges expired `abuse_rate_limit_buckets` after t
 | GitHub rate limited | entire professional portfolio | stale/cached GitHub activity |
 | one Tech Pulse source broken | entire site + other sources | that source only |
 | all Tech Pulse sources down | entire site | stale/empty Tech Pulse |
-| Resend Contact API down | browsing/CV/projects | Contact delivery only |
 | Auth SMTP down | current Admin login with password+TOTP if otherwise valid | password recovery/security email |
 | Turnstile down | browsing | protected writes according to DOC-47 policy |
 | Vercel Cron missed | browsing + stale cache | freshness until request-triggered/scheduled recovery |
@@ -2107,7 +1997,6 @@ Failure isolation never means lying.
 
 Examples:
 
-- Contact cannot show success if provider acceptance is unknown;
 - Tech Pulse cannot label expired data “Latest” without freshness context;
 - GitHub cannot infer a current project status from old commits;
 - Turnstile unavailable cannot be treated as “verified” merely to avoid UX friction.
@@ -2121,9 +2010,6 @@ Examples:
 ```text
 lib/
 └── integrations/
-    ├── email/
-    │   ├── email-delivery.gateway.ts
-    │   └── resend.adapter.ts
     ├── github/
     │   ├── github-activity.gateway.ts
     │   ├── github-rest.adapter.ts
@@ -2166,8 +2052,8 @@ Forbidden:
 // ChannelWidget.tsx
 import { Octokit } from '...'
 
-// ContactForm.tsx
-import { Resend } from 'resend'
+// GuestbookComposer.tsx
+import { createClient } from '@supabase/supabase-js'
 ```
 
 Allowed dependency direction:
@@ -2221,16 +2107,9 @@ Test:
 
 ---
 
-## 120. Gate C — Contact delivery
+## 120. Gate C — Contact delivery (retired, ADR-009)
 
-Verify:
-
-- same Contact `operation_id` maps to same provider idempotency identity;
-- provider timeout does not cause duplicate send on retry;
-- permanent provider rejection maps correctly;
-- `429` respects retry policy;
-- browser message remains recoverable on failure;
-- no Contact body appears in integration logs.
+Retired (ADR-009): Contact has no delivery to verify.
 
 ---
 
@@ -2294,7 +2173,7 @@ For a V1.0 configuration:
 
 - GitHub/Tech Pulse secrets are not required;
 - GitHub/Tech Pulse jobs are not scheduled;
-- Contact delivery works;
+- the Contact address renders with Copy and `mailto:` (ADR-009);
 - disabled V1.4 widgets do not attempt provider requests.
 
 For V1.4:
@@ -2334,10 +2213,10 @@ The following remain true regardless of provider/SDK details:
 10. GitHub activity never becomes an automated progress/completion metric.
 11. Tech Pulse uses configured feeds/APIs, not arbitrary visitor-supplied scraping.
 12. Third-party article bodies/HTML are not rendered directly.
-13. Contact delivery preserves stable application/provider idempotency identity.
-14. Contact provider acceptance is not misrepresented as guaranteed inbox delivery.
-15. V1.0 has no general email queue.
-16. Auth SMTP and Contact delivery are separate operational channels even if the same vendor is used.
+13. Contact has no delivery provider; the site never emails visitors (ADR-009).
+14. The only outbound email is admin Auth recovery from V1.2, on a dedicated sending subdomain.
+15. V1.x has no general email queue.
+16. The root domain receives Contact mail and never sends.
 17. Turnstile always validates server-side before its signal is trusted.
 18. Turnstile secret remains server-only.
 19. Turnstile provider availability and security policy are separate concerns.
@@ -2411,15 +2290,15 @@ The following remain true regardless of provider/SDK details:
 | `ICJ-043` | Feed deduplication uses source identity/canonical URL, not fuzzy-title merging alone. |
 | `ICJ-044` | One Tech Pulse source failure does not invalidate successful independent sources. |
 | `ICJ-045` | Remote provider/feed data is schema/size/type validated before persistence. |
-| `ICJ-046` | Resend remains the Contact delivery provider behind `EmailDeliveryGateway`. |
-| `ICJ-047` | Contact retries reuse the same stable provider idempotency identity for the same application operation. |
+| `ICJ-046` | Retired (ADR-009): Contact has no delivery provider. |
+| `ICJ-047` | Retired (ADR-009): there are no Contact sends to retry. |
 | `ICJ-048` | Provider acceptance is not described as guaranteed inbox delivery. |
-| `ICJ-049` | Contact transient retries are bounded and only performed when safe/idempotent. |
-| `ICJ-050` | V1.0 does not add a durable general email queue. |
-| `ICJ-051` | Contact provider outage preserves visitor input and does not falsely report success. |
-| `ICJ-052` | Supabase Auth email delivery is an operationally separate SMTP path from application Contact delivery. |
-| `ICJ-053` | Security/Auth and Contact sender identities/configuration remain separable. |
-| `ICJ-054` | Resend delivery webhooks are not required for V1.0 Contact correctness. |
+| `ICJ-049` | Retired (ADR-009): there are no Contact sends, so there are no transient retries. |
+| `ICJ-050` | V1.x does not add a durable general email queue. |
+| `ICJ-051` | A mail-forwarding outage never breaks the Contact page; the address and `mailto:` still render (reworded by ADR-009). |
+| `ICJ-052` | Supabase Auth email (V1.2) is the only outbound email path and uses a dedicated sending subdomain (ADR-009). |
+| `ICJ-053` | The root domain only receives Contact mail; only the Auth subdomain sends (ADR-009). |
+| `ICJ-054` | Retired (ADR-009): no email-provider webhooks exist in V1.x. |
 | `ICJ-055` | Cloudflare Turnstile is the baseline `HumanVerificationGateway`, subject to DOC-47 feature policy. |
 | `ICJ-056` | Turnstile tokens receive mandatory server-side Siteverify validation. |
 | `ICJ-057` | Turnstile site key may be public; Turnstile secret remains server-only. |
@@ -2432,7 +2311,7 @@ The following remain true regardless of provider/SDK details:
 | `ICJ-064` | Turnstile production/non-production configurations are isolated. |
 | `ICJ-065` | No general-purpose queue/worker fleet is introduced in V1.x. |
 | `ICJ-066` | `waitUntil()` may perform best-effort non-critical post-response refresh/work only. |
-| `ICJ-067` | `after()` is never the sole correctness mechanism for Contact delivery, moderation audit, Arcade finalization or security mutations. |
+| `ICJ-067` | `after()` is never the sole correctness mechanism for moderation audit, Arcade finalization or security mutations. |
 | `ICJ-068` | Vercel Cron is the baseline scheduled-job provider while Vercel remains the deployment platform. |
 | `ICJ-069` | Cron endpoints require `CRON_SECRET` Bearer verification and `no-store` behavior. |
 | `ICJ-070` | Production cron is not assumed to run on preview deployments. |
@@ -2502,7 +2381,6 @@ These references are implementation context, not higher authority than approved 
 - GitHub REST API best practices: <https://docs.github.com/en/rest/using-the-rest-api/best-practices-for-using-the-rest-api>
 - GitHub REST API rate limits: <https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api>
 - GitHub REST authentication: <https://docs.github.com/en/rest/authentication/authenticating-to-the-rest-api>
-- Resend idempotency keys: <https://resend.com/changelog/idempotency-keys>
 - Cloudflare Turnstile server-side validation: <https://developers.cloudflare.com/turnstile/get-started/server-side-validation/>
 - Vercel Cron Jobs: <https://vercel.com/docs/cron-jobs>
 - Vercel Cron management/security: <https://vercel.com/docs/cron-jobs/manage-cron-jobs>

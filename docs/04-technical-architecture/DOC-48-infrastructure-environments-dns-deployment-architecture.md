@@ -37,8 +37,8 @@ depends_on:
 
 decision_families:
   - INF
-last_updated: 2026-11-10
-approved_at: 2026-11-10
+last_updated: 2026-11-25
+approved_at: 2026-11-25
 ---
 
 # DOC-48 — Infrastructure, Environments, DNS & Deployment Architecture
@@ -94,7 +94,7 @@ The intended balance is:
 ```text
 Managed edge/CDN/TLS/compute     → Vercel
 Managed PostgreSQL/Auth          → Supabase
-Email delivery                   → provider adapter (baseline Resend)
+Contact email                    → domain forwarding (receive only, ADR-009)
 Human verification              → provider adapter (baseline Turnstile)
 Source / CI                      → GitHub
 
@@ -111,7 +111,7 @@ Secrets                          → provider secret stores, never Git
 1. **Production is boring on purpose.** Infrastructure should be easier to recover than the UI is to design.
 2. **No self-hosted servers in V1.x.** There is no VPS, Kubernetes cluster, Nginx host or manually patched database VM.
 3. **The professional core is deployable without runtime providers.** Projects, experience, CV and authored content remain repository/build-backed.
-4. **Runtime providers fail independently.** Supabase, Resend, GitHub or Turnstile outages must not erase the professional portfolio shell.
+4. **Runtime providers fail independently.** Supabase, GitHub, Turnstile or mail-forwarding outages must not erase the professional portfolio shell.
 5. **Environment isolation is stronger than naming conventions.** Preview must never receive production secrets or production data merely because both run the same commit.
 6. **Schema changes are versioned.** Production database edits are migrations, not undocumented dashboard clicks.
 7. **Secrets are scoped by environment and purpose.** A preview token cannot mutate production.
@@ -152,11 +152,11 @@ Secrets                          → provider secret stores, never Git
                                                 │
                          ┌──────────────────────┼─────────────────────┐
                          ▼                      ▼                     ▼
-                      Resend                 GitHub             Turnstile
+                   Auth SMTP (V1.2)          GitHub             Turnstile
                     (outbound)            / feeds              verification
 ```
 
-The browser never receives privileged Supabase credentials, email provider secrets, cron secrets or database connection strings.
+The browser never receives privileged Supabase credentials, SMTP secrets, cron secrets or database connection strings.
 
 ---
 
@@ -214,7 +214,7 @@ Provider behavior falls into three classes:
 - **sandbox/test credential** — integration verification;
 - **real production provider** — never the default local path.
 
-A developer running the site locally must not accidentally send real Contact emails, publish production data or consume production admin sessions.
+A developer running the site locally must not accidentally send real Auth email, publish production data or consume production admin sessions.
 
 ---
 
@@ -273,7 +273,6 @@ It contains only runtime data approved by DOC-44:
 - Arcade sessions/scores;
 - audit events;
 - abuse-control state;
-- Contact delivery metadata;
 - Admin Auth/account state.
 
 It does not become the canonical store for Projects/Experience/CV content.
@@ -335,7 +334,7 @@ may be used as a stable alias, subject to:
 - synthetic data only;
 - separate secrets;
 - separate Supabase persistent branch/project;
-- no production email recipients by default.
+- no production Auth SMTP credentials by default.
 
 Staging must never become a forgotten semi-production environment with stale credentials.
 
@@ -423,10 +422,12 @@ Conceptual zone:
 alejosorno.dev.            A/ALIAS → Vercel-required apex target
 www.alejosorno.dev.        CNAME   → Vercel-required target
 
-## Email/provider verification
-<dkim selectors>           CNAME/TXT → email provider
-alejosorno.dev.            TXT       → SPF/verification as required
-_dmarc.alejosorno.dev.     TXT       → DMARC policy
+## Email (ADR-009)
+alejosorno.dev.            MX        → email-forwarding provider
+alejosorno.dev.            TXT       → SPF ending in -all; only the forwarder include if required (receive-only root)
+_dmarc.alejosorno.dev.     TXT       → DMARC p=reject
+<selector>._domainkey.mail CNAME/TXT → Auth SMTP provider DKIM (V1.2)
+mail.alejosorno.dev.       TXT       → SPF for the Auth SMTP provider (V1.2)
 
 ## Optional provider verification
 <provider-specific>        TXT/CNAME → documented provider target
@@ -438,7 +439,7 @@ Rules:
 - inspect the Vercel domain configuration at setup time;
 - changes to SPF must preserve the one-record SPF rule;
 - DMARC rollout should be deliberate;
-- DKIM selectors belong to the sending provider;
+- DKIM selectors belong to the V1.2 Auth SMTP provider on the sending subdomain;
 - DNS records are documented in an infrastructure inventory without publishing secret tokens unnecessarily.
 
 ---
@@ -510,23 +511,25 @@ Domain ownership is a Tier-0 asset. A compromised DNS account can defeat otherwi
 
 ## 16. Email DNS separation
 
-Contact delivery and Supabase Auth recovery may use the same email delivery provider but they are separate logical channels.
-
-Recommended sending-domain strategy:
+The root domain receives mail and never sends it; the site never emails visitors (ADR-009).
 
 ```text
-public identity / links:       alejosorno.dev
-transactional sending domain:  mail.alejosorno.dev  (or another documented subdomain)
+public identity, links, Contact address:  alejosorno.dev       (receives only; forwards to the owner)
+Auth recovery sending (V1.2):              mail.alejosorno.dev  (or another documented subdomain)
 ```
 
-The exact sender address is decided during email setup, but production requires:
+Root domain, before V1.0 production:
 
-- SPF alignment;
-- DKIM verification;
-- DMARC record/policy;
-- tested From/Reply-To behavior;
-- separation between visitor Reply-To and provider-authenticated From domain;
-- no production credentials in Preview.
+- MX and any verification records required by the email-forwarding provider;
+- SPF that authorizes no sender: `v=spf1 -all`, or, if the forwarder requires it, only the forwarder's include followed by `-all`;
+- DMARC `p=reject`, so nobody can send as the root domain;
+- a test message to the published address reaches the owner's mailbox.
+
+Auth sending subdomain, before V1.2 (DOC-45 §57):
+
+- SPF and DKIM for the chosen production SMTP provider;
+- DMARC alignment for the subdomain;
+- no production SMTP credentials in Preview.
 
 DOC-16/DOC-46 own application/email behavior; DOC-48 owns DNS deployment of the required records.
 
@@ -698,7 +701,6 @@ Examples:
 
 ```text
 SUPABASE_SECRET_KEY
-RESEND_API_KEY
 TURNSTILE_SECRET_KEY
 CRON_SECRET
 ABUSE_HMAC_KEY_V1
@@ -729,10 +731,10 @@ Examples may include source-map upload tokens or deployment automation credentia
 Each variable requires an inventory entry:
 
 ```yaml
-name: RESEND_API_KEY
+name: TURNSTILE_SECRET_KEY
 classification: secret
 consumer: server-runtime
-provider: Resend
+provider: Cloudflare Turnstile
 environments:
   local: test/sandbox
   preview: test/sandbox
@@ -770,7 +772,7 @@ Production and Preview use different credentials whenever the provider permits i
 At minimum separate:
 
 - Supabase project/branch keys;
-- email API key or sending behavior;
+- Auth SMTP credentials (V1.2);
 - Turnstile secret/site configuration where useful;
 - abuse-HMAC keys;
 - cron secret;
@@ -1060,7 +1062,8 @@ If future approved features introduce Supabase Storage:
 | Failure | Expected impact |
 |---|---|
 | GitHub API down | cached/stale Dev Activity only |
-| Resend down | Contact/Auth-email delivery degraded |
+| Mail forwarding down | Contact mail delayed; the Contact page still renders (ADR-009) |
+| Auth SMTP down (V1.2) | admin recovery email degraded |
 | Turnstile down | protected public writes fail safely, authored text preserved client-side |
 | Supabase down | runtime/community/Admin/Arcade degraded; repository professional content remains usable where deployment/cache permits |
 | Vercel regional function issue | platform routing/failover behavior applies; static/cached content may remain available |
@@ -1228,7 +1231,6 @@ No standalone worker fleet exists in V1.x.
 
 They are not used for:
 
-- Contact delivery correctness;
 - moderation audit persistence;
 - Arcade score commit;
 - Auth recovery correctness;
@@ -1311,14 +1313,12 @@ Preview/Staging:
 
 - provider test/sandbox key or restricted recipient allowlist;
 - environment-labelled subject/header where useful;
-- never email arbitrary visitor-entered addresses unless the feature explicitly requires it.
+- never email visitors (ADR-009).
 
 Production:
 
-- verified domain;
-- real Contact destination;
-- production Auth SMTP channel;
-- SPF/DKIM/DMARC verified.
+- root domain forwarding to the owner, SPF ending in `-all` (DOC-48 §16) and DMARC `p=reject` (ADR-009);
+- from V1.2, the production Auth SMTP channel on its sending subdomain with SPF/DKIM verified.
 
 ---
 
@@ -1502,7 +1502,6 @@ Examples:
 ```text
 community writes disabled
 Arcade score submissions disabled
-Contact delivery disabled
 external integrations frozen on stale cache
 ```
 
@@ -1542,14 +1541,14 @@ The first production launch follows an ordered runbook.
 16. verify TLS;
 17. configure `www` redirect;
 18. verify canonical/SEO output;
-19. configure email DNS and verify provider;
+19. configure Contact forwarding and the root-domain SPF/DMARC records (ADR-009);
 
 ## Phase D — validation
 
 20. production build/deploy;
 21. security-header/CSP verification;
 22. Admin AAL2 login verification;
-23. Contact delivery test;
+23. Contact forwarding test (a message to the published address reaches the owner);
 24. environment isolation test;
 25. backup visibility/restore procedure verification;
 26. final smoke/accessibility/performance checks;
@@ -1570,7 +1569,7 @@ Production is not ready if any are unresolved:
 - production Auth redirect allowlist accepts unsafe origins;
 - backup policy unknown;
 - Admin provisioned without MFA;
-- Contact sender domain unverified;
+- Contact forwarding untested or root-domain anti-spoofing records missing;
 - Preview can access production runtime data;
 - rollback/recovery ownership unknown.
 
@@ -1607,7 +1606,7 @@ Primary email/recovery account
 
 Compromise of one requires incident response even if application code is unchanged.
 
-Resend/Turnstile/analytics are important but usually have narrower blast radius.
+Mail forwarding, Turnstile and analytics are important but usually have narrower blast radius.
 
 ---
 
@@ -1623,7 +1622,7 @@ production:
   database: supabase
   database_region: <chosen>
   dns: cloudflare|vercel
-  email: resend
+  email: forwarding-only (ADR-009); auth_smtp: <chosen before V1.2>
   human_verification: turnstile
   source: github
   monitoring: <provider>
@@ -1775,7 +1774,6 @@ Infrastructure is cost-aware but correctness-first.
 When a provider quota is reached:
 
 - external data degrades to cache;
-- Contact reports unavailable rather than duplicating mail;
 - scheduled refresh backs off;
 - public professional content remains accessible.
 
@@ -1893,7 +1891,7 @@ The portfolio can theoretically move:
 
 - Astro application to another compatible host (adapter swap);
 - PostgreSQL data to another PostgreSQL service;
-- email adapter to another provider;
+- mail forwarding or Auth SMTP to another provider (DNS change only);
 - verification adapter to another provider;
 - DNS to another authoritative service.
 
@@ -2072,7 +2070,7 @@ Potential approved values:
 
 ```text
 www.alejosorno.dev       redirect only
-mail.alejosorno.dev      email authentication/sending domain
+mail.alejosorno.dev      Auth recovery sending subdomain (V1.2)
 staging.alejosorno.dev   optional, non-production
 ```
 
@@ -2197,7 +2195,7 @@ Restore production-like backup into isolated non-production environment and run 
 
 ## INF-GATE-08 — Provider outage isolation
 
-Simulate Supabase/Resend/Turnstile/GitHub unavailability.
+Simulate Supabase/Turnstile/GitHub unavailability.
 
 **Pass:** failure matches documented feature boundary; professional core does not collapse from unrelated provider outage.
 
@@ -2220,7 +2218,7 @@ RUN-01 Deploy / promote / rollback application
 RUN-02 Apply / verify database migration
 RUN-03 Restore database backup
 RUN-04 Rotate Supabase secret
-RUN-05 Rotate Resend / Turnstile / GitHub tokens
+RUN-05 Rotate Turnstile / GitHub tokens and Auth SMTP credentials
 RUN-06 Recover Admin access
 RUN-07 Domain/DNS incident
 RUN-08 Disable Community writes
@@ -2248,7 +2246,7 @@ Before DOC-48 is considered implemented:
 - [ ] Preview cannot reach production data/secrets;
 - [ ] production Admin is AAL2-protected;
 - [ ] TLS/canonical redirect verified;
-- [ ] email SPF/DKIM/DMARC verified before real sending;
+- [ ] Contact forwarding works and the root-domain SPF ending in `-all` (DOC-48 §16) and DMARC `p=reject` are published (ADR-009);
 - [ ] cron endpoints authenticated;
 - [ ] backup capability active before persistent UGC is considered durable;
 - [ ] restore drill completed before depending on backup claims;
@@ -2338,7 +2336,7 @@ The following decisions are proposed by DOC-48.
 | INF-022 | HSTS is rolled out after HTTPS verification; preload is deferred unless deliberately approved. |
 | INF-023 | Registrar and DNS accounts require MFA, recovery and auto-renew controls. |
 | INF-024 | DNSSEC is enabled where supported/validated. |
-| INF-025 | Email authentication DNS is separated/documented and production requires SPF/DKIM/DMARC verification. |
+| INF-025 | Email DNS is separated/documented: the root domain receives only (MX, SPF ending in `-all` (DOC-48 §16), DMARC `p=reject`), and the V1.2 Auth sending subdomain requires SPF/DKIM/DMARC verification (ADR-009). |
 | INF-026 | Static/cached delivery remains global while stateful functions run near the primary database. |
 | INF-027 | Final production region pairing is selected using measured representative latency before meaningful production data accumulates. |
 | INF-028 | Initial region candidate is Supabase `us-east-1` + Vercel `iad1`, compared against São Paulo pairing before final lock. |
@@ -2382,7 +2380,7 @@ The following decisions are proposed by DOC-48.
 | INF-066 | Non-production origins are noindex and excluded from production sitemap/canonical output. |
 | INF-067 | Callback allowlists are environment-specific and do not use unsafe broad wildcards. |
 | INF-068 | Production Admin credentials/factors are never copied to non-production Auth. |
-| INF-069 | Non-production email uses fake/sandbox/restricted behavior; Production alone uses real delivery configuration. |
+| INF-069 | Non-production Auth email uses fake/sandbox/restricted behavior; Production alone uses real SMTP configuration. |
 | INF-070 | Preview/local analytics are disabled or isolated from production analytics. |
 | INF-071 | Observability events carry environment/release metadata. |
 | INF-072 | Core project assets are repository/managed assets rather than runtime hotlinks to arbitrary remote hosts. |

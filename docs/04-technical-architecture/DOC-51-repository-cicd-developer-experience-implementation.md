@@ -44,8 +44,8 @@ depends_on:
 
 decision_families:
   - RDX
-approved_at: 2026-11-10
-last_updated: 2026-11-19
+approved_at: 2026-11-25
+last_updated: 2026-11-25
 ---
 
 # DOC-51 — Repository, CI/CD & Developer Experience Implementation
@@ -318,7 +318,7 @@ Use short descriptive branches:
 ```text
 feat/widget-customization
 feat/project-detail-routing
-fix/contact-retry
+fix/contact-copy-fallback
 fix/dock-320-zoom
 refactor/input-manager
 security/admin-csrf
@@ -949,7 +949,7 @@ Therefore tests rely on:
 - local/mock provider adapters;
 - safe public configuration only.
 
-A contributor PR should not need Resend, production Supabase, Turnstile secret or production monitoring credentials to prove correctness.
+A contributor PR should not need production Supabase, Auth SMTP credentials, Turnstile secret or production monitoring credentials to prove correctness.
 
 ---
 
@@ -1247,7 +1247,7 @@ After production deployment, non-destructive smoke checks verify at minimum:
 - security headers/basic health are present;
 - no obvious server exception spike appears.
 
-Smoke tests do not send real Contact messages or create fake public UGC.
+Smoke tests do not email the Contact address or create fake public UGC.
 
 ---
 
@@ -1612,7 +1612,7 @@ Scheduled failure creates a visible issue/alert if material; it is not allowed t
 
 ## 83. Live-provider tests
 
-Normal CI does not depend on GitHub API, Resend, live RSS, Turnstile or production Supabase being available.
+Normal CI does not depend on GitHub API, live RSS, Turnstile or production Supabase being available.
 
 Provider contracts use fixtures/adapters.
 
@@ -1937,7 +1937,7 @@ This is part of environment correctness, not just cleanliness.
 
 ## 106. Preview email behavior
 
-Preview must not accidentally send Contact messages as if they came from Production.
+Preview must not accidentally send Auth email as if it came from Production.
 
 Preferred options:
 
@@ -2669,7 +2669,7 @@ V0 bootstrap must prove the selected Vercel build image can run the pinned Rende
 | RDX-097 | Local development/runtime data is synthetic. |
 | RDX-098 | Local/CI Admin identities/factors are isolated from Production Admin credentials. |
 | RDX-099 | Preview UGC cannot leak into Production runtime tables. |
-| RDX-100 | Preview Contact cannot silently send as Production behavior/recipient. |
+| RDX-100 | Preview cannot silently send Auth email as Production; Contact sends nothing (ADR-009). |
 | RDX-101 | Preview/local analytics do not pollute Production analytics. |
 | RDX-102 | Observability differentiates environment and correlates source maps with release identity. |
 | RDX-103 | Safe build metadata correlates Git SHA, release and deployment without exposing secrets. |

@@ -12,8 +12,8 @@ depends_on:
   - DOC-31
 decision_families:
   - SEO
-last_updated: 2026-11-10
-approved_at: 2026-11-10
+last_updated: 2026-11-25
+approved_at: 2026-11-25
 ---
 
 # DOC-17 — SEO, Metadata, Analytics & Discoverability Requirements
@@ -62,7 +62,7 @@ Use privacy-friendly, purposeful events rather than exhaustive surveillance. Use
 
 - project detail opened;
 - CV preview/download language;
-- Contact attempt/success/failure category;
+- Contact address copied / Email me opened (no message content exists; ADR-009);
 - Arcade game started/completed;
 - Guestbook/sketch submit success;
 - Making Of/Terminal/Command Palette opened;
@@ -75,7 +75,6 @@ Browsing past a project in a selector is not automatically a page view.
 
 Do not log/send raw:
 
-- Contact message bodies;
 - Guestbook message bodies just for analytics;
 - unpublished sketches;
 - Terminal command text;

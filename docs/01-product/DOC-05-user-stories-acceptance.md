@@ -12,8 +12,8 @@ depends_on:
   - DOC-04
 decision_families:
   - USR
-last_updated: 2026-11-10
-approved_at: 2026-11-10
+last_updated: 2026-11-25
+approved_at: 2026-11-25
 ---
 
 # DOC-05 — User Stories, Epics & Acceptance Framework
@@ -68,10 +68,10 @@ Normative epic release mapping (DOC-02 governs exact release scope):
 
 - **USR-020:** I can preview/download an English or Spanish CV.
 - **USR-021:** A direct CV URL works without previous app state.
-- **USR-022:** I can send a real contact message and receive clear success/failure feedback.
-- **USR-023:** A failed send preserves my typed message.
-- **USR-024:** Before sending, I can read how my data will be used and explicitly authorize it (ADR-008).
-- **USR-025:** I can read the privacy policy in my language and know how to consult, correct or delete my data (ADR-008).
+- **USR-022:** I can see the owner's email address and either copy it or open it in my mail client (ADR-009).
+- **USR-023:** If copying fails, I am told so and the address is selected so I can copy it myself (ADR-009).
+- **USR-024:** Retired (ADR-009): Contact collects no data, so there is nothing to authorize.
+- **USR-025:** I can read the privacy notice in my language, know what the site does and does not collect, and know where to send data requests (ADR-008, ADR-009).
 
 ## 6. Epic D — Personalization and system settings
 

@@ -11,8 +11,8 @@ depends_on:
   - DOC-01
 decision_families:
   - SCP
-last_updated: 2026-11-10
-approved_at: 2026-11-10
+last_updated: 2026-11-25
+approved_at: 2026-11-25
 ---
 
 # DOC-02 — Scope, Release Boundaries & Non-Goals
@@ -58,11 +58,11 @@ Must be useful even if no later release ships:
 - project Media;
 - controlled Personal Widget Field personalization: pin/unpin, logical reorder, supported `S/M/L` sizes, local versioned persistence and reset;
 - ES/EN; light/dark; sound control; motion/transparency preferences;
-- Contact form with real delivery and recovery on failure;
+- Contact with a visible address, Copy and `mailto:` (no form, ADR-009);
 - `/[locale]/cv` with RenderCV preview/download in both languages;
 - responsive Compact/Medium/Expanded/Wide behavior;
 - accessibility baseline, SEO, metadata, sitemap/robots, 404;
-- Personal Data Processing Policy page in ES/EN (ADR-008);
+- short privacy notice page in ES/EN (ADR-009);
 - content-driven `Currently Building` foundation where useful.
 
 Achievements may have an internal data/unlock foundation in V1.0 even if their full public feature set ships in V1.1.
@@ -92,7 +92,7 @@ The six primary Dock destinations are never dead controls. Before a later-releas
 - Sketch Wall;
 - Drawing Pad utility workspace;
 - reporting/reactions where approved;
-- Terms of Use page in ES/EN and the UGC age declaration (ADR-008);
+- Personal Data Processing Policy and Terms of Use pages in ES/EN, both lawyer-reviewed, the RNBD applicability check, and the UGC age declaration (ADR-008, ADR-009);
 - moderation workflow and admin authentication;
 - moderation queue, hide/reject/approve and basic ban/rate-limit controls.
 
@@ -184,4 +184,4 @@ Do not “save time” by removing mobile support, keyboard accessibility, valid
 - **SCP-011** Curated themes ship in V1.1; a theme marketplace stays out of scope (ADR-007).
 - **SCP-012** Anonymous presence ships in V1.4; real-time chat, identity and messages stay out of scope (ADR-007).
 - **SCP-013** Arcade expansion beyond two games may be proposed only after V1.3 ships (ADR-007).
-- **SCP-014** The Personal Data Processing Policy ships in V1.0 and the Terms of Use before V1.2 (ADR-008).
+- **SCP-014** A short privacy notice ships in V1.0; the full Personal Data Processing Policy and the Terms of Use ship before V1.2 (ADR-008, ADR-009).

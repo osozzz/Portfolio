@@ -11,8 +11,8 @@ depends_on:
   - DOC-02
 decision_families:
   - AUD
-last_updated: 2026-09-15
-approved_at: 2026-09-15
+last_updated: 2026-11-25
+approved_at: 2026-11-25
 ---
 
 # DOC-03 — Audiences, Personas & Stakeholder Needs
@@ -63,7 +63,7 @@ Needs:
 
 - concise capabilities demonstrated through projects;
 - professional trust signals;
-- usable Contact form;
+- an easy Contact path: a visible address to copy or open in a mail client (ADR-009);
 - clarity about public vs private/client work;
 - no need to understand Arcade/Easter eggs.
 

@@ -47,8 +47,8 @@ depends_on:
   - ADR-001
 decision_families:
   - CNT
-last_updated: 2026-11-10
-approved_at: 2026-11-10
+last_updated: 2026-11-25
+approved_at: 2026-11-25
 ---
 
 # DOC-36 — Content Architecture & Canonical Professional Data
@@ -253,7 +253,7 @@ credential
 other
 ```
 
-Contact form submission data is **not** canonical professional content and never feeds the profile automatically.
+The published Contact address is the `email` public link (`id: contact-email`, `kind: email`, `privacy_class: PUBLIC`). It is the single source for the Contact space and any other place that shows it, and it belongs to the `alejosorno.dev` domain with forwarding (ADR-009). Mail that visitors send is **not** canonical professional content and never feeds the profile automatically.
 
 ---
 

@@ -25,9 +25,13 @@ affects:
   - DOC-50
 supersedes:
   - "DOC-02 §10 rows: background music, full blog CMS, theme marketplace, real-time public chat / follow graph (partially), more than two Arcade games"
+superseded_in_part_by:
+  - ADR-009
 ---
 
 # ADR-007 — DOC-02 Non-Goal Revision
+
+> Superseded in part by ADR-009 (2026-11-25): V1.0 ships a short privacy notice instead of the full Personal Data Processing Policy, which moves to before V1.2. The rest is unchanged.
 
 ## Context
 

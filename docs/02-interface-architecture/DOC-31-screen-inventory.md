@@ -9,8 +9,8 @@ depends_on:
   - none
 decision_families:
   - SCR
-last_updated: 2026-11-10
-approved_at: 2026-11-10
+last_updated: 2026-11-25
+approved_at: 2026-11-25
 ---
 
 # DOC-31 — Screen & Workspace Inventory
@@ -116,7 +116,7 @@ No dedicated public route initially:
 | System Status | `/status` | Route Content | Public | V1.1/V1.4 |
 | Blog index | `/blog` | Route Content | Public | V1.1 |
 | Blog post | `/blog/[slug]` | Route Content | Public | V1.1 |
-| Privacy policy | `/privacy` | Route Content | Public | V1.0 |
+| Privacy notice (V1.0), full policy (before V1.2) | `/privacy` | Route Content | Public | V1.0 (ADR-009) |
 | Terms of Use | `/terms` | Route Content | Public | V1.2 |
 | Presence indicator | None (chrome/Status) | Ambient status element | Public | V1.4 |
 | 404 | framework fallback | Primary Workspace | Public | V1.0 |
@@ -341,20 +341,11 @@ Route: `/[locale]/contact`
 Primary content:
 
 - ContactProfile
-- ContactForm
+- ContactCard: the published address as visible text, a Copy button and an Email me `mailto:` link with a localized subject (ADR-009)
 
-Recommended fields:
+States: ready, copied, copy failed (inline message; the address is selected). Without JavaScript the address and the link still work; Copy appears only when it can work.
 
-- Name
-- Email
-- Message
-- Subject optional or omitted V1.0
-
-Submission flow:
-
-`client validation → server validation → anti-spam/rate limit → minimal persistence if needed → email delivery → success state`
-
-Preserve typed content if sending fails.
+There is no form, submission or server call (ADR-009). The visitor writes from their own mail client.
 
 ## CV
 
@@ -392,10 +383,10 @@ Route: `/[locale]/blog` and `/[locale]/blog/[slug]` (V1.1). Markdown posts autho
 
 ## Legal pages
 
-- `/[locale]/privacy` — Personal Data Processing Policy (V1.0, Ley 1581; ADR-008).
+- `/[locale]/privacy` — short privacy notice in V1.0, replaced by the full Personal Data Processing Policy before V1.2 (Ley 1581; ADR-008, ADR-009).
 - `/[locale]/terms` — Terms of Use (V1.2).
 
-Plain, readable Route Content in ES and EN, linked from the footer, Contact and community composers. Both are marked "pending lawyer review" until reviewed.
+Plain, readable Route Content in ES and EN, linked from the footer and, from V1.2, the community composers. V1.0 publishes the short privacy notice (ADR-009). Both are marked "pending lawyer review" until reviewed.
 
 ## Command Palette
 
@@ -448,7 +439,6 @@ Potential systems:
 - Guestbook
 - Sketch Wall
 - Arcade Scores
-- Contact Delivery
 
 Early versions can expose build/deployment/integration state without pretending to run enterprise monitoring. No fake CPU/RAM telemetry.
 
@@ -521,7 +511,7 @@ Guestbook nickname, score nickname, sketch nickname and Contact identity remain 
 - music prompt and music/sound control
 - responsive system
 - SEO/404
-- privacy policy page
+- short privacy notice page (V1.0; full policy before V1.2, ADR-009)
 
 ### V1.1 — Personality
 
@@ -658,6 +648,6 @@ A public route additionally needs metadata, canonical URL, Open Graph, locale al
 
 - SCR-038 — The music prompt is a non-modal transient experience shown once after Boot; it has no route (ADR-005).
 - SCR-039 — The blog uses `/blog` and `/blog/[slug]` from V1.1 (ADR-007).
-- SCR-040 — Legal pages use `/privacy` (V1.0) and `/terms` (V1.2) (ADR-008).
+- SCR-040 — Legal pages use `/privacy` (V1.0 notice, full policy before V1.2) and `/terms` (V1.2) (ADR-008, ADR-009).
 - SCR-041 — Project Detail is one route that renders as a floating surface over the persisted Home when opened from Home and full-page on direct entry (ADR-004).
 - SCR-042 — Anonymous presence is an ambient chrome/Status element in V1.4, not a screen (ADR-007).

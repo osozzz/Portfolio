@@ -18,8 +18,8 @@ depends_on:
   - DOC-38
 decision_families:
   - MAT
-last_updated: 2026-11-10
-approved_at: 2026-11-10
+last_updated: 2026-11-25
+approved_at: 2026-11-25
 ---
 
 # DOC-39 — Liquid Glass Material Specification
@@ -543,7 +543,7 @@ Rule:
 
 ## 25. Forms
 
-Inputs and Contact forms prioritize clarity.
+Inputs, forms and the Contact address card (ADR-009) prioritize clarity.
 
 Inputs may visually reference Frost/Liquid through border and subtle fill, but:
 
@@ -1282,7 +1282,7 @@ Before freezing production tokens, create material prototype scenes covering at 
 2. Global Dock over both calm and busy project backdrops.
 3. Project Detail MAT-3 shell + MAT-0/1 reading plane.
 4. Command Palette / Settings.
-5. Contact form.
+5. Contact address card (ADR-009).
 6. Achievement reveal.
 7. Compact mobile Home.
 8. Reduced Transparency.

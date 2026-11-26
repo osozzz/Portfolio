@@ -9,8 +9,8 @@ depends_on:
   - none
 decision_families:
   - CMP
-last_updated: 2026-11-10
-approved_at: 2026-11-10
+last_updated: 2026-11-25
+approved_at: 2026-11-25
 ---
 
 # DOC-27 — Component Inventory & UI Primitives
@@ -391,8 +391,8 @@ Tech Pulse cards visibly attribute external sources.
 
 - ContactWorkspace
 - ContactProfile
-- ContactForm
-- ContactSuccess
+- ContactCard (visible address, Copy, Email me `mailto:` link; ADR-009)
+- CopyButton (progressive enhancement; copied and copy failed states, polite announcement)
 - SocialLinkList
 - AvailabilityStatus
 

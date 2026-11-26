@@ -9,8 +9,8 @@ depends_on:
   - none
 decision_families:
   - UI
-last_updated: 2026-09-15
-approved_at: 2026-09-15
+last_updated: 2026-11-25
+approved_at: 2026-11-25
 ---
 
 # DOC-20 — Interface Philosophy & Interaction Model
@@ -246,7 +246,7 @@ Visual, motion, audio and interaction feedback can reinforce each other, but no 
 
 ## Forms
 
-Contact, Guestbook and Admin use conventional accessible form semantics beneath the visual system. Do not sacrifice form usability to the console metaphor.
+Guestbook and Admin use conventional accessible form semantics beneath the visual system, and Contact uses plain text, a native button and a link (ADR-009). Do not sacrifice usability to the console metaphor.
 
 ## Accessibility
 

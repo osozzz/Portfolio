@@ -35,14 +35,14 @@ depends_on:
   - ADR-002
 decision_families:
   - BEA
-last_updated: 2026-11-10
-approved_at: 2026-11-10
+last_updated: 2026-11-25
+approved_at: 2026-11-25
 ---
 
 # DOC-43 — Backend, API & Application Service Architecture
 
 > **Status:** APPROVED.  
-> **Role:** Define the server-side application contract that turns public/admin requests into validated, authorized, idempotent domain operations without coupling UI code directly to PostgreSQL, Supabase SDK calls, Resend, provider payloads or route-file business logic.
+> **Role:** Define the server-side application contract that turns public/admin requests into validated, authorized, idempotent domain operations without coupling UI code directly to PostgreSQL, Supabase SDK calls, provider payloads or route-file business logic.
 
 ---
 
@@ -63,7 +63,6 @@ This document defines:
 - idempotency/replay semantics;
 - transaction and concurrency boundaries;
 - repository and provider interfaces;
-- Contact delivery architecture;
 - Guestbook, Sketch, report and optional reaction workflows;
 - Arcade session/result protocols;
 - admin moderation application services;
@@ -108,7 +107,7 @@ Domain Policy / Transaction Boundary
         ↓
 Repository / Provider Port
         ↓
-Supabase PostgreSQL / Storage / Resend / External Provider
+Supabase PostgreSQL / Storage / External Provider
 ```
 
 The transport knows HTTP/framework mechanics. The application service knows the use case. The repository/provider adapter knows infrastructure.
@@ -151,7 +150,7 @@ domain policy / typed ports
 infrastructure adapters
 ```
 
-Infrastructure adapters may implement interfaces defined by the application/domain boundary, but application services do not import concrete Supabase or Resend clients.
+Infrastructure adapters may implement interfaces defined by the application/domain boundary, but application services do not import concrete Supabase or other provider clients.
 
 Forbidden examples:
 
@@ -166,8 +165,8 @@ GameResultRoute
 ```
 
 ```text
-ContactForm component
-→ Resend SDK
+GuestbookComposer component
+→ Supabase service-role client
 ```
 
 Preferred:
@@ -186,7 +185,6 @@ Initial backend domains:
 
 ```text
 server/
-├── contact/
 ├── social/
 │   ├── guestbook/
 │   ├── sketches/
@@ -228,7 +226,6 @@ Commands attempt to change authoritative state or trigger a side effect.
 
 Examples:
 
-- submit Contact;
 - submit Guestbook entry;
 - publish Sketch for review;
 - report public content;
@@ -335,9 +332,7 @@ Rules:
 
 Baseline for same-application form mutations where progressive enhancement and direct UI integration are useful.
 
-Primary V1.0 use:
-
-- Contact submission.
+Primary use: Guestbook submission from V1.2 (Contact has no form in V1.x, ADR-009).
 
 Likely admin uses:
 
@@ -391,7 +386,6 @@ Internal HTTP is unnecessary latency and duplicates auth/cache/error semantics.
 
 | Use case | Baseline transport | Why |
 |---|---|---|
-| Contact submit | Astro Action | same-origin form, progressive enhancement, no external API contract |
 | Guestbook submit | Astro Action by default | simple form semantics; can later expose API endpoint only if client workflow proves necessary |
 | Guestbook list | direct server query; API endpoint only for client pagination | avoid self-HTTP |
 | Sketch publish | API endpoint | structured drawing payload and explicit protocol |
@@ -439,7 +433,6 @@ POST /api/social/sketches
 POST /api/social/reports
 POST /api/social/reactions        # only if feature ships
 
-POST /api/webhooks/resend         # only when webhook processing is enabled
 ```
 
 Guestbook submission remains an Astro Action baseline rather than adding an API route just for symmetry.
@@ -576,7 +569,7 @@ Do not add generic pagination/meta fields to every response if the use case does
 
 Astro Actions use the same semantic `AppResult<T>` family but do not pretend to expose HTTP status codes to the component.
 
-A Contact form receives enough data to render:
+A Guestbook composer receives enough data to render:
 
 - field errors;
 - challenge required/failed;
@@ -644,9 +637,9 @@ Transport schemas should live next to the backend domain/application contract, n
 Conceptual structure:
 
 ```text
-features/contact/contracts/
-├── contact-command.schema.ts
-└── contact-result.ts
+features/guestbook/contracts/
+├── guestbook-command.schema.ts
+└── guestbook-result.ts
 
 features/arcade/server/contracts/
 ├── create-session.schema.ts
@@ -783,7 +776,6 @@ The frontend generates an operation UUID once when the user initiates an eligibl
 
 Used for:
 
-- Contact submit;
 - Guestbook submit;
 - Sketch publish;
 - report submission where appropriate.
@@ -820,80 +812,25 @@ Never generate a brand-new operation ID automatically inside a retry loop for th
 
 ## 27. Contact architecture decision
 
-V1.0 baseline favors **data minimization**:
-
-> Contact message content is delivered through the email provider and is not stored as a general-purpose portfolio database inbox by default.
-
-The server may retain minimal operational/idempotency metadata if required, but should not persist the full `name + email + message` body merely because PostgreSQL exists.
-
-If future reliability/CRM requirements justify durable message storage, that is a deliberate DOC-44/47 amendment with retention/access policy.
+Contact has no server path (ADR-009). The Contact space renders a published domain address with Copy and a `mailto:` link; there is no form, Astro Action, application service, provider call or stored message. Reintroducing a form requires a new ADR (ADR-009, Reversibility).
 
 ---
 
-## 28. Contact submission flow
+## 28. Contact submission flow (retired, ADR-009)
 
-Baseline:
-
-```text
-Contact form
-→ Astro Action
-→ schema validation + normalization
-→ release/abuse policy
-→ stable operation ID
-→ ContactApplicationService
-→ EmailGateway
-→ Resend
-→ authoritative accepted/error result
-```
-
-Important behavior:
-
-- browser preserves entered text on recoverable failure;
-- server never logs raw message content;
-- email provider key stays server-only;
-- provider timeout/error maps to `DELIVERY_FAILED`/`PROVIDER_UNAVAILABLE`;
-- successful provider acceptance is the success boundary shown to the user;
-- optional sender confirmation remains deferred.
+Retired (ADR-009): there is no submission.
 
 ---
 
-## 29. Contact email idempotency
+## 29. Contact email idempotency (retired, ADR-009)
 
-The provider adapter receives a stable idempotency key derived from the logical Contact operation.
-
-Conceptual:
-
-```text
-contact-delivery/<operationId>
-```
-
-Resend supports idempotency keys for send requests, allowing a retry of the same email request to avoid duplicate sending within the provider's idempotency window. Provider-specific details remain inside `EmailGateway`; the application service only expresses “deliver this contact message exactly-once-as-practical.”
-
-This is defense-in-depth with our own operation semantics, not permission to let the provider define our application contract.
+Retired (ADR-009): the site sends no email.
 
 ---
 
-## 30. EmailGateway port
+## 30. EmailGateway port (retired, ADR-009)
 
-Conceptual interface:
-
-```ts
-interface EmailGateway {
-  sendContactMessage(input: ContactDelivery): Promise<EmailDeliveryResult>;
-}
-```
-
-`ContactDelivery` contains only what the provider needs.
-
-`EmailDeliveryResult` normalizes provider response into:
-
-```text
-accepted + providerMessageId?
-temporary failure
-permanent validation/config failure
-```
-
-The rest of the application never imports Resend response types.
+Retired (ADR-009): there is no email provider in V1.x, so there is no `EmailGateway`.
 
 ---
 
@@ -1359,7 +1296,6 @@ RevokeBan(banId, reason)
 V1.x enforcement scopes are feature-local:
 
 ```text
-contact
 guestbook
 sketch
 reports
@@ -1407,7 +1343,7 @@ Do not start a transaction around long external provider calls such as email del
 
 ## 53. External side effects and transactions
 
-PostgreSQL transactions cannot atomically include Resend or another external provider.
+PostgreSQL transactions cannot atomically include Storage or another external provider.
 
 Therefore application design must not pretend distributed atomicity exists.
 
@@ -1419,7 +1355,7 @@ Patterns:
 - define compensating cleanup for storage artifacts when cross-resource writes can orphan data;
 - introduce outbox/background repair only when concrete reliability requirements justify it.
 
-V1.0 Contact currently avoids a DB message inbox, reducing distributed consistency complexity.
+Contact has no server path at all (ADR-009), so it adds no distributed consistency concern.
 
 ---
 
@@ -1468,7 +1404,7 @@ AuditRepository
 IdempotencyRepository       # if persistence needed per domain
 ```
 
-Contact does **not** require `ContactSubmissionRepository` in the V1.0 baseline merely to store PII.
+There is no `ContactSubmissionRepository`: Contact stores nothing (ADR-009).
 
 DOC-44 may collapse/compose ports where one PostgreSQL transaction is clearer.
 
@@ -1479,7 +1415,6 @@ DOC-44 may collapse/compose ports where one PostgreSQL transaction is clearer.
 Infrastructure-facing ports include:
 
 ```text
-EmailGateway
 DrawingArtifactRenderer
 ObjectStorageGateway        # if DOC-44 chooses storage for derived assets
 AntiBotVerifier
@@ -1536,7 +1471,7 @@ Rules:
 - long-running work should not block acknowledgement if/when background infrastructure is introduced;
 - provider webhook support is implemented only when we actually consume useful events.
 
-Resend webhook ingestion is optional until delivery-status use cases justify it.
+No email-provider webhooks exist in V1.x (ADR-009).
 
 ---
 
@@ -1619,7 +1554,7 @@ Forbidden:
 
 Every external provider call has a bounded timeout appropriate to request UX.
 
-A Contact submission should fail recoverably rather than hanging indefinitely because the email provider is slow.
+A public submission should fail recoverably rather than hanging indefinitely because a provider is slow.
 
 Exact timeout values are performance/reliability tuning in DOC-49.
 
@@ -1650,7 +1585,6 @@ Services must distinguish sensitive/task-specific payloads from operational meta
 
 Sensitive examples:
 
-- Contact name/email/message;
 - Guestbook message/nickname;
 - Sketch text/drawing data;
 - report details;
@@ -1673,8 +1607,6 @@ Do not automatically copy sensitive payloads into logs, analytics, traces or aud
 Transport/application services may emit structured operational events such as:
 
 ```text
-contact.submit.accepted
-contact.submit.provider_failed
 guestbook.submit.pending
 sketch.submit.pending
 report.created
@@ -1695,7 +1627,7 @@ durationMs
 resourceId where safe
 ```
 
-Never raw Contact messages or full UGC payloads.
+Never full UGC payloads.
 
 Detailed observability/Sentry scrubbing follows DOC-49.
 
@@ -1727,7 +1659,6 @@ Examples:
 
 - report target missing/private may use generic `NOT_FOUND`;
 - admin auth failure does not reveal hidden moderation data;
-- email delivery failure does not expose provider credential/config detail;
 - database conflict does not expose SQL/table names;
 - anti-bot failure does not reveal scoring/rate-limit thresholds;
 - Arcade rejection may give user-safe reason class without exposing full anti-cheat heuristics.
@@ -1781,7 +1712,6 @@ The UI owns localized display messages.
 Exceptions:
 
 - user-generated content remains exactly the user's content (subject to normalization/moderation), not automatically translated;
-- provider email template content may be localized deliberately at the email adapter/template layer.
 
 Do not store translated copies of Guestbook messages merely for interface parity.
 
@@ -1813,12 +1743,6 @@ We do not guarantee indefinitely old browser sessions.
 ---
 
 ## 74. Application service examples
-
-### Contact
-
-```text
-SubmitContact
-```
 
 ### Social
 
@@ -1890,7 +1814,7 @@ Recommended feature-first implementation:
 ```text
 src/
 ├── features/
-│   ├── contact/
+│   ├── guestbook/
 │   │   ├── server/
 │   │   │   ├── actions/
 │   │   │   ├── services/
@@ -1949,7 +1873,7 @@ Server configuration is validated centrally at startup/build/runtime as appropri
 Bad:
 
 ```ts
-if (process.env.RESEND_API_KEY) ...
+if (process.env.TURNSTILE_SECRET_KEY) ...
 ```
 
 scattered in feature files.
@@ -1958,8 +1882,8 @@ Preferred:
 
 ```text
 validated server config
-→ Resend adapter construction
-→ EmailGateway
+→ Turnstile adapter construction
+→ AntiBotVerifier
 ```
 
 Exact environment topology is DOC-48.
@@ -1973,7 +1897,6 @@ Provider errors are normalized before logging/returning.
 Never expose/log:
 
 - Supabase service-role key;
-- Resend API key;
 - webhook signing secret;
 - admin session token;
 - anti-bot secret;
@@ -2007,12 +1930,9 @@ If a use case can only be tested through a full browser because all logic lives 
 
 Before broad V1.x feature expansion, verify at least:
 
-### Gate B1 — Contact
+### Gate B1 — Contact (retired, ADR-009)
 
-- valid Contact reaches provider;
-- provider timeout preserves browser text;
-- duplicate retry with same operation ID does not send duplicate email within supported provider semantics;
-- raw message is absent from logs.
+Retired (ADR-009): Contact has no server path to verify.
 
 ### Gate B2 — Guestbook
 
@@ -2077,12 +1997,6 @@ Backend feature failure is localized.
 Examples:
 
 ```text
-Resend down
-→ Contact degraded
-→ Projects/CV/Home unaffected
-```
-
-```text
 Supabase runtime unavailable
 → Guestbook/Arcade/Admin degraded
 → repository-backed professional content/CV remain available
@@ -2091,7 +2005,7 @@ Supabase runtime unavailable
 ```text
 GitHub provider down
 → cached/stale Channel/Widget state
-→ UGC/contact unaffected
+→ UGC unaffected
 ```
 
 Application services should not create accidental cross-feature dependencies.
@@ -2127,8 +2041,7 @@ Backend services must not join task-specific identities into a universal profile
 Prohibited implicit linkage:
 
 ```text
-Contact email
-→ Guestbook nickname
+Guestbook nickname
 → Arcade nickname
 → Sketch identity
 → returning local name
@@ -2179,7 +2092,7 @@ Examples:
 - moderation content may need hidden/rejected state + later purge;
 - audit history should generally be append-only/retention-controlled;
 - expired Arcade sessions may be purged by policy;
-- Contact full message is not persisted in the baseline at all.
+- Contact persists nothing; it has no server path (ADR-009).
 
 DOC-44 decides physical data model per entity.
 
@@ -2255,9 +2168,9 @@ Implementation tooling must:
 - not create generic CRUD repositories merely for speed;
 - not create new `/api` routes for server-internal reads;
 - not invent visitor accounts;
-- not persist Contact PII/message body without an approved architecture change;
+- not add a Contact form, endpoint or storage without a new ADR (ADR-009);
 - not expose service-role/provider secrets;
-- not reuse Contact/UGC identities for personalization;
+- not reuse UGC identities for personalization;
 - use stable operation IDs where idempotency is required;
 - preserve pending/public moderation semantics;
 - treat reports separately from content status;
@@ -2327,7 +2240,7 @@ DOC-43 is successfully implemented when:
 - public/admin DTOs are explicit allowlists;
 - public mutations are schema-validated and abuse-aware;
 - privileged mutations require verified admin actor;
-- retries cannot trivially duplicate Contact email, UGC records or scores;
+- retries cannot trivially duplicate UGC records or scores;
 - reports remain independent from moderation status;
 - Sketch publication never accepts arbitrary visitor image/SVG upload as authoritative content;
 - Arcade score requires a valid server-issued session;
@@ -2347,8 +2260,6 @@ Primary references:
 
 - Astro Actions / endpoints / on-demand rendering documentation: `https://docs.astro.build/`
 - Supabase server-side/auth/database documentation: `https://supabase.com/docs`
-- Resend Email API: `https://resend.com/docs/api-reference/emails/send-email`
-- Resend idempotency keys: `https://resend.com/docs/dashboard/emails/idempotency-keys`
 
 Documentation examples are references, not permission to override this architecture contract.
 
@@ -2365,7 +2276,7 @@ Documentation examples are references, not permission to override this architect
 | `BEA-005` | Commands and queries are conceptually separated without adopting CQRS infrastructure. |
 | `BEA-006` | Application services may use functions or classes; boundary clarity matters more than OOP ceremony. |
 | `BEA-007` | RequestContext is normalized server-side and does not expose raw cookies/IP to domain logic. |
-| `BEA-008` | Astro Actions are the baseline for same-app form mutations such as Contact. |
+| `BEA-008` | Astro Actions are the baseline for same-app form mutations such as Guestbook. |
 | `BEA-009` | API endpoints own explicit JSON/webhook/game/drawing protocols. |
 | `BEA-010` | V1.x does not promise a supported third-party public API. |
 | `BEA-011` | API transports use explicit typed response/error contracts and meaningful HTTP status codes. |
@@ -2380,10 +2291,10 @@ Documentation examples are references, not permission to override this architect
 | `BEA-020` | Public mutation services integrate through an AbuseGuard policy port; exact thresholds belong to Security Architecture. |
 | `BEA-021` | Eligible public mutations use a stable logical operation ID for safe retries. |
 | `BEA-022` | Same idempotency key with materially different payload is a conflict. |
-| `BEA-023` | Contact full message content is not persisted in a portfolio database inbox by default in V1.0. |
-| `BEA-024` | Contact success means the email provider authoritatively accepted the send request. |
-| `BEA-025` | Contact provider retry uses a stable provider idempotency key derived from the logical operation. |
-| `BEA-026` | Resend remains behind an EmailGateway adapter; provider types do not leak into application services. |
+| `BEA-023` | Retired (ADR-009): Contact has no server path and persists nothing. |
+| `BEA-024` | Retired (ADR-009): there is no Contact send to confirm. |
+| `BEA-025` | Retired (ADR-009): the site sends no email. |
+| `BEA-026` | Retired (ADR-009): there is no email provider or `EmailGateway` in V1.x. |
 | `BEA-027` | Guestbook submissions are pending until moderation approval; submission success is not publication. |
 | `BEA-028` | Public Guestbook queries return approved public projections only. |
 | `BEA-029` | Sketch publication sends a controlled logical drawing model, not an arbitrary image upload. |
@@ -2409,7 +2320,7 @@ Documentation examples are references, not permission to override this architect
 | `BEA-049` | External provider calls are not performed inside long-running DB transactions. |
 | `BEA-050` | Cross-provider atomicity is never assumed; idempotency/repair/compensation are used where needed. |
 | `BEA-051` | Repositories are domain-specific ports rather than generic CRUD abstractions. |
-| `BEA-052` | Application services do not import concrete Supabase/Resend SDK response types. |
+| `BEA-052` | Application services do not import concrete Supabase or other provider SDK response types. |
 | `BEA-053` | Third-party responses/webhooks receive runtime validation/normalization before application use. |
 | `BEA-054` | Webhook processing verifies signatures, deduplicates provider event IDs and keeps acknowledgements minimal. |
 | `BEA-055` | Public mutation routes are same-origin application protocols, not wildcard-CORS endpoints. |
@@ -2428,8 +2339,8 @@ Documentation examples are references, not permission to override this architect
 | `BEA-068` | Server-only credentials/config remain behind validated server-only modules. |
 | `BEA-069` | Application services do not read environment variables ad hoc. |
 | `BEA-070` | Backend architecture must enable service-level unit tests without requiring a browser. |
-| `BEA-071` | Backend features fail locally; Contact/UGC/Arcade/provider failures do not make professional repository content unavailable. |
-| `BEA-072` | Task-specific Contact/Guestbook/Sketch/Arcade identities are never silently joined into a visitor profile. |
+| `BEA-071` | Backend features fail locally; UGC/Arcade/provider failures do not make professional repository content unavailable. |
+| `BEA-072` | Task-specific Guestbook/Sketch/Arcade identities, and email sent to the Contact address, are never silently joined into a visitor profile. |
 | `BEA-073` | Visibility/moderation/retention/physical deletion remain separate concepts. |
 | `BEA-074` | Soft delete is not applied universally; lifecycle semantics are domain-specific. |
 | `BEA-075` | Provider webhook versus polling is chosen per integration in DOC-46, not assumed globally. |
