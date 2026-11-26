@@ -21,7 +21,8 @@
     "verify:fast": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm content:validate && pnpm docs:validate && pnpm test:unit",
     "test:perf": "node scripts/budget.ts",
     "test:e2e": "playwright test tests/e2e/smoke.spec.ts",
-    "test:a11y": "playwright test tests/e2e/a11y.spec.ts"
+    "test:a11y": "playwright test tests/e2e/a11y.spec.ts",
+    "verify:standard": "pnpm verify:fast && pnpm build && pnpm test:perf && pnpm test:e2e && pnpm test:a11y"
   },
   "dependencies": {
     "@astrojs/react": "7.1.9",
