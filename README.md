@@ -52,14 +52,14 @@ The GitHub Wiki is intentionally a lighter navigation/help layer with summaries,
 - **V1.3** — Arcade
 - **V1.4** — Live integrations
 
-## Desarrollo local
+## Local development
 
-Requisitos:
+Requirements:
 
-- Node 26, según `.nvmrc`. fnm, nvm o cualquier gestor que lea `.nvmrc` lo cambia al entrar a la carpeta.
-- pnpm 12.23.0, según `packageManager` en `package.json`. Sirve con `corepack enable` o con pnpm instalado aparte.
+- Node 26, as pinned in `.nvmrc`. We use [fnm](https://github.com/Schniz/fnm) with `--use-on-cd`, which switches to that version when you enter the folder.
+- pnpm 12.23.0, as pinned in `packageManager` in `package.json`.
 
-Primeros pasos:
+Getting started:
 
 ```bash
 pnpm install --frozen-lockfile
@@ -67,18 +67,22 @@ cp .env.example .env.local
 pnpm dev
 ```
 
-El sitio queda en `http://localhost:4321`. El arranque no necesita variables de entorno; `.env.example` lista las que vaya pidiendo cada integración.
+The site runs at `http://localhost:4321`. The bootstrap needs no environment variables; `.env.example` lists the ones each integration adds.
 
-| Script | Qué hace |
+| Script | What it does |
 |---|---|
-| `pnpm dev` | Servidor de desarrollo con recarga |
-| `pnpm build` | Construye el sitio estático y la salida para Vercel |
-| `pnpm preview` | Sirve localmente lo que dejó `build` |
-| `pnpm typecheck` | Revisa tipos de TypeScript y Astro (`astro check`) |
-| `pnpm lint` | ESLint, incluida la frontera entre servidor y cliente |
-| `pnpm format` | Formatea con Prettier |
-| `pnpm format:check` | Comprueba el formato sin cambiar archivos |
-| `pnpm test` | Pruebas con Vitest |
+| `pnpm dev` | Development server with hot reload |
+| `pnpm build` | Builds the static site and the Vercel output |
+| `pnpm start` | Serves the output of `build` locally |
+| `pnpm typecheck` | Type-checks TypeScript and Astro (`astro check`) |
+| `pnpm lint` | ESLint, including the server/client boundary |
+| `pnpm format` | Formats with Prettier |
+| `pnpm format:check` | Checks formatting without changing files |
+| `pnpm test:unit` | Unit and architecture tests with Vitest |
+
+`lint` and `format` cover `src/`, `tests/` and the root config files. When a new code folder appears (for example `scripts/` or `supabase/`), add it to both scripts in `package.json`.
+
+The server/client boundary (DOC-42 §13) is enforced twice. ESLint rejects client imports of `src/lib/server` and `src/lib/*/server`, and the build fails if any of that code reaches the browser bundle.
 
 ## Development workflow
 
