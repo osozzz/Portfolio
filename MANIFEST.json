@@ -20,15 +20,15 @@
     "approved_numbered_documents": 53,
     "draft_numbered_documents": 0,
     "approved_adrs": 9,
-    "review_records": 12,
+    "review_records": 13,
     "files_hashed": 91,
-    "total_hashed_bytes": 1628275
+    "total_hashed_bytes": 1629069
   },
   "files": [
     {
       "path": "README.md",
-      "bytes": 4731,
-      "sha256": "c3109aac9e06b329f5b3292bd1c93569150c5accd30f5f6366b147524722eae3"
+      "bytes": 5525,
+      "sha256": "2fa95435d528f186da977642948579b33c45793129d52fd40c1cbb5b6835163e"
     },
     {
       "path": "docs/00-project/DOC-00-master-guide.md",

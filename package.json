@@ -11,10 +11,18 @@
     "build": "astro build",
     "start": "astro preview",
     "typecheck": "astro check",
+    "lint": "eslint src tests scripts \"*.{js,mjs,ts}\"",
+    "format": "prettier --write src tests scripts .github \"*.{js,mjs,ts,json}\" .prettierrc.json",
+    "format:check": "prettier --check src tests scripts .github \"*.{js,mjs,ts,json}\" .prettierrc.json",
+    "content:validate": "astro sync",
+    "docs:validate": "node scripts/docs/validate.ts",
+    "docs:manifest": "node scripts/docs/manifest.ts",
     "test:unit": "vitest run",
-    "lint": "eslint src tests \"*.{js,mjs,ts}\"",
-    "format": "prettier --write src tests \"*.{js,mjs,ts,json}\" .prettierrc.json",
-    "format:check": "prettier --check src tests \"*.{js,mjs,ts,json}\" .prettierrc.json"
+    "verify:fast": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm content:validate && pnpm docs:validate && pnpm test:unit",
+    "test:perf": "node scripts/budget.ts",
+    "test:e2e": "playwright test tests/e2e/smoke.spec.ts",
+    "test:a11y": "playwright test tests/e2e/a11y.spec.ts",
+    "verify:standard": "pnpm verify:fast && pnpm build && pnpm test:perf && pnpm test:e2e && pnpm test:a11y"
   },
   "dependencies": {
     "@astrojs/react": "7.1.9",
@@ -25,7 +33,9 @@
   },
   "devDependencies": {
     "@astrojs/check": "0.9.12",
+    "@axe-core/playwright": "4.14.1",
     "@eslint/js": "10.0.1",
+    "@playwright/test": "1.65.1",
     "@types/node": "26.6.6",
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",

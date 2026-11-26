@@ -1,0 +1,19 @@
+# Dependabot (DOC-51 §70–§71). cooldown evita proponer versiones que pnpm minimumReleaseAge todavía rechaza.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 3
+    groups:
+      minor-and-patch:
+        update-types: [minor, patch]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 3
