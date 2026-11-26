@@ -1,7 +1,7 @@
 ---
 id: DOC-44
 title: "Data Architecture, PostgreSQL, RLS & Storage"
-document_status: REVIEW
+document_status: APPROVED
 canonical_format: markdown
 phase: "Technical Architecture"
 folder: 04-technical-architecture
@@ -1012,7 +1012,7 @@ Correctness requirements:
 
 ---
 
-## Contact delivery metadata
+## Contact (ADR-009)
 
 ## 41. No Contact inbox table
 
@@ -1026,15 +1026,15 @@ Retired (ADR-009): Contact collects no data, so there is no authorization to pro
 
 Presence counts/traces come from ephemeral realtime channel state (for example Supabase Realtime Presence) and are never written to PostgreSQL. No presence table, visitor identifier or history exists; abuse limits follow DOC-47 §45B.
 
-## 42. Contact operation ledger
+## 42. Contact operation ledger (retired, ADR-009)
 
 Retired (ADR-009).
 
-## 43. Contact claim/send/complete flow
+## 43. Contact claim/send/complete flow (retired, ADR-009)
 
 Retired (ADR-009).
 
-## 43A. Contact operation age and provider deduplication boundary
+## 43A. Contact operation age and provider deduplication boundary (retired, ADR-009)
 
 Retired (ADR-009).
 
@@ -2101,7 +2101,7 @@ When implementing DOC-44, development tooling must:
 - incompatible leaderboard versions never mix;
 - public score contains no session/evidence/abuse data.
 
-### Gate D6 — Contact ledger
+### Gate D6 — Contact ledger (retired, ADR-009)
 
 Retired (ADR-009): there is no Contact ledger.
 

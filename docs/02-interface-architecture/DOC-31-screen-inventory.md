@@ -1,7 +1,7 @@
 ---
 id: DOC-31
 title: "Screen & Workspace Inventory"
-document_status: REVIEW
+document_status: APPROVED
 canonical_format: markdown
 phase: "Interface Architecture"
 folder: 02-interface-architecture
@@ -10,7 +10,7 @@ depends_on:
 decision_families:
   - SCR
 last_updated: 2026-11-25
-approved_at: 2026-11-10
+approved_at: 2026-11-25
 ---
 
 # DOC-31 — Screen & Workspace Inventory
@@ -511,7 +511,7 @@ Guestbook nickname, score nickname, sketch nickname and Contact identity remain 
 - music prompt and music/sound control
 - responsive system
 - SEO/404
-- privacy policy page
+- short privacy notice page (V1.0; full policy before V1.2, ADR-009)
 
 ### V1.1 — Personality
 

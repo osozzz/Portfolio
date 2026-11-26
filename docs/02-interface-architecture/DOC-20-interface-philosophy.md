@@ -1,7 +1,7 @@
 ---
 id: DOC-20
 title: "Interface Philosophy & Interaction Model"
-document_status: REVIEW
+document_status: APPROVED
 canonical_format: markdown
 phase: "Interface Architecture"
 folder: 02-interface-architecture
@@ -10,7 +10,7 @@ depends_on:
 decision_families:
   - UI
 last_updated: 2026-11-25
-approved_at: 2026-09-15
+approved_at: 2026-11-25
 ---
 
 # DOC-20 — Interface Philosophy & Interaction Model

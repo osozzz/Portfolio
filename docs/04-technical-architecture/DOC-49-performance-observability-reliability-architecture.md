@@ -1,7 +1,7 @@
 ---
 id: DOC-49
 title: "Performance, Observability & Reliability Architecture"
-document_status: REVIEW
+document_status: APPROVED
 canonical_format: markdown
 phase: "Technical Architecture"
 folder: 04-technical-architecture
@@ -53,7 +53,7 @@ depends_on:
 decision_families:
   - POR
 last_updated: 2026-11-25
-approved_at: 2026-11-10
+approved_at: 2026-11-25
 ---
 
 # DOC-49 — Performance, Observability & Reliability Architecture
@@ -637,7 +637,7 @@ Initial guidance:
 | Class | Typical timeout budget |
 |---|---:|
 | user-blocking verification/provider check | ~3 s |
-| user-blocking email delivery | ~5 s |
+| admin Auth recovery email (V1.2) | ~5 s |
 | background GitHub/feed refresh | ~8–10 s |
 | webhook/provider callback processing | bounded by provider contract, preferably short |
 

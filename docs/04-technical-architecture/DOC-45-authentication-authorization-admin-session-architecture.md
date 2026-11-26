@@ -32,8 +32,8 @@ depends_on:
   - ADR-002
 decision_families:
   - IAM
-last_updated: 2026-11-10
-approved_at: 2026-11-10
+last_updated: 2026-11-25
+approved_at: 2026-11-25
 ---
 
 # DOC-45 — Authentication, Authorization & Admin Session Architecture
@@ -937,7 +937,7 @@ The recovery request page:
 
 Production password recovery must use a configured production-grade SMTP path rather than relying on the provider's trial/best-effort default email service.
 
-SMTP/domain/DNS production wiring follows DOC-48. Reusing the project's transactional email provider is acceptable if it meets Supabase Auth requirements and sender separation is clear.
+SMTP/domain/DNS production wiring follows DOC-48 §16: recovery email is sent from a dedicated sending subdomain, never from the receive-only root domain (ADR-009). The site has no other email provider.
 
 ---
 

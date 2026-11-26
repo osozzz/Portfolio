@@ -1,7 +1,7 @@
 ---
 id: DOC-12
 title: "Security, Privacy & Abuse-Prevention Requirements"
-document_status: REVIEW
+document_status: APPROVED
 reconstructed: true
 canonical_format: markdown
 phase: Product Foundation
@@ -12,7 +12,7 @@ depends_on:
 decision_families:
   - SEC
 last_updated: 2026-11-25
-approved_at: 2026-11-10
+approved_at: 2026-11-25
 ---
 
 # DOC-12 — Security, Privacy & Abuse-Prevention Requirements
@@ -105,7 +105,7 @@ These do not become a universal visitor profile. Guestbook data, and any email a
 > **Pending lawyer review — not legal advice.** This section fixes the product/engineering baseline; the full policy and the terms are reviewed by a lawyer before V1.2 (ADR-009). The V1.0 short privacy notice describes a release that collects no personal data through forms.
 
 - **Framework.** Ley 1581 de 2012 (Habeas Data) and its regulation, Decreto 1377 de 2013 (compiled in Decreto 1074 de 2015). Supervisory authority: Superintendencia de Industria y Comercio (SIC). The owner (Medellín, Colombia) is the data controller (*responsable del tratamiento*).
-- **Short privacy notice (V1.0, ADR-009).** `/[locale]/privacy` publishes a short notice in ES and EN. It states that the site collects no personal data through forms; that an email a visitor chooses to send to the Contact address is ordinary correspondence, answered and kept only as long as needed; that the hosting provider (Vercel) keeps technical access logs, including IP addresses, under its own retention; that local preferences (theme, language, sound and music choice, motion, transparency, Widget Field layout, remembered name) stay in the visitor's browser and can be cleared from Settings; that product analytics is disabled (DOC-17); that error monitoring (Sentry) receives scrubbed technical data only; and that the published address is the channel for data-subject requests.
+- **Short privacy notice (V1.0, ADR-009).** `/[locale]/privacy` publishes a short notice in ES and EN. It names the controller (the owner) and his contact channel, and states that the site collects no personal data through forms; that an email a visitor chooses to send to the Contact address is ordinary correspondence, answered and kept only as long as needed; that the hosting provider (Vercel) keeps technical access logs, including IP addresses, under its own retention; that local preferences (theme, language, sound and music choice, motion, transparency, Widget Field layout, remembered name) stay in the visitor's browser and can be cleared from Settings; that product analytics is disabled (DOC-17); that error monitoring (Sentry) receives scrubbed technical data only; and that the published address is the channel for data-subject requests.
 - **Personal Data Processing Policy** (*Política de Tratamiento de Datos Personales*) replaces the notice **before V1.2**, the first release that collects personal data, in ES and EN (ADR-009). Minimum content: controller identity and contact channel; categories of data and purposes per feature (Guestbook, Sketch Wall, leaderboards); processors (Supabase, Vercel, Sentry, Turnstile); retention per category (DOC-44); data-subject rights and how to exercise them; response times; policy version and effective date.
 - **Authorization.** Prior, express and informed authorization is collected at every collection point (Guestbook/Sketch/leaderboard nickname from V1.2/V1.3; Contact collects nothing, ADR-009) with a short notice linking to the policy; proof is kept as policy version + time (DOC-44 DTA-101).
 - **Data-subject rights channel.** Visitors can consult, update, rectify and delete their data through a published channel (email to the controller plus the accountless deletion capabilities for UGC). Response times follow the law: consultations within 10 business days, claims within 15 business days, extendable as the law allows.

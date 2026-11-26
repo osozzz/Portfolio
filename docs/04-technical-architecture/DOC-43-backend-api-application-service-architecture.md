@@ -1,7 +1,7 @@
 ---
 id: DOC-43
 title: "Backend, API & Application Service Architecture"
-document_status: REVIEW
+document_status: APPROVED
 canonical_format: markdown
 phase: "Technical Architecture"
 folder: 04-technical-architecture
@@ -36,7 +36,7 @@ depends_on:
 decision_families:
   - BEA
 last_updated: 2026-11-25
-approved_at: 2026-11-10
+approved_at: 2026-11-25
 ---
 
 # DOC-43 — Backend, API & Application Service Architecture
@@ -822,13 +822,13 @@ Retired (ADR-009): there is no submission.
 
 ---
 
-## 29. Contact email idempotency
+## 29. Contact email idempotency (retired, ADR-009)
 
 Retired (ADR-009): the site sends no email.
 
 ---
 
-## 30. EmailGateway port
+## 30. EmailGateway port (retired, ADR-009)
 
 Retired (ADR-009): there is no email provider in V1.x, so there is no `EmailGateway`.
 
@@ -1659,7 +1659,6 @@ Examples:
 
 - report target missing/private may use generic `NOT_FOUND`;
 - admin auth failure does not reveal hidden moderation data;
-- email delivery failure does not expose provider credential/config detail;
 - database conflict does not expose SQL/table names;
 - anti-bot failure does not reveal scoring/rate-limit thresholds;
 - Arcade rejection may give user-safe reason class without exposing full anti-cheat heuristics.
@@ -1713,7 +1712,6 @@ The UI owns localized display messages.
 Exceptions:
 
 - user-generated content remains exactly the user's content (subject to normalization/moderation), not automatically translated;
-- provider email template content may be localized deliberately at the email adapter/template layer.
 
 Do not store translated copies of Guestbook messages merely for interface parity.
 
@@ -1932,7 +1930,7 @@ If a use case can only be tested through a full browser because all logic lives 
 
 Before broad V1.x feature expansion, verify at least:
 
-### Gate B1 — Contact
+### Gate B1 — Contact (retired, ADR-009)
 
 Retired (ADR-009): Contact has no server path to verify.
 

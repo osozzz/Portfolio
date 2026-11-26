@@ -1,7 +1,7 @@
 ---
 id: DOC-42
 title: "Frontend Architecture, Rendering & State Boundaries"
-document_status: REVIEW
+document_status: APPROVED
 canonical_format: markdown
 phase: "Technical Architecture"
 folder: 04-technical-architecture
@@ -43,7 +43,7 @@ depends_on:
 decision_families:
   - FEA
 last_updated: 2026-11-25
-approved_at: 2026-11-10
+approved_at: 2026-11-25
 ---
 
 # DOC-42 — Frontend Architecture, Rendering & State Boundaries
@@ -1521,7 +1521,7 @@ Avoid converting every input into controlled React state when native/uncontrolle
 
 ---
 
-## 65. Contact form rendering (no form, ADR-009)
+## 65. Contact rendering (ADR-009)
 
 Contact has no form (ADR-009). `/[locale]/contact` is prerendered per locale like other public professional routes. It renders the canonical address (DOC-36) as text and an Email me `mailto:` link, both without JavaScript.
 

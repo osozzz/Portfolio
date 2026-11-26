@@ -1,7 +1,7 @@
 ---
 id: DOC-15
 title: "External Integrations & Live-Data Requirements"
-document_status: REVIEW
+document_status: APPROVED
 reconstructed: true
 canonical_format: markdown
 phase: Product Foundation
@@ -12,7 +12,7 @@ depends_on:
 decision_families:
   - INT
 last_updated: 2026-11-25
-approved_at: 2026-11-10
+approved_at: 2026-11-25
 ---
 
 # DOC-15 — External Integrations & Live-Data Requirements
@@ -44,7 +44,7 @@ Exact provider/source list is deferred and should be selected for reliability, t
 
 ## 4. Contact email
 
-No email provider is integrated in V1.x (ADR-009). Contact publishes a domain address that forwards to the owner through the DNS/email-forwarding provider; the site holds no email credentials and sends nothing.
+No email provider serves Contact or visitors in V1.x (ADR-009). Contact publishes a domain address that forwards to the owner through the DNS/email-forwarding provider. From V1.2, Supabase Auth sends the admin's recovery email over production SMTP on a dedicated sending subdomain (DOC-45 §57, DOC-48 §16).
 
 ## 5. Anti-bot
 

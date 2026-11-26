@@ -1,7 +1,7 @@
 ---
 id: DOC-46
 title: "Integrations, Caching, Jobs & Provider Resilience"
-document_status: REVIEW
+document_status: APPROVED
 canonical_format: markdown
 phase: "Technical Architecture"
 folder: 04-technical-architecture
@@ -38,7 +38,7 @@ depends_on:
 decision_families:
   - ICJ
 last_updated: 2026-11-25
-approved_at: 2026-11-10
+approved_at: 2026-11-25
 ---
 
 # DOC-46 — Integrations, Caching, Jobs & Provider Resilience
@@ -166,7 +166,7 @@ The baseline provider/integration inventory is:
 | GitHub REST | Dev Log/public project activity enhancement | V1.4 | Non-critical |
 | Curated RSS/Atom/API sources | Tech Pulse | V1.4 | Non-critical |
 | Production SMTP for Supabase Auth | Password recovery/security mail on a dedicated sending subdomain | V1.2 Admin | Critical only to recovery flow |
-| Cloudflare Turnstile | Human-verification adapter for selected public writes | capability from V1.0; policy by feature | Critical only when policy requires verification |
+| Cloudflare Turnstile | Human-verification adapter for selected public writes | from V1.2 (first public write); policy by feature | Critical only when policy requires verification |
 | Supabase | runtime DB/Auth boundary | earlier canonical docs | Feature-scoped, not professional-core-wide |
 | RenderCV | build-time CV generation | V0 | Build-time only |
 | Product analytics wrapper | aggregate product analytics | disabled/no-op in V0/V1.0 until explicit privacy/provider decision | Non-critical |
@@ -1085,7 +1085,7 @@ Retired (ADR-009): Contact has no form and the site sends no email to visitors, 
 
 ---
 
-## 53. Contact email idempotency
+## 53. Contact email idempotency (retired, ADR-009)
 
 Retired (ADR-009).
 
@@ -1097,7 +1097,7 @@ Retired (ADR-009) for Contact. The admin Auth recovery email (§58) relies on Su
 
 ---
 
-## 55. Contact retry behavior
+## 55. Contact retry behavior (retired, ADR-009)
 
 Retired (ADR-009).
 
@@ -1109,7 +1109,7 @@ V1.x has no email queue: the only outbound email is the admin Auth recovery mess
 
 ---
 
-## 57. Contact outage behavior
+## 57. Contact outage behavior (retired, ADR-009)
 
 Retired (ADR-009). If the forwarding provider fails, the address still renders and the `mailto:` link still opens; mail delivery to the owner is an operational issue monitored outside the site (DOC-48).
 
@@ -1639,7 +1639,7 @@ No external call waits indefinitely.
 DOC-49 sets/tunes concrete budgets for:
 
 - user-facing verification;
-- user-facing email delivery;
+- admin Auth recovery email (V1.2);
 - background GitHub calls;
 - background feed source fetch;
 - webhook/provider calls if later added.
@@ -2293,9 +2293,9 @@ The following remain true regardless of provider/SDK details:
 | `ICJ-046` | Retired (ADR-009): Contact has no delivery provider. |
 | `ICJ-047` | Retired (ADR-009): there are no Contact sends to retry. |
 | `ICJ-048` | Provider acceptance is not described as guaranteed inbox delivery. |
-| `ICJ-049` | Retired (ADR-009). |
+| `ICJ-049` | Retired (ADR-009): there are no Contact sends, so there are no transient retries. |
 | `ICJ-050` | V1.x does not add a durable general email queue. |
-| `ICJ-051` | Retired (ADR-009): a forwarding outage never breaks the Contact page; the address and `mailto:` still render. |
+| `ICJ-051` | A mail-forwarding outage never breaks the Contact page; the address and `mailto:` still render (reworded by ADR-009). |
 | `ICJ-052` | Supabase Auth email (V1.2) is the only outbound email path and uses a dedicated sending subdomain (ADR-009). |
 | `ICJ-053` | The root domain only receives Contact mail; only the Auth subdomain sends (ADR-009). |
 | `ICJ-054` | Retired (ADR-009): no email-provider webhooks exist in V1.x. |

@@ -1,7 +1,7 @@
 ---
 id: DOC-47
 title: "Security Architecture & Threat Model"
-document_status: REVIEW
+document_status: APPROVED
 canonical_format: markdown
 phase: "Technical Architecture"
 folder: 04-technical-architecture
@@ -49,7 +49,7 @@ depends_on:
 decision_families:
   - SECARC
 last_updated: 2026-11-25
-approved_at: 2026-11-10
+approved_at: 2026-11-25
 ---
 
 # DOC-47 — Security Architecture & Threat Model
@@ -1158,7 +1158,7 @@ Contact has no form, endpoint or stored data (ADR-009). It renders the canonical
 Remaining threats and controls:
 
 - address harvesting by bots → accepted risk; the forwarded domain address can be rotated without a site change (DOC-16);
-- spoofed mail claiming to come from the domain → the root domain publishes SPF `-all` and DMARC `p=reject` (DOC-48);
+- spoofed mail claiming to come from the domain → the root domain publishes an SPF ending in `-all` (DOC-48 §16) and DMARC `p=reject`;
 - a tampered address in content → the address is canonical content reviewed through the normal repository workflow (DOC-36).
 
 ---
@@ -2031,7 +2031,7 @@ Test:
 
 - the Contact page renders the canonical address and a working `mailto:` link without JavaScript;
 - no Contact endpoint, form handler or Contact table exists (ADR-009);
-- root-domain SPF `-all` and DMARC `p=reject` are published, and forwarding reaches the owner.
+- the root-domain SPF ending in `-all` (DOC-48 §16) and DMARC `p=reject` are published, and forwarding reaches the owner.
 
 ---
 

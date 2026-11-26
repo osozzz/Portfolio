@@ -1,7 +1,7 @@
 ---
 id: DOC-32
 title: "Interface Architecture Master Specification & Decision Registry"
-document_status: REVIEW
+document_status: APPROVED
 canonical_format: markdown
 phase: "Interface Architecture"
 folder: 02-interface-architecture
@@ -11,7 +11,7 @@ depends_on:
 decision_families:
   - MST
 last_updated: 2026-11-25
-approved_at: 2026-11-10
+approved_at: 2026-11-25
 ---
 
 # DOC-32 — Interface Architecture Master Specification & Decision Registry

@@ -1,7 +1,7 @@
 ---
 id: DOC-07
 title: "Non-Functional Requirements"
-document_status: REVIEW
+document_status: APPROVED
 reconstructed: true
 canonical_format: markdown
 phase: Product Foundation
@@ -11,7 +11,7 @@ depends_on:
 decision_families:
   - NFR
 last_updated: 2026-11-25
-approved_at: 2026-11-10
+approved_at: 2026-11-25
 ---
 
 # DOC-07 — Non-Functional Requirements
@@ -53,7 +53,7 @@ These requirements define quality boundaries that apply across features. A featu
 | NFR-023 | Compatibility | Support current mainstream evergreen browsers; advanced effects progressively degrade when APIs/effects are unavailable. |
 | NFR-024 | Safe areas/viewports | Mobile persistent controls account for safe-area and dynamic viewport/keyboard behavior. |
 | NFR-025 | Cost | Architecture starts managed/simple and avoids always-on infrastructure whose value is not justified by actual traffic. |
-| NFR-026 | Data integrity | Score/moderation/contact state changes are server-authoritative; idempotency is used for externally retried operations where relevant. |
+| NFR-026 | Data integrity | Score/moderation state changes are server-authoritative; idempotency is used for externally retried operations where relevant. |
 | NFR-027 | Content truth | No invented roles, dates, credentials, project metrics, technologies or completion percentages. |
 | NFR-028 | Licensing | Fonts, icons, sounds, images and third-party assets require documented rights/licenses; no copied iiSU assets. |
 | NFR-029 | Supply chain | Dependencies are pinned/locked, updated deliberately and scanned for known vulnerabilities. |

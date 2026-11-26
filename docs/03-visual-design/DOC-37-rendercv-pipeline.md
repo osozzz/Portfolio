@@ -1,7 +1,7 @@
 ---
 id: DOC-37
 title: "RenderCV Pipeline"
-document_status: REVIEW
+document_status: APPROVED
 canonical_format: markdown
 phase: "Visual Design Foundation"
 folder: 03-visual-design
@@ -19,7 +19,7 @@ depends_on:
 decision_families:
   - CVP
 last_updated: 2026-11-25
-approved_at: 2026-09-15
+approved_at: 2026-11-25
 ---
 
 # DOC-37 — RenderCV Pipeline

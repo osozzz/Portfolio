@@ -1,7 +1,7 @@
 ---
 id: DOC-03
 title: "Audiences, Personas & Stakeholder Needs"
-document_status: REVIEW
+document_status: APPROVED
 reconstructed: true
 canonical_format: markdown
 phase: Product Foundation
@@ -12,7 +12,7 @@ depends_on:
 decision_families:
   - AUD
 last_updated: 2026-11-25
-approved_at: 2026-09-15
+approved_at: 2026-11-25
 ---
 
 # DOC-03 — Audiences, Personas & Stakeholder Needs

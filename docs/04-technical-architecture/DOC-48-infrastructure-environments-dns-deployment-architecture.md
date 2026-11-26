@@ -1,7 +1,7 @@
 ---
 id: DOC-48
 title: "Infrastructure, Environments, DNS & Deployment Architecture"
-document_status: REVIEW
+document_status: APPROVED
 canonical_format: markdown
 phase: "Technical Architecture"
 folder: 04-technical-architecture
@@ -38,7 +38,7 @@ depends_on:
 decision_families:
   - INF
 last_updated: 2026-11-25
-approved_at: 2026-11-10
+approved_at: 2026-11-25
 ---
 
 # DOC-48 — Infrastructure, Environments, DNS & Deployment Architecture
@@ -424,9 +424,9 @@ www.alejosorno.dev.        CNAME   → Vercel-required target
 
 ## Email (ADR-009)
 alejosorno.dev.            MX        → email-forwarding provider
-alejosorno.dev.            TXT       → SPF "v=spf1 -all" (receive-only root)
+alejosorno.dev.            TXT       → SPF ending in -all; only the forwarder include if required (receive-only root)
 _dmarc.alejosorno.dev.     TXT       → DMARC p=reject
-<dkim selectors>.mail      CNAME/TXT → Auth SMTP provider (V1.2)
+<selector>._domainkey.mail CNAME/TXT → Auth SMTP provider DKIM (V1.2)
 mail.alejosorno.dev.       TXT       → SPF for the Auth SMTP provider (V1.2)
 
 ## Optional provider verification
@@ -521,7 +521,7 @@ Auth recovery sending (V1.2):              mail.alejosorno.dev  (or another docu
 Root domain, before V1.0 production:
 
 - MX and any verification records required by the email-forwarding provider;
-- SPF `v=spf1 -all`, unless the forwarder requires its own include;
+- SPF that authorizes no sender: `v=spf1 -all`, or, if the forwarder requires it, only the forwarder's include followed by `-all`;
 - DMARC `p=reject`, so nobody can send as the root domain;
 - a test message to the published address reaches the owner's mailbox.
 
@@ -1317,7 +1317,7 @@ Preview/Staging:
 
 Production:
 
-- root domain forwarding to the owner, SPF `-all` and DMARC `p=reject` (ADR-009);
+- root domain forwarding to the owner, SPF ending in `-all` (DOC-48 §16) and DMARC `p=reject` (ADR-009);
 - from V1.2, the production Auth SMTP channel on its sending subdomain with SPF/DKIM verified.
 
 ---
@@ -2246,7 +2246,7 @@ Before DOC-48 is considered implemented:
 - [ ] Preview cannot reach production data/secrets;
 - [ ] production Admin is AAL2-protected;
 - [ ] TLS/canonical redirect verified;
-- [ ] Contact forwarding works and root-domain SPF `-all`/DMARC `p=reject` are published (ADR-009);
+- [ ] Contact forwarding works and the root-domain SPF ending in `-all` (DOC-48 §16) and DMARC `p=reject` are published (ADR-009);
 - [ ] cron endpoints authenticated;
 - [ ] backup capability active before persistent UGC is considered durable;
 - [ ] restore drill completed before depending on backup claims;
@@ -2336,7 +2336,7 @@ The following decisions are proposed by DOC-48.
 | INF-022 | HSTS is rolled out after HTTPS verification; preload is deferred unless deliberately approved. |
 | INF-023 | Registrar and DNS accounts require MFA, recovery and auto-renew controls. |
 | INF-024 | DNSSEC is enabled where supported/validated. |
-| INF-025 | Email DNS is separated/documented: the root domain receives only (MX, SPF `-all`, DMARC `p=reject`), and the V1.2 Auth sending subdomain requires SPF/DKIM/DMARC verification (ADR-009). |
+| INF-025 | Email DNS is separated/documented: the root domain receives only (MX, SPF ending in `-all` (DOC-48 §16), DMARC `p=reject`), and the V1.2 Auth sending subdomain requires SPF/DKIM/DMARC verification (ADR-009). |
 | INF-026 | Static/cached delivery remains global while stateful functions run near the primary database. |
 | INF-027 | Final production region pairing is selected using measured representative latency before meaningful production data accumulates. |
 | INF-028 | Initial region candidate is Supabase `us-east-1` + Vercel `iad1`, compared against São Paulo pairing before final lock. |

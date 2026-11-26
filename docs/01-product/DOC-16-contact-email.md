@@ -1,7 +1,7 @@
 ---
 id: DOC-16
 title: "Contact, Email & Communication Requirements"
-document_status: REVIEW
+document_status: APPROVED
 reconstructed: true
 canonical_format: markdown
 phase: Product Foundation
@@ -13,7 +13,7 @@ depends_on:
 decision_families:
   - MSG
 last_updated: 2026-11-25
-approved_at: 2026-11-10
+approved_at: 2026-11-25
 ---
 
 # DOC-16 — Contact, Email & Communication Requirements
@@ -41,7 +41,7 @@ There are no fields, no account and no submit step. The address is canonical con
 ## 3. Behavior
 
 - **Without JavaScript:** the address text and the `mailto:` link work. Copy is a progressive enhancement and is not rendered until it can work.
-- **Copy:** uses the Clipboard API. On success it shows the copied state. If the API is unavailable or permission is denied, it shows the copy failed state and selects the address text so the visitor can copy it by hand.
+- **Copy:** uses the Clipboard API and renders only where the API exists. On success it shows the copied state. If the write is rejected (permission denied or insecure context), it shows the copy failed state and selects the address text so the visitor can copy it by hand.
 - **`mailto:`:** opens the visitor's mail client. The site cannot know whether a message was sent, so it shows no sent state.
 
 ## 4. Abuse
@@ -54,7 +54,7 @@ The site stores nothing about Contact. Mail arrives in the owner's mailbox as or
 
 ## 6. Domain mail records
 
-The root domain receives mail and does not send it (ADR-009). Production needs the inbound records for forwarding (MX) and anti-spoofing records for a domain that does not send: SPF `v=spf1 -all` (unless the forwarder requires its own include) and DMARC `p=reject` (DOC-48). The admin's Auth recovery email from V1.2 uses its own sending subdomain and never touches Contact (DOC-45 §57).
+The root domain receives mail and does not send it (ADR-009). Production needs the inbound records for forwarding (MX) and anti-spoofing records for a domain that does not send: an SPF ending in `-all` (DOC-48 §16) and DMARC `p=reject`. The admin's Auth recovery email from V1.2 uses its own sending subdomain and never touches Contact (DOC-45 §57).
 
 ## 7. UX states
 
@@ -71,7 +71,7 @@ A Toast alone is not sufficient for the copy failed state; the message stays nex
 - The copied and copy failed states are announced through an `aria-live="polite"` region.
 - The `mailto:` link text says what it opens (for example "Email me"), not only the address.
 - Focus does not move when copying.
-- Tab order: address, Copy, Email me.
+- Reading order: address, Copy, Email me. Tab order: Copy, Email me (the address is plain text and is not made focusable).
 
 ## 9. Decisions
 
@@ -79,7 +79,7 @@ A Toast alone is not sufficient for the copy failed state; the message stays nex
 - **MSG-002** Retired (ADR-009): there is no form to validate on the server.
 - **MSG-003** Retired (ADR-009): there is no message to preserve on failure; the visitor writes in their own mail client.
 - **MSG-004** Contact identity is not reused for personalization/community identity.
-- **MSG-005** The root domain only receives mail; inbound (MX) and anti-spoofing records (SPF `-all`, DMARC `p=reject`) are part of production (ADR-009, DOC-48).
+- **MSG-005** The root domain only receives mail; inbound (MX) and anti-spoofing records (SPF ending in `-all` (DOC-48 §16), DMARC `p=reject`) are part of production (ADR-009, DOC-48).
 - **MSG-006** Contact remains professionally restrained—no confetti/achievement gamification.
 - **MSG-007** Retired (ADR-009): Contact collects no data, so it has no authorization checkbox.
 - **MSG-008** Contact works without JavaScript: the address and the `mailto:` link need no script; Copy is an enhancement.

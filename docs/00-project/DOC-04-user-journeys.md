@@ -1,7 +1,7 @@
 ---
 id: DOC-04
 title: "User Journeys & Experience Outcomes"
-document_status: REVIEW
+document_status: APPROVED
 reconstructed: true
 canonical_format: markdown
 phase: Product Foundation
@@ -11,7 +11,7 @@ depends_on:
 decision_families:
   - JRN
 last_updated: 2026-11-25
-approved_at: 2026-11-10
+approved_at: 2026-11-25
 ---
 
 # DOC-04 — User Journeys & Experience Outcomes

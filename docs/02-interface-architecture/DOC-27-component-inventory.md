@@ -1,7 +1,7 @@
 ---
 id: DOC-27
 title: "Component Inventory & UI Primitives"
-document_status: REVIEW
+document_status: APPROVED
 canonical_format: markdown
 phase: "Interface Architecture"
 folder: 02-interface-architecture
@@ -10,7 +10,7 @@ depends_on:
 decision_families:
   - CMP
 last_updated: 2026-11-25
-approved_at: 2026-11-10
+approved_at: 2026-11-25
 ---
 
 # DOC-27 — Component Inventory & UI Primitives

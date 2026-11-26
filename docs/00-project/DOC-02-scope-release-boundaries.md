@@ -1,7 +1,7 @@
 ---
 id: DOC-02
 title: "Scope, Release Boundaries & Non-Goals"
-document_status: REVIEW
+document_status: APPROVED
 reconstructed: true
 canonical_format: markdown
 phase: Product Foundation
@@ -12,7 +12,7 @@ depends_on:
 decision_families:
   - SCP
 last_updated: 2026-11-25
-approved_at: 2026-11-10
+approved_at: 2026-11-25
 ---
 
 # DOC-02 — Scope, Release Boundaries & Non-Goals
@@ -92,7 +92,7 @@ The six primary Dock destinations are never dead controls. Before a later-releas
 - Sketch Wall;
 - Drawing Pad utility workspace;
 - reporting/reactions where approved;
-- Personal Data Processing Policy and Terms of Use pages in ES/EN, both lawyer-reviewed, and the UGC age declaration (ADR-008, ADR-009);
+- Personal Data Processing Policy and Terms of Use pages in ES/EN, both lawyer-reviewed, the RNBD applicability check, and the UGC age declaration (ADR-008, ADR-009);
 - moderation workflow and admin authentication;
 - moderation queue, hide/reject/approve and basic ban/rate-limit controls.
 

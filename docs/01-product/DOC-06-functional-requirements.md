@@ -1,7 +1,7 @@
 ---
 id: DOC-06
 title: "Functional Requirements"
-document_status: REVIEW
+document_status: APPROVED
 reconstructed: true
 canonical_format: markdown
 phase: Product Foundation
@@ -13,7 +13,7 @@ depends_on:
 decision_families:
   - FR
 last_updated: 2026-11-25
-approved_at: 2026-11-10
+approved_at: 2026-11-25
 ---
 
 # DOC-06 — Functional Requirements

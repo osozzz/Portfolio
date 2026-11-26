@@ -1,7 +1,7 @@
 ---
 id: DOC-01
 title: "Product Vision, Positioning & Success Criteria"
-document_status: REVIEW
+document_status: APPROVED
 reconstructed: true
 canonical_format: markdown
 phase: Product Foundation
@@ -11,7 +11,7 @@ depends_on:
 decision_families:
   - VIS
 last_updated: 2026-11-25
-approved_at: 2026-11-10
+approved_at: 2026-11-25
 ---
 
 # DOC-01 — Product Vision, Positioning & Success Criteria
@@ -89,7 +89,7 @@ Qualitative success:
 - The product remains coherent with sound off, reduced motion, reduced transparency and external integrations unavailable.
 - The visual identity feels inspired by iiSU but not like a clone.
 
-Quantitative targets are defined as requirements rather than vanity KPIs. Initial goals include Core Web Vitals within good thresholds, low layout shift, responsive input, strong accessibility coverage, reliable contact delivery and zero known critical security issues at release.
+Quantitative targets are defined as requirements rather than vanity KPIs. Initial goals include Core Web Vitals within good thresholds, low layout shift, responsive input, strong accessibility coverage, a reliable, always-visible Contact address and zero known critical security issues at release.
 
 ## 9. Long-term direction
 

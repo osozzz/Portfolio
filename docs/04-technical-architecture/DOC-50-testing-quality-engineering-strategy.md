@@ -1,7 +1,7 @@
 ---
 id: DOC-50
 title: "Testing & Quality Engineering Strategy"
-document_status: REVIEW
+document_status: APPROVED
 canonical_format: markdown
 phase: "Technical Architecture"
 folder: 04-technical-architecture
@@ -60,7 +60,7 @@ depends_on:
 
 decision_families:
   - TQE
-approved_at: 2026-11-10
+approved_at: 2026-11-25
 last_updated: 2026-11-25
 ---
 
@@ -1048,8 +1048,8 @@ Contact has no form or server path (ADR-009). Contact must verify:
 - the Email me link is a `mailto:` to that address with the localized subject;
 - without JavaScript, the address and the link work and no Copy button is rendered;
 - Copy success writes the address to the clipboard and announces the copied state politely (component test with a stubbed Clipboard API);
-- Copy failure (API missing or permission denied) shows the inline copy failed message and selects the address text;
-- focus does not move when copying, and tab order is address → Copy → Email me;
+- Copy failure (the clipboard write is rejected) shows the inline copy failed message and selects the address text;
+- focus does not move when copying; reading order is address → Copy → Email me and tab order is Copy → Email me;
 - the built route contains no form, no Contact endpoint and no Contact island beyond Copy (ADR-009).
 
 ---
@@ -1782,7 +1782,13 @@ Minimum applicable exit criteria:
 - the always-visible sound/music control stops music in one action in every responsive mode (WCAG 2.2 SC 1.4.2);
 - music and the 3D stage persist across navigation (ADR-004 prototype gate passed);
 - the audio license register lists every shipped track with its license;
-- the short privacy notice page is published in ES/EN (ADR-009); the full policy and its lawyer review are V1.2 exit criteria (ADR-008, ADR-009).
+- the short privacy notice page is published in ES/EN (ADR-009).
+
+**V1.2 additional exit criteria (ADR-008, ADR-009).** V1.2 is published only when, in addition to the above:
+
+- the full Personal Data Processing Policy and the Terms of Use are published in ES/EN and have passed lawyer review;
+- RNBD applicability has been verified and, if it applies, the registration is done;
+- the admin Auth recovery email sends from its dedicated subdomain with SPF/DKIM/DMARC verified (DOC-48 §16).
 
 DOC-51 defines which checks are merge-blocking vs release-only.
 
@@ -1804,7 +1810,7 @@ V1.0 Professional Core prioritizes:
 - SEO/meta basics;
 - Coming Soon routes;
 - Boot, 3D stage and fallbacks, music prompt/control and persistence across navigation;
-- privacy policy page;
+- short privacy notice page (V1.0, ADR-009);
 - performance/security fundamentals.
 
 Community/Arcade tests should not be required for a feature that is not yet released, except foundation contracts that already exist.
@@ -1962,7 +1968,6 @@ Examples:
 
 - a route-history bug → Playwright regression test;
 - an RLS exposure → pgTAP negative test;
-- duplicate email → idempotency service test;
 - provider parsing failure → contract fixture;
 - visual clipping → targeted screenshot/responsive test.
 

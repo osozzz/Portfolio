@@ -1,7 +1,7 @@
 ---
 id: DOC-08
 title: "Engineering Coverage Register & Technical Constraints"
-document_status: REVIEW
+document_status: APPROVED
 reconstructed: true
 canonical_format: markdown
 phase: Product Foundation
@@ -12,7 +12,7 @@ depends_on:
 decision_families:
   - ENG
 last_updated: 2026-11-25
-approved_at: 2026-11-10
+approved_at: 2026-11-25
 ---
 
 # DOC-08 — Engineering Coverage Register & Technical Constraints
@@ -160,7 +160,7 @@ Use structured logs/metrics/errors without storing message bodies, unpublished s
 
 ## 11. Email/deliverability assessment
 
-The site sends no email in V1.0 and never emails visitors in V1.x (ADR-009). Contact is a published domain address that forwards to the owner, so transactional sending to visitors, bounce handling and provider credentials are **NOT APPLICABLE**. From V1.2 the only sending path is the admin's Auth recovery email over production SMTP on a dedicated sending subdomain (DOC-45 §57, DOC-48). There is no newsletter or marketing email, so marketing-email unsubscribe and postal-address requirements (CAN-SPAM-style) are **NOT APPLICABLE**; both must be reassessed if sending or a newsletter is ever proposed. Before production, configure inbound forwarding (MX) and anti-spoofing records for a domain that does not send: SPF `v=spf1 -all` and DMARC `p=reject` (DOC-48).
+The site sends no email in V1.0 and never emails visitors in V1.x (ADR-009). Contact is a published domain address that forwards to the owner, so transactional sending to visitors, bounce handling and provider credentials are **NOT APPLICABLE**. From V1.2 the only sending path is the admin's Auth recovery email over production SMTP on a dedicated sending subdomain (DOC-45 §57, DOC-48). There is no newsletter or marketing email, so marketing-email unsubscribe and postal-address requirements (CAN-SPAM-style) are **NOT APPLICABLE**; both must be reassessed if sending or a newsletter is ever proposed. Before production, configure inbound forwarding (MX) and anti-spoofing records for a domain that does not send: an SPF ending in `-all` (DOC-48 §16) and DMARC `p=reject`.
 
 ## 12. Mobile-store assessment
 
@@ -281,7 +281,7 @@ This matrix mirrors the project's explicit engineering checklist so a concern ca
 | Non-payment webhook validation | Conditional if provider webhooks are added | DOC-43 / DOC-46 / DOC-47 |
 | General idempotency | Applicable to retryable side effects/submissions where needed | DOC-43 / DOC-44 / DOC-46 |
 | Email provider | **N/A for visitors in V1.x** (ADR-009); production SMTP for admin Auth recovery from V1.2 | DOC-16 / DOC-45 / DOC-48 |
-| SPF | Applicable: `v=spf1 -all` on the non-sending root domain (ADR-009); the V1.2 Auth SMTP subdomain publishes its own | DOC-16 / DOC-48 |
+| SPF | Applicable: SPF ending in `-all` (DOC-48 §16) on the non-sending root domain (ADR-009); the V1.2 Auth SMTP subdomain publishes its own | DOC-16 / DOC-48 |
 | DKIM | N/A on the root domain (ADR-009); applicable to the V1.2 Auth SMTP subdomain | DOC-16 / DOC-45 / DOC-48 |
 | DMARC | Applicable as anti-spoofing (`p=reject`, ADR-009) | DOC-16 / DOC-48 |
 | Native mobile certificates | **N/A web portfolio** | Reassess only if native app enters scope |

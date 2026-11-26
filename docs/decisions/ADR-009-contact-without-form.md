@@ -8,28 +8,15 @@ owners:
   - Alejandro Osorno
 scope: "How visitors reach the owner in V1.x, and the privacy, legal-review and RNBD timing that follows from it"
 affects:
-  - DOC-06
-  - DOC-08
-  - DOC-10
-  - DOC-12
-  - DOC-16
-  - DOC-27
-  - DOC-31
-  - DOC-36
-  - DOC-41
-  - DOC-43
-  - DOC-44
-  - DOC-46
-  - DOC-47
-  - DOC-48
-  - DOC-49
-  - DOC-50
+  - "Every document listed in AMENDMENT-CONTACT-001"
 supersedes:
   - "ADR-008 §2 timing: the full Personal Data Processing Policy moves from V1.0 to before V1.2; V1.0 publishes a short privacy notice"
   - "ADR-008 §3 for Contact: Contact collects no data, so it has no authorization checkbox"
   - "ADR-008 §7 timing: the RNBD check moves to before V1.2"
   - "ADR-008 §9 timing: the lawyer reviews the policy before V1.2 instead of before V1.0"
   - "DOC-16 Contact form, FR-015, FR-016, FR-070, MSG-002, MSG-003 and MSG-007"
+  - "ADR-004 §9: Resend is removed from the unchanged baseline"
+  - "ADR-007 V1.0 scope: the Personal Data Processing Policy becomes the short privacy notice; the full policy moves to before V1.2"
 ---
 
 # ADR-009 — Contact Without a Form
@@ -45,13 +32,15 @@ The owner asked whether the lawyer would still be needed if Contact collected no
 1. **Contact surface.** The Contact space shows the published address as visible text, a Copy button and a `mailto:` link. There is no form, no server endpoint and no stored message.
 2. **Address.** The published address belongs to the `alejosorno.dev` domain (for example `hello@alejosorno.dev`). The final local part is content, not a baseline value. It forwards to the owner's mailbox, so it can be rotated or redirected without changing the site. It is canonical content with a single source (DOC-36).
 3. **No email to visitors.** The site sends no email in V1.0 and never emails visitors in V1.x. There is no Resend or other transactional email provider for Contact; one comes back only through a new ADR. The root domain only receives mail.
-   - The one sending path in V1.x is the admin's Supabase Auth recovery email from V1.2 (DOC-45 §57), which goes only to the owner. It uses a production SMTP provider on a dedicated sending subdomain with its own SPF and DKIM, chosen before V1.2 (DOC-48). The root domain keeps its non-sending records.
+   - The one sending path in V1.x is the admin's Supabase Auth recovery email from V1.2 (DOC-45 §57), which goes only to the owner. It uses a production SMTP provider on a dedicated sending subdomain with its own SPF and DKIM, chosen before V1.2 (DOC-48). The root domain keeps its non-sending records: an SPF ending in `-all` (DOC-48 §16) and DMARC `p=reject`.
 4. **Short privacy notice in V1.0.** `/[locale]/privacy` publishes a short notice in ES and EN. It states:
+   - who the controller is (the owner) and how to reach him (the published address);
    - that the site collects no personal data through forms in V1.0;
    - that an email a visitor chooses to send is ordinary correspondence, answered and kept only as long as needed;
-   - that the hosting provider keeps technical access logs;
+   - that the hosting provider keeps technical access logs, including IP addresses;
    - that preferences such as theme, sound and Widget Field layout stay in the visitor's browser;
    - that product analytics is disabled (DOC-17);
+   - that error monitoring (Sentry) receives scrubbed technical data only;
    - that the published address is the channel for data-subject requests.
 5. **Timing moved to before V1.2.** V1.2 is the first release that collects personal data (community nicknames and UGC). These move to before V1.2:
    - the full Personal Data Processing Policy;
@@ -68,6 +57,8 @@ The owner asked whether the lawyer would still be needed if Contact collected no
 ## Options considered
 
 ### Option A — Visible address, Copy and `mailto:` (chosen)
+
+This is the option the owner called "option B" in PROPOSAL-CONTACT-001 (B as opposed to keeping the form).
 
 It works without JavaScript, works when the visitor has no configured mail client (they copy the address), and collects nothing.
 

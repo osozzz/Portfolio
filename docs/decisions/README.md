@@ -14,7 +14,7 @@ ADRs use YAML frontmatter with `record_type: adr` and a separate `decision_statu
 - `ADR-006-three-js-signature-3d-layer.md` — three.js only in signature moments, one persistent WebGL stage, fallbacks and a DOC-49 asset budget.
 - `ADR-007-non-goal-revision.md` — DOC-02 §10 revision (music, blog, curated themes, anonymous presence, Arcade expansion) and the V1.0 release scope.
 - `ADR-008-colombian-legal-baseline.md` — Ley 1581 baseline, terms before V1.2, minors declaration. Its privacy, lawyer and RNBD timing is superseded in part by ADR-009.
-- `ADR-009-contact-without-form.md` — Contact without a form (visible domain address, Copy and `mailto:`); a short privacy notice in V1.0; full policy, lawyer review and RNBD check before V1.2; no sending provider in V1.x.
+- `ADR-009-contact-without-form.md` — Contact without a form (visible domain address, Copy and `mailto:`); a short privacy notice in V1.0; full policy, lawyer review and RNBD check before V1.2; the site never emails visitors, and only the V1.2 admin Auth recovery sends, from a dedicated subdomain.
 
 ADR-004–ADR-008 were approved on 2026-11-10 under PROPOSAL-REOPEN-001 (owner-delegated review). ADR-009 was approved on 2026-11-25 under PROPOSAL-CONTACT-001 (owner-delegated review).
 

@@ -1,7 +1,7 @@
 ---
 id: DOC-40
 title: "Visual States, Focus & Effects"
-document_status: REVIEW
+document_status: APPROVED
 canonical_format: markdown
 phase: "Visual Design Foundation"
 folder: 03-visual-design
@@ -24,7 +24,7 @@ depends_on:
 decision_families:
   - STA
 last_updated: 2026-11-25
-approved_at: 2026-09-15
+approved_at: 2026-11-25
 ---
 
 # DOC-40 — Visual States, Focus & Effects
