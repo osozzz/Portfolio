@@ -1,0 +1,76 @@
+# Checks de calidad de cada PR (DOC-51 §31, §32, §35). La lógica vive en los scripts de package.json.
+name: quality
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: quality-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  fast:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm verify:fast
+
+  standard:
+    needs: fast
+    # Corre aunque fast falle, para fallar de forma explícita: un check requerido omitido cuenta como aprobado.
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Require quality / fast
+        if: needs.fast.result != 'success'
+        run: |
+          echo "quality / fast did not pass (${{ needs.fast.result }}); STANDARD includes FAST."
+          exit 1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm build
+      - run: pnpm test:perf
+      - run: pnpm test:e2e
+      - run: pnpm test:a11y
+      - name: Upload Playwright report
+        if: failure()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
+      - name: Stage report
+        if: always()
+        run: |
+          {
+            echo "## quality / standard"
+            echo
+            echo "| Stage | Status |"
+            echo "|---|---|"
+            echo "| FAST (format, lint, typecheck, content, docs, unit) | ${{ needs.fast.result }} |"
+            echo "| Production build, route budgets, Chromium smoke, axe | ${{ job.status }} |"
+            echo "| Component tests | NOT RUN — Storybook not set up yet (#90) |"
+            echo "| Database reset + pgTAP | NOT RUN — local database not set up yet (#91) |"
+            echo "| Canonical content validation beyond astro sync | NOT RUN — content model not loaded yet (#92) |"
+            echo "| RenderCV build checks | NOT RUN — CV pipeline not set up yet (#93) |"
+            echo "| Firefox/WebKit, visual regression, Lighthouse | NOT RUN — DEEP tier (DOC-51 §33) |"
+          } >> "$GITHUB_STEP_SUMMARY"
