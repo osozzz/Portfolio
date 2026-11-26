@@ -14,6 +14,8 @@ const audioLicenses = defineCollection({
       file: z.string().min(1),
       retrieved: z.iso.date(),
       status: z.enum(["candidate", "shipped"]),
+      // Archivos que el sitio sirve, relativos a public/ (DOC-49: Opus/WebM + AAC, máximo 3 MB cada uno).
+      assets: z.array(z.string().regex(/^audio\/music\/[a-z0-9-]+\.(webm|m4a)$/)).optional(),
       attribution: z.string().optional(),
       notes: z.string().optional(),
     })
@@ -21,6 +23,10 @@ const audioLicenses = defineCollection({
     .refine((t) => t.license === "CC0-1.0" || Boolean(t.attribution), {
       message: "Las licencias CC-BY requieren el texto de atribución.",
       path: ["attribution"],
+    })
+    .refine((t) => t.status === "candidate" || (t.assets?.length ?? 0) > 0, {
+      message: "Una pista shipped debe listar sus archivos en assets.",
+      path: ["assets"],
     }),
 });
 
