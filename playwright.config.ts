@@ -9,5 +9,6 @@ export default defineConfig({
   reporter: process.env.CI ? [["list"], ["html", { open: "never" }]] : "list",
   use: { baseURL: url },
   projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
-  webServer: { command: "pnpm start --port 4322", url, reuseExistingServer: !process.env.CI },
+  // Nunca reutiliza un servidor ajeno en 4322: si el puerto está ocupado, Playwright falla con un aviso claro.
+  webServer: { command: "pnpm start --port 4322", url, reuseExistingServer: false },
 });

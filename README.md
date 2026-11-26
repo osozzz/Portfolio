@@ -89,7 +89,7 @@ The site runs at `http://localhost:4321`. The bootstrap needs no environment var
 | `pnpm verify:fast` | Everything the `quality / fast` CI check runs |
 | `pnpm verify:standard` | FAST plus build, budgets, smoke and accessibility (`quality / standard`) |
 
-`lint` and `format` cover `src/`, `tests/`, `scripts/`, `.github/` and the root config files. When a new code folder appears (for example `scripts/` or `supabase/`), add it to both scripts in `package.json`.
+`lint` and `format` cover `src/`, `tests/`, `scripts/`, `.github/` and the root config files. When a new code folder appears (for example `supabase/`), add it to both scripts in `package.json`.
 
 The server/client boundary (DOC-42 §13) is enforced twice. ESLint rejects client imports of `src/lib/server` and `src/lib/*/server`, and the build fails if any of that code reaches the browser bundle.
 

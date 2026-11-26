@@ -11,7 +11,8 @@ permissions:
 
 concurrency:
   group: quality-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
+  # Solo se cancelan corridas viejas de un PR; cada commit de main se verifica completo (DOC-51 §36).
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   fast:
@@ -19,6 +20,8 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
@@ -30,7 +33,7 @@ jobs:
   standard:
     needs: fast
     # Corre aunque fast falle, para fallar de forma explícita: un check requerido omitido cuenta como aprobado.
-    if: always()
+    if: ${{ !cancelled() }}
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -40,6 +43,8 @@ jobs:
           echo "quality / fast did not pass (${{ needs.fast.result }}); STANDARD includes FAST."
           exit 1
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
@@ -67,7 +72,11 @@ jobs:
             echo "| Stage | Status |"
             echo "|---|---|"
             echo "| FAST (format, lint, typecheck, content, docs, unit) | ${{ needs.fast.result }} |"
-            echo "| Production build, route budgets, Chromium smoke, axe | ${{ job.status }} |"
+            if [ "${{ needs.fast.result }}" = "success" ]; then
+              echo "| Production build, route budgets, Chromium smoke, axe | ${{ job.status }} |"
+            else
+              echo "| Production build, route budgets, Chromium smoke, axe | NOT RUN — quality / fast failed |"
+            fi
             echo "| Component tests | NOT RUN — Storybook not set up yet (#90) |"
             echo "| Database reset + pgTAP | NOT RUN — local database not set up yet (#91) |"
             echo "| Canonical content validation beyond astro sync | NOT RUN — content model not loaded yet (#92) |"

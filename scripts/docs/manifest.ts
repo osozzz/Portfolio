@@ -14,19 +14,24 @@ export type Manifest = {
 
 const FIXED = new Set(["path", "bytes", "sha256"]);
 
-function markdownUnder(root: string, dir: string): string[] {
+/** Archivos bajo dir con alguna de las extensiones, como rutas relativas con "/" (también lo usa validate.ts). */
+export function filesUnder(root: string, dir: string, extensions: string[]): string[] {
   const out: string[] = [];
   if (!existsSync(join(root, dir))) return out;
   for (const item of readdirSync(join(root, dir), { withFileTypes: true, recursive: true })) {
-    if (item.isFile() && item.name.endsWith(".md")) {
+    if (item.isFile() && extensions.some((ext) => item.name.endsWith(ext))) {
       out.push(relative(root, join(item.parentPath, item.name)).split(sep).join("/"));
     }
   }
   return out.sort();
 }
 
+const readNormalized = (root: string, path: string) =>
+  Buffer.from(readFileSync(join(root, path), "utf8").replace(/\r\n/g, "\n"), "utf8");
+
 function entryFor(root: string, path: string, keysFrom: Entry | undefined, old: Entry | undefined): Entry {
-  const raw = readFileSync(join(root, path));
+  // Git normaliza a LF (.gitattributes); un archivo con CRLF local debe dar el mismo hash que en CI.
+  const raw = readNormalized(root, path);
   const entry: Entry = { path, bytes: raw.length, sha256: createHash("sha256").update(raw).digest("hex") };
   const fm = path.endsWith(".md") ? parseFrontMatter(raw.toString("utf8")) : null;
   const meta: Record<string, unknown> =
@@ -51,23 +56,33 @@ function template(path: string, current: Entry[]): Entry | undefined {
   return same.sort((a, b) => Object.keys(b).length - Object.keys(a).length)[0];
 }
 
+// Los conteos salen de los archivos; nadie los edita a mano (DOC-51 §29).
+function summarize(root: string, files: Entry[]) {
+  const meta = files
+    .filter((e) => e.path.endsWith(".md"))
+    .map((e) => parseFrontMatter(readNormalized(root, e.path).toString("utf8")) ?? {});
+  const docs = meta.filter((m) => /^DOC-\d{2}$/.test(String(m.id)));
+  const approved = docs.filter((m) => m.document_status === "APPROVED").length;
+  return {
+    numbered_documents: docs.length,
+    approved_numbered_documents: approved,
+    draft_numbered_documents: docs.length - approved,
+    approved_adrs: meta.filter((m) => m.record_type === "adr" && m.decision_status === "APPROVED").length,
+    review_records: meta.filter((m) => m.record_type === "review" || m.record_type === "amendment").length,
+    files_hashed: files.length,
+    total_hashed_bytes: files.reduce((sum, e) => sum + e.bytes, 0),
+  };
+}
+
 export function buildManifest(root: string, current: Manifest): Manifest {
   const known = new Map(current.files.map((e) => [e.path, e]));
   const kept = current.files.map((e) => e.path).filter((p) => existsSync(join(root, p)));
-  const added = markdownUnder(root, "docs").filter((p) => !known.has(p));
+  const added = filesUnder(root, "docs", [".md", ".json"]).filter((p) => !known.has(p));
   const files = [
     ...kept.map((p) => entryFor(root, p, known.get(p), known.get(p))),
     ...added.map((p) => entryFor(root, p, template(p, current.files), undefined)),
   ];
-  return {
-    ...current,
-    summary: {
-      ...current.summary,
-      files_hashed: files.length,
-      total_hashed_bytes: files.reduce((sum, e) => sum + e.bytes, 0),
-    },
-    files,
-  };
+  return { ...current, summary: { ...current.summary, ...summarize(root, files) }, files };
 }
 
 export function manifestProblems(root: string, current: Manifest): Problem[] {
