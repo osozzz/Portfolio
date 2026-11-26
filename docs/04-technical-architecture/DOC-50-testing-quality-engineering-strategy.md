@@ -2515,7 +2515,7 @@ CI retries/quarantine behavior does not hide persistent critical-suite instabili
 | `TQE-115` | Real PostgreSQL rate-limit concurrency/expiry behavior is an integration/security test gate. |
 | `TQE-116` | Retention, capability-based deletion, Drawing IndexedDB persistence and privacy-receipt behavior receive explicit tests. |
 | `TQE-117` | Dock zoom QA separates 320 CSS-px, browser page zoom, independent text scaling and short-landscape cases. |
-| `TQE-118` | V1.0 exit criteria include the first-impression items: Boot, 3D stage budgets and fallbacks, music prompt/control, persistence across navigation, audio license register and the reviewed privacy policy. |
+| `TQE-118` | V1.0 exit criteria include the first-impression items: Boot, 3D stage budgets and fallbacks, music prompt/control, persistence across navigation, audio license register and the published short privacy notice (ADR-009). |
 | `TQE-119` | Visual regression covers Liquid Glass over both the live 3D stage and its static rendition. |
 | `TQE-120` | E2E verifies that music continues across ClientRouter navigation and that no second WebGL context is created. |
 

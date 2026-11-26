@@ -1,7 +1,7 @@
 ---
 id: DOC-32
 title: "Interface Architecture Master Specification & Decision Registry"
-document_status: APPROVED
+document_status: REVIEW
 canonical_format: markdown
 phase: "Interface Architecture"
 folder: 02-interface-architecture
@@ -10,7 +10,7 @@ depends_on:
   - DOC-31
 decision_families:
   - MST
-last_updated: 2026-11-10
+last_updated: 2026-11-25
 approved_at: 2026-11-10
 ---
 
@@ -364,7 +364,7 @@ Docs, repo, architecture/design foundations, routing/i18n, data/content model, S
 
 ### V1.0 Professional Portfolio
 
-Cinematic Boot, three.js signature stage with fallbacks, music prompt and sound control, fixed six-space Dock with localized route-backed Coming Soon surfaces for later spaces, Home/Projects, Experience/Education/Certifications, Project Detail/Media, controlled Personal Widget Field personalization, Contact, CV, Settings, ES/EN, theme/sound, responsive system, SEO/404, privacy policy. Published only after passing its exit criteria (ADR-007).
+Cinematic Boot, three.js signature stage with fallbacks, music prompt and sound control, fixed six-space Dock with localized route-backed Coming Soon surfaces for later spaces, Home/Projects, Experience/Education/Certifications, Project Detail/Media, controlled Personal Widget Field personalization, Contact by email (ADR-009), CV, Settings, ES/EN, theme/sound, responsive system, SEO/404, short privacy notice. Published only after passing its exit criteria (ADR-007).
 
 ### V1.1 Personality
 

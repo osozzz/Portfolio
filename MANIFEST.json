@@ -22,7 +22,7 @@
     "approved_adrs": 9,
     "review_records": 9,
     "files_hashed": 89,
-    "total_hashed_bytes": 1616766
+    "total_hashed_bytes": 1617029
   },
   "files": [
     {
@@ -184,12 +184,12 @@
     },
     {
       "path": "docs/01-product/DOC-07-nonfunctional-requirements.md",
-      "bytes": 7453,
-      "sha256": "0a2ba56fb5546d8809d7451a3ec7bf1d42f0ab6700aad7e21d084eb4b47421ef",
+      "bytes": 7525,
+      "sha256": "18b625e390ac0efbc0766206047e136db86cb3a29b715df8ba7a9de58c41808c",
       "record_id": "DOC-07",
       "record_type": "document",
       "title": "Non-Functional Requirements",
-      "document_status": "APPROVED",
+      "document_status": "REVIEW",
       "reconstructed": true,
       "phase": "Product Foundation",
       "folder": "01-product",
@@ -199,7 +199,7 @@
       "decision_families": [
         "NFR"
       ],
-      "last_updated": "2026-11-10",
+      "last_updated": "2026-11-25",
       "approved_at": "2026-11-10"
     },
     {
@@ -705,8 +705,8 @@
     },
     {
       "path": "docs/02-interface-architecture/DOC-31-screen-inventory.md",
-      "bytes": 22509,
-      "sha256": "41d83c79cef27f9de7f41e1ac9b03a850c80cd960ac26ac117571b8e65788a7d",
+      "bytes": 22660,
+      "sha256": "43def52a2dbf1e53697d60b1b3533831ea2c7bd21f6f9d7646b4f53ea8912388",
       "record_id": "DOC-31",
       "record_type": "document",
       "title": "Screen & Workspace Inventory",
@@ -724,12 +724,12 @@
     },
     {
       "path": "docs/02-interface-architecture/DOC-32-interface-master-spec.md",
-      "bytes": 18228,
-      "sha256": "7e66be18219cd7132e7b04d1b02fd971ff0ab8f0d269af7ece033934225b7150",
+      "bytes": 18251,
+      "sha256": "054a71ca19475dcedcfe5172e65c4017b9913f0417f269a9c44d4e6715cb81e2",
       "record_id": "DOC-32",
       "record_type": "document",
       "title": "Interface Architecture Master Specification & Decision Registry",
-      "document_status": "APPROVED",
+      "document_status": "REVIEW",
       "phase": "Interface Architecture",
       "folder": "02-interface-architecture",
       "depends_on": [
@@ -739,7 +739,7 @@
       "decision_families": [
         "MST"
       ],
-      "last_updated": "2026-11-10",
+      "last_updated": "2026-11-25",
       "approved_at": "2026-11-10"
     },
     {
@@ -1452,8 +1452,8 @@
     },
     {
       "path": "docs/04-technical-architecture/DOC-50-testing-quality-engineering-strategy.md",
-      "bytes": 77542,
-      "sha256": "53786b1711e4a3b09023e13940727e41c2408c78500dbc4812070d85909a933d",
+      "bytes": 77559,
+      "sha256": "06a38a64c067c76affe9fafb1f22586ab9511c63bada77818451b9a1f146de91",
       "record_id": "DOC-50",
       "record_type": "document",
       "title": "Testing & Quality Engineering Strategy",

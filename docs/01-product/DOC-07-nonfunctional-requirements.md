@@ -1,7 +1,7 @@
 ---
 id: DOC-07
 title: "Non-Functional Requirements"
-document_status: APPROVED
+document_status: REVIEW
 reconstructed: true
 canonical_format: markdown
 phase: Product Foundation
@@ -10,7 +10,7 @@ depends_on:
   - DOC-06
 decision_families:
   - NFR
-last_updated: 2026-11-10
+last_updated: 2026-11-25
 approved_at: 2026-11-10
 ---
 
@@ -40,7 +40,7 @@ These requirements define quality boundaries that apply across features. A featu
 | NFR-010 | Motion | Reduced-motion preference removes/shortens large spatial motion while preserving meaning/capability. |
 | NFR-011 | Transparency | Reduced/off transparency preserves hierarchy/readability/focus using solid fallbacks. |
 | NFR-012 | Reliability | Failure of a noncritical integration remains local; core project/CV/contact navigation does not depend on live feeds. |
-| NFR-013 | Contact reliability | Contact failures preserve user text and communicate retryable/non-retryable state clearly. |
+| NFR-013 | Contact reliability | The Contact address and `mailto:` link render without JavaScript or any runtime service; Copy failure is explained inline and leaves the address selected (ADR-009). |
 | NFR-014 | Security | No known critical/high exploitable issue is accepted for public release without explicit risk decision. |
 | NFR-015 | Privacy | Collect minimum data, separate task-specific identity, avoid raw IP retention where not required, and never sell/share conversation-like visitor data. |
 | NFR-016 | Abuse resistance | Public write endpoints have server validation, size limits, rate limits and anti-automation controls appropriate to risk. |
