@@ -63,6 +63,7 @@ Getting started:
 
 ```bash
 pnpm install --frozen-lockfile
+pnpm exec playwright install chromium
 cp .env.example .env.local
 pnpm dev
 ```
@@ -78,9 +79,17 @@ The site runs at `http://localhost:4321`. The bootstrap needs no environment var
 | `pnpm lint` | ESLint, including the server/client boundary |
 | `pnpm format` | Formats with Prettier |
 | `pnpm format:check` | Checks formatting without changing files |
-| `pnpm test:unit` | Unit and architecture tests with Vitest |
+| `pnpm test:unit` | Unit, architecture, content and docs-tooling tests with Vitest |
+| `pnpm test:e2e` | Chromium smoke test against the built site (Playwright; run `pnpm build` first) |
+| `pnpm test:a11y` | axe accessibility check (WCAG 2.2 AA tags) against the built site |
+| `pnpm test:perf` | Initial JS/CSS budget per route over `dist/` (DOC-49) |
+| `pnpm content:validate` | Validates content collections such as the audio license register |
+| `pnpm docs:validate` | Checks docs front matter, IDs, references, fences, secret values and `MANIFEST.json` |
+| `pnpm docs:manifest` | Regenerates `MANIFEST.json` after a docs change |
+| `pnpm verify:fast` | Everything the `quality / fast` CI check runs |
+| `pnpm verify:standard` | FAST plus build, budgets, smoke and accessibility (`quality / standard`) |
 
-`lint` and `format` cover `src/`, `tests/` and the root config files. When a new code folder appears (for example `scripts/` or `supabase/`), add it to both scripts in `package.json`.
+`lint` and `format` cover `src/`, `tests/`, `scripts/`, `.github/` and the root config files. When a new code folder appears (for example `scripts/` or `supabase/`), add it to both scripts in `package.json`.
 
 The server/client boundary (DOC-42 §13) is enforced twice. ESLint rejects client imports of `src/lib/server` and `src/lib/*/server`, and the build fails if any of that code reaches the browser bundle.
 

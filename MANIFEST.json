@@ -22,13 +22,13 @@
     "approved_adrs": 9,
     "review_records": 12,
     "files_hashed": 91,
-    "total_hashed_bytes": 1628275
+    "total_hashed_bytes": 1629083
   },
   "files": [
     {
       "path": "README.md",
-      "bytes": 4731,
-      "sha256": "c3109aac9e06b329f5b3292bd1c93569150c5accd30f5f6366b147524722eae3"
+      "bytes": 5539,
+      "sha256": "4393889a87ca74af9dbfae1ad3ea9a0d9a47bde19cf2e2e97c5807fa275bc7f8"
     },
     {
       "path": "docs/00-project/DOC-00-master-guide.md",
