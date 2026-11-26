@@ -13,7 +13,7 @@
     "unresolved_p3": 0,
     "v0_implementation_gate": "CLEARED_FOR_REPOSITORY_BOOTSTRAP",
     "technical_architecture_phase": "SPECIFICATION_COMPLETE_AUDITED",
-    "current_draft": null
+    "current_draft": "PROPOSAL-CONTACT-001"
   },
   "summary": {
     "numbered_documents": 53,
@@ -21,8 +21,8 @@
     "draft_numbered_documents": 0,
     "approved_adrs": 8,
     "review_records": 9,
-    "files_hashed": 87,
-    "total_hashed_bytes": 1610590
+    "files_hashed": 88,
+    "total_hashed_bytes": 1614863
   },
   "files": [
     {
@@ -2007,6 +2007,17 @@
       "path": "docs/reviews/evidence/FINAL-AUDIT-001-STRUCTURAL.json",
       "bytes": 3167,
       "sha256": "daf7179da3fc73e7fc560d740110802904bfab5008de378ed85c3e79c6041303"
+    },
+    {
+      "path": "docs/reviews/PROPOSAL-CONTACT-001-contact-without-form.md",
+      "bytes": 2835,
+      "sha256": "c508ec6336093c7b50caa6bb1f6ae651d6860a9a1f554de61cd3ecdcbe0934b8",
+      "record_id": "PROPOSAL-CONTACT-001",
+      "record_type": "document",
+      "title": "Contact Without a Form",
+      "document_status": "APPROVED",
+      "phase": "Baseline Revision",
+      "folder": "reviews"
     }
   ]
 }
